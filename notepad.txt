@@ -1,0 +1,124 @@
+--------------------------------------------------------------
+initial Jeremy meeting
+--------------------------------------------------------------
++ 4 main pages, there will be subpages
+  + US / WORK / SERVICES / CONVERSE
++ whole keystone UI signature is scrolljacking 
+  + you scroll and whole site moves right to transition between top-level pages
+    + like a carousel, the viewport is a fixed window with flowing content inside
+  + when a page has subpages, it automatically starts scrolling down
+    + then picks up again going to the right for the next page 
++ routing is entirely synthetic
+
+--------------------------------------------------------------
+--------------------------------------------------------------
+THINGS TO RESEARCH:
+--------------------------------------------------------------
++ imperative routing with Next.js
+  + and route transitions
++ scroll-as-controller:
+  + routing
+  + animation (start with color)
+
+
+
+
+--------------------------------------------------------------
+--------------------------------------------------------------
+SCROLL-O-MATIC PSEUDO-RULES && NOTES
+--------------------------------------------------------------
+for (CurrentRoute) {
+  if (subpages) {
+    if (onTopLvlPage) {
+      left = true
+      right = false
+      up = false
+      down = true
+      scrollingUp = scrollLeft
+      scrollingDown = scrollDown
+      vpCSS = {top:0, left:100vw}
+    } else if (onLastSubpage) {
+      left = false
+      right = true
+      up = true
+      down = false
+      scrollingUp = scrollUp
+      scrollingDown = scrollRight
+      vpCSS = {top:100vh, left:0}
+    } else {
+      left = false
+      right = false
+      up = true
+      down = true
+      scrollingUp = scrollUp
+      scrollingDown = scrollDown
+      vpCSS = {top:100vh, left:0}
+    }
+  } else {
+    left = true
+    right = true
+    up = false
+    down = false
+    scrollingUp = scrollLeft 
+    scrollingDown = scrollRight 
+    vpCSS = {top:0, left:100vw}
+  }
+}
+
+
+CurrentRoute.initialState = {
+  canGo[obj:bool]: {
+    up,
+    down,
+    left,
+    right
+  },
+  onScrollDir[func]: {
+    upLeft,
+    downRight
+  },
+  currentScrollAxis[str:x,y],       // how does either one get activated? z-index? or is the non-scrolling container just hidden?
+  isMostlyOnRoute[str],
+  isScrolling[bool],
+  isWithinSnapDistance[bool],
+  didHitScrollEnd[bool],
+  isIndexRoute[bool],
+  isLastRoute[bool],
+  prevRoute[str],
+  nextRoute[str],
+  style[obj:str]: {
+    top,
+    left
+  },
+  travelingToRoute                  // for animating transition to menu selection, note: will require redux
+}
+
+
+CurrentRoute.methods = {
+  onScrollUpLeft(),
+  onScrollDownRight(),
+    OR:
+  onScrollDir (dir, navState) {
+    switch (true) {
+      case navState === 'topNoSub':
+        dir === ('left' || 'up')
+          scrollx
+        ?
+        :  
+      case navState === 'topSub':
+        break;
+      case navState === 'subMid':
+        break;
+      case navState === 'subLast':
+        break;
+      default:
+        break;
+
+    }
+  }
+  onEnterSnapDistance(),
+  onPauseScrollPickRoute(),
+  onHitScrollEnd(),
+  onFinishLastRoute(),
+  onClickFocusThisRoute()
+}
