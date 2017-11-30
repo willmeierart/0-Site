@@ -1,6 +1,7 @@
-const AZ_RED = '#970d11'
+// const AZ_RED = '#970d11'
+const AZ_RED = 'var(--AZ-RED)'
 
-export function AzLogo01 () {
+export function AzLogo01 ({ color }) {
   // red glyph with no background:
   return (
     <div className='az-logo-01'>
@@ -11,7 +12,7 @@ export function AzLogo01 () {
       </svg>
       <style jsx>{`
         .cls-1{ fill:none; }
-        .cls-2{ fill: ${AZ_RED}; }
+        .cls-2{ fill: ${color || AZ_RED}; }
       `}</style>
     </div>
   )
@@ -35,4 +36,19 @@ export function AzLogo02 () {
       `}</style>
     </div>
   )
+}
+export function AzLogo03 ({ color }) {
+  // transparent glyph, filled bg
+  return (
+    <div>
+      <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 394.44 582.31'>
+        <title>AZ-LOGO-03</title>
+        <path className='cls-1' d='M236.52,0h-78.6A157.92,157.92,0,0,0,0,157.92V424.38A157.93,157.93,0,0,0,157.92,582.31h78.6A157.94,157.94,0,0,0,394.44,424.38V157.92A157.93,157.93,0,0,0,236.52,0Zm126,262.58-29.72,12.57V403.53A112.56,112.56,0,0,1,220.31,516V448.89a45.39,45.39,0,0,0,45.36-45.36v-100L128.76,361.51v42a45.41,45.41,0,0,0,45.37,45.36V516A112.57,112.57,0,0,1,61.67,403.53V389.92L35,401.23l-3,1.38v-73l29.7-12.58v-141A112.57,112.57,0,0,1,174.13,63.67h46.18A112.56,112.56,0,0,1,332.75,176.11V202.3l29.72-12.58Z' />
+        <path className='cls-1' d='M220.31,130.77H174.13a45.39,45.39,0,0,0-45.37,45.34V288.67l136.91-58V176.11A45.38,45.38,0,0,0,220.31,130.77Z'/><path d='M102.41,266.89v-.45c0,.08,0,.15,0,.23S102.41,266.81,102.41,266.89Z' />
+      </svg>
+      <style jsx>{`
+        .cls-1{ fill: ${color || AZ_RED}; }
+      `}</style>
+    </div>
+  )   
 }
