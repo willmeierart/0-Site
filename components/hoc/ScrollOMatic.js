@@ -1,48 +1,60 @@
 import React, { Component } from 'react'
 import Router from 'next/router'
 import { fadeColor, binder } from '../../lib/_utils'
+import { setScrollState } from '../../lib/_navRules'
 
 export default class ScrollOMatic extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      prevPage: '/',
-      nextRoute: '/us',
-      currentColor: 'rgb(255,255,255,1)',
+      prevRoute: '',
+      nextRoute: '',
+      currentColor: this.props.routeData.bgColor1,
+      scrollState: {},
       isEndOfScroll: false
     }
-    binder(this, ['handleScroll', 'handleRouting'])
+    binder(this, ['handleScroll'])
   }
   componentDidMount () {
+    window.removeEventListener('scroll', this.handleScroll)
     window.addEventListener('scroll', this.handleScroll)
+    const { type, bgColor1, bgColor2, subpages, prevRoute, nextRoute } = this.props.routeData
+    this.setState(() => ({
+      prevRoute,
+      nextRoute,
+      currentColor: window.scrollTop > 50 ? bgColor2 : bgColor1,
+      scrollState: setScrollState(type)
+    }))
+    // this.setState()
   }
   componentWillUnmount () {
+    const { scrollTop, scrollHeight } = window
+    const scrollTiplier = scrollTop / scrollHeight
+    if (scrollTop === 0) {
+      window.scrollTo(0, scrollHeight - 1)
+    }
+    if (scrollTiplier === 1) {
+      window.scrollTo(0, 1)
+    }
     window.removeEventListener('scroll', this.handleScroll)
   }
-  handleRouting (dir) {
-    if (dir === 'next'){
-      Router.push(this.state.nextRoute)
-      setTimeout(() => {
-        this.setState({
-          currentColor: 'var(--az-red)',
-          nextRoute: this.state.nextRoute === '/us' ? '/' : '/us'
-        })
-      }, 50)
-    }
-  }
   handleScroll (e) {
-    const { colors } = this.props
+    // e.preventDefault()
+    const { routeData: {bgColor1, bgColor2} } = this.props
     let { scrollTop, scrollHeight } = e.srcElement.scrollingElement
     scrollHeight = scrollHeight / 2
-    if (scrollTop === 0) { scrollTop = 1 }
     const scrollTiplier = scrollTop / scrollHeight
-    this.setState({ currentColor: fadeColor(scrollTiplier, [colors[1], colors[0]]) })
+    this.setState({ currentColor: fadeColor(scrollTiplier, [bgColor1, bgColor2]) })
+    if (scrollTop === 0) {
+      Router.push(this.state.prevRoute)
+      window.scrollTo(0, scrollHeight - 1)
+    }
     if (scrollTiplier === 1) {
-      this.handleRouting('next')
+      Router.push(this.state.nextRoute)
+      window.scrollTo(0, 1)
     }
   }
   render () {
-    const { colors } = this.props
     return (
       <div className='scroll-o-matic'>
         {this.props.children}
@@ -52,15 +64,6 @@ export default class ScrollOMatic extends Component {
             height:200vh;
             background-color: ${this.state.currentColor};
             {/* animation: cycleColors 5s infinite ease-in-out; */}
-          }
-          @keyframes cycleColors {
-            from {
-              background-color: ${colors[0]};
-            } 50% {
-              background-color: white;
-            } to {
-              background-color: ${colors[0]};
-            }
           }
         `}</style>
       </div>

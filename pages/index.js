@@ -22,9 +22,9 @@ const content = () => (
 
 // include boilerplate for global loader dependent on graphql req's:
 export default () => {
-  const indexRoute = routeData.find(route => route.title === 'home')
+  // const indexRoute = routeData.find(route => route.title === 'home')
   return (
-    <App routeData={indexRoute} title='home'>
+    <App routeData={routeData.home} title='home'>
       <div className='content'>
         {/* const allQueries = [allThings1, allThings2]
           checkAllQueriesLoading(allQueries, content) */}

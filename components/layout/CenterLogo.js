@@ -6,15 +6,14 @@ export default class CenterLogo extends Component {
   constructor (props) {
     super(props)
     binder(this, ['handleScroll'])
-    this.state = { currentColor: (this.props.colors[0]) }
+    this.state = { currentColor: this.props.colors.color1 }
   }
   static async getInitialProps () {
-    this.setState(() => ({ currentColor: this.props.colors[0] }))
+    this.setState(() => ({ currentColor: this.props.colors.color2 }))
   }
   componentDidMount () {
     window.addEventListener('scroll', this.handleScroll)
-    console.log(this.props.colors[0])
-    this.setState(() => ({ currentColor: this.props.colors[0] }))
+    this.setState(() => ({ currentColor: this.props.colors.color1 }))
   }
   componentWillUnmount () {
     window.removeEventListener('scroll', this.handleScroll)
@@ -26,7 +25,7 @@ export default class CenterLogo extends Component {
     if (scrollTop === 0) { scrollTop = 1 }
     const scrollTiplier = scrollTop / scrollHeight
     this.setState(() => ({
-      currentColor: fadeColor(scrollTiplier, [colors[0], colors[1]])
+      currentColor: fadeColor(scrollTiplier, [colors.color1, colors.color2])
     }))
   }
   render () {

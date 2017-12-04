@@ -2,9 +2,9 @@ import App from '../components/App'
 import routeData from '../lib/routeData'
 
 export default () => {
-  const usRoute = routeData.find(route => route.title === 'us')
+  // const usRoute = routeData.find(route => route.title === 'us')
   return (
-    <App routeData={usRoute} title='us'>
+    <App routeData={routeData.us} title='us'>
       <div>us</div>
       <style jsx>{``}</style>
     </App>
