@@ -1,0 +1,15 @@
+export const schema {
+  query: Query
+}
+type Query {
+  queryLog: QueryLog
+}
+type QueryLog {
+  entry: [QueryLogEntry!]!
+}
+type QueryLogEntry {
+  name: String
+}
+
+
+export default schema
