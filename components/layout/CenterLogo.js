@@ -41,6 +41,7 @@ export default class CenterLogo extends Component {
             z-index:5;
             position:fixed; top:0; left:0;
             display: flex; justify-content: center; align-items: center;
+            pointer-events:none;
           }
           .logo-inner-wrapper {
             width:25%;
