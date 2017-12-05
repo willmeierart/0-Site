@@ -5,3 +5,8 @@
 developed by Will Meier at Agency Zero 
 
 😎
+
+----------------------------------------------------------------
+
+**TODO:**
+[ ] add PropTypes to all files
