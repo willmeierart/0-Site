@@ -1,4 +1,6 @@
 import { PureComponent } from 'react'
+import AppProvider from '../lib/_redux/AppProvider'
+
 import raf from 'raf'
 import router from '../router'
 import Main from './main'
@@ -21,6 +23,7 @@ router.Router.onRouteChangeStart = () => {
     () => {
       document.body.classList.remove('loading')
       $container.classList.remove('animate-in')
+      // console.log($clone.parentNode)
       $clone.parentNode.removeChild($clone)
     },
     { once: true }
@@ -33,6 +36,10 @@ export default class Index extends PureComponent {
     return { pathname }
   }
   render () {
-    return <Main {...this.props} />
+    return (
+      <AppProvider>
+        <Main {...this.props} />
+      </AppProvider>
+    )
   }
 }

@@ -9,7 +9,8 @@ import work from './work'
 
 export default class Main extends PureComponent {
   render () {
-    console.log(this.props.pathname);
+    // console.log(home);
+    // console.log(this.props.pathname);
     // const capitalize = (str) => `${str.charAt(0).toUpperCase()}${str.slice(1)}`
     const { pathname } = this.props
     let ThisComponent = home
@@ -30,6 +31,7 @@ export default class Main extends PureComponent {
         ThisComponent = home
         break
     }
+    // console.log(ThisComponent)
     return (
       <div>
         <div id='container'>

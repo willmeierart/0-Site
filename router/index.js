@@ -2,7 +2,7 @@ const nextRoutes = require('next-routes')
 const router = nextRoutes()
 
 router
-  .add('main', '/:slug/:child?', '')  // <<< transition example = this only
+  .add('main', '/:slug', '')  // <<< transition example = this only
   // .add('home', '/:slug', '')
   // .add('us', '/:slug', '')
   // .add('work', '/:slug', '')

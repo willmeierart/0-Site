@@ -8,7 +8,6 @@ import ScrollOMatic from './hoc/ScrollOMatic'
 import CenterLogo from '../components/layout/CenterLogo'
 
 export default ({ children, title, routeData }) => {
-  console.log(children)
   return (
     <div className='App'>
       <Head title={title} />
