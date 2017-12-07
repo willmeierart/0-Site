@@ -2,7 +2,7 @@ import colors from '../components/ui/colors'
 
 export default {
   home: {
-    path: '/main/home',
+    route: 'home',
     type: 'topNoSub',
     subpages: [],
     nextRoute: 'us',
@@ -11,7 +11,7 @@ export default {
     bgColor2: colors[0]
   },
   us: {
-    path: '/main/us',
+    route: 'us',
     type: 'topNoSub',
     subpages: [],
     nextRoute: 'work',
@@ -20,7 +20,7 @@ export default {
     bgColor2: colors[2]
   },
   work: {
-    path: '/main/work',
+    route: 'work',
     type: 'topWSub',
     subpages: [],
     nextRoute: 'services',
@@ -29,7 +29,7 @@ export default {
     bgColor2: colors[3]
   },
   services: {
-    path: '/main/services',
+    route: 'services',
     type: 'topWSub',
     subpages: [],
     nextRoute: 'converse',
@@ -38,7 +38,7 @@ export default {
     bgColor2: colors[4]
   },
   converse: {
-    path: '/main/converse',
+    route: 'converse',
     type: 'topNoSub',
     subpages: [],
     nextRoute: 'home',

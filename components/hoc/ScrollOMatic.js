@@ -19,93 +19,63 @@ class ScrollOMatic extends Component {
       scrollTimer: null,
       router: null
     }
-    binder(this, ['handleScroll', 'handleClick'])
+    binder(this, ['handleScroll', 'handleClick', 'initScroll'])
   }
-  componentWillMount () {
-    // window.scrollY = 10
-  }
-  componentDidMount () {
-    console.log(this.props.reduxRouteData)
-    // if (this.state.canScroll === false) {
-    //   document.scrollingElement.scrollTop = 1
-    //   setTimeout(() => {
-    //     this.setState({ canScroll: true })
-    //   }, 50)
-    // }
-    window.addEventListener('scroll', this.handleScroll)
-    if (this.state.router) {
-      this.props.getRouteState(this.props.reduxRouteData.nextRoute)
-      this.state.router.pushRoute('main', { slug: this.props.reduxRouteData.nextRoute })
-    }
-    // window.scroll(0, 1)
-    // window.scrollTo(0, 1)
-    const { type, bgColor1, bgColor2, subpages, prevRoute, nextRoute } = this.props.routeData
-    // if (this.state.prevRoute === '') {
-      this.setState(() => ({
-        prevRoute,
-        nextRoute,
-        router: router.Router,
-        currentColor: window.scrollTop > 50 ? bgColor2 : bgColor1,
-        scrollState: setScrollState(type)
-      }))
-    // }
-    // this.setState()
-  }
-  // componentWillReceiveProps (nextProps) {
-  //   console.log(nextProps)    
 
-  //   // if (this.state.canScroll === false) {
-  //   //   document.scrollingElement.scrollTop = 1
-  //   //   setTimeout(() => {
-  //   //     this.setState({ canScroll: true })
-  //   //   }, 50)
-  //   // }
-  //   // window.removeEventListener('scroll', this.handleScroll)
-  //   window.addEventListener('scroll', (e) => {
-  //     this.handleScroll(e)
-  //   })
-  //   // window.scroll(0, 1)
-  //   // window.scrollTo(0, 1)
-  //   const { type, bgColor1, bgColor2, subpages, prevRoute, nextRoute } = nextProps.reduxRouteData
-  //   this.setState(() => ({
-  //     prevRoute,
-  //     nextRoute,
-  //     currentColor: window.scrollTop > 50 ? bgColor2 : bgColor1,
-  //     scrollState: setScrollState(type)
-  //   }))
-  // }
+  componentDidMount () {
+    setTimeout(() => {
+      this.setState({ canScroll: true })
+    }, 100)
+    window.addEventListener('scroll', this.handleScroll)
+
+    const { type, bgColor1, bgColor2, subpages, prevRoute, nextRoute, route } = this.props.routeData
+
+    this.props.getRouteState(route)
+
+    // this.initScroll()
+
+    this.setState(() => ({
+      prevRoute,
+      nextRoute,
+      router: router.Router,
+      currentColor: window.scrollTop > 50 ? bgColor2 : bgColor1,
+      scrollState: setScrollState(type)
+    }))
+  }
+  async initScroll () {
+    await window.scrollTo(0, 5)
+    this.setState({ canScroll: true })
+  }
+
   componentWillUnmount () {
+    // this.setState({canScroll: false})
     window.removeEventListener('scroll', this.handleScroll)
   }
   handleScroll (e) {
     e.preventDefault()
-    if (this.state.router) {
-      // console.log(this.state.nextRoute)
-      const { router } = this.state
-      const { routeData: { bgColor1, bgColor2 } } = this.props
-      let { scrollTop, scrollHeight } = e.srcElement.scrollingElement
-      scrollHeight = scrollHeight / 2
-      const scrollTiplier = scrollTop / scrollHeight
-      // console.log(scrollTop)
-      this.setState({
-        currentColor: fadeColor(scrollTiplier, [bgColor1, bgColor2])
-      })
-      // if (this.state.canScroll) {
-      //   if (scrollTop === 0) {
-      //     Router.pushRoute('main', { slug: this.state.prevRoute })
-      //     window.scrollTo(0, scrollHeight - 1)
-      //     console.log(this.state.prevRoute)
-      //   }
-      if (scrollTiplier === 1) {
-        console.log(router)
-        this.props.getRouteState(this.props.routeData.nextRoute)
-        router.pushRoute('main', { slug: this.props.routeData.nextRoute })
-        console.log(this.props.reduxRouteData.nextRoute)
-        window.scrollTo(0, 1)
-        // this.forceUpdate()
+    const { router } = this.state
+    const { routeData: { bgColor1, bgColor2 } } = this.props
+    let { scrollTop, scrollHeight } = e.srcElement.scrollingElement
+    scrollHeight = scrollHeight / 2
+    const scrollTiplier = scrollTop / scrollHeight
+
+    this.setState({
+      currentColor: fadeColor(scrollTiplier, [bgColor1, bgColor2])
+    })
+    if (this.state.canScroll) {
+      if (scrollTop === 0) {
+        router.pushRoute('main', { slug: this.state.prevRoute })
+        window.scrollTo(0, scrollHeight - 1)
       }
-      // }
     }
+    if (scrollTiplier === 1) {
+      console.log(router)
+      this.props.getRouteState(this.props.routeData.nextRoute)
+      router.pushRoute('main', { slug: this.props.routeData.nextRoute })
+      console.log(this.props.reduxRouteData.nextRoute)
+      window.scrollTo(0, 1)
+    }
+
   }
   handleClick () {
     // console.log(router)
