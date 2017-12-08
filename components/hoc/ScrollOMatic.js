@@ -58,8 +58,10 @@ class ScrollOMatic extends Component {
 
   handleScroll (e) {
     e.preventDefault()
+    console.log(e.deltaY)
     const { routeData: { bgColor1, bgColor2 } } = this.props
-    let { scrollTop, scrollHeight } = e.srcElement.scrollingElement
+    console.log(e.target.scrollTop)
+    let { scrollTop, scrollHeight } = e.target
     scrollHeight = scrollHeight / 2
     const scrollTiplier = scrollTop / scrollHeight
 
@@ -86,7 +88,7 @@ class ScrollOMatic extends Component {
 
   render () {
     return (
-      <div style={{ backgroundColor: this.state.currentColor }} className='scroll-o-matic'>
+      <div style={{ backgroundColor: this.state.currentColor }} className='scroll-o-matic' onWheel={this.handleScroll}>
         {this.props.children}
         <style jsx>{`
           .scroll-o-matic {
@@ -110,14 +112,7 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     getRouteState: route => dispatch(getRouteState(route)),
-    setScrollPos: coords => {
-      // console.log(coords)
-      // console.log(window)
-      // console.log(window.scrollTo)
-      // console.log(window.scrollTo(coords.x, coords.y))
-      // window.scrollTo(coords.x, coords.y)
-      dispatch(setScrollPos(coords))
-    },
+    setScrollPos: coords => dispatch(setScrollPos(coords)),
     configScrollEnv: type => dispatch(configScrollEnv(type))
   }
 }

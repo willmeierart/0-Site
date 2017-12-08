@@ -1,6 +1,6 @@
 // main wrapper component - layout, universal styles, etc.
 
-// import Link from 'next/link'
+import ScrollLock from 'react-scroll-lock-component'
 import Head from './Head'
 import Header from './layout/Header'
 import Footer from './layout/Footer'
@@ -14,7 +14,11 @@ export default ({ children, title, routeData }) => {
       {/* <Header /> */}
       <main>
         <div className='logo-clip-path'>
-          <ScrollOMatic routeData={routeData} className='scroll-o-matic'>{ children }</ScrollOMatic>
+          <ScrollLock>
+            <ScrollOMatic routeData={routeData} className='scroll-o-matic'>
+              { children }
+            </ScrollOMatic>
+          </ScrollLock>
         </div>
         <CenterLogo colors={{ color1: routeData.bgColor2, color2: routeData.bgColor1 }} />
       </main>
