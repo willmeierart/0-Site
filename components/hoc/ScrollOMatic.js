@@ -47,6 +47,8 @@ class ScrollOMatic extends Component {
       this.props.configScrollEnv(type)
     }
 
+    console.log(this.props)
+
     // this.initScroll()
 
     // this.setState(() => ({
@@ -163,14 +165,18 @@ class ScrollOMatic extends Component {
     const layout = this.getLayoutData()
     const { currentVal, scrollOMaticHeight, trayScrollHeight } = layout
     const shouldBeNextRoute = -(currentVal - scrollOMaticHeight) + 1 >= trayScrollHeight
-    // const shouldBePrevRoute = this.state.animValues < 0
+    const shouldBePrevRoute = this.state.animValues <= 0
 
-    if (shouldBeNextRoute) {
-      Router.push('/' + nextRoute)
+    if (shouldBePrevRoute) {
+      this.props.getRouteState(this.props.routeData.prevRoute)
+      Router.pushRoute('main', { slug: this.props.routeData.prevRoute })
+      this.props.setScrollPos({ x: 0, y: trayScrollHeight - 1 })  
     }
-    // if (shouldBePrevRoute) {
-    //   Router.push(this.state.prevRoute)      
-    // }
+    if (shouldBeNextRoute) {
+      this.props.getRouteState(this.props.routeData.nextRoute)
+      Router.pushRoute('main', { slug: this.props.routeData.nextRoute })
+      this.props.setScrollPos({ x: 0, y: 1 })
+    }
   }
 
   handleScroll (e) {
