@@ -14,11 +14,11 @@ export default ({ children, title, routeData }) => {
       {/* <Header /> */}
       <main>
         <div className='logo-clip-path'>
-          <ScrollLock>
+          {/* <ScrollLock> */}
             <ScrollOMatic routeData={routeData} className='scroll-o-matic'>
               { children }
             </ScrollOMatic>
-          </ScrollLock>
+          {/* </ScrollLock> */}
         </div>
         <CenterLogo colors={{ color1: routeData.bgColor2, color2: routeData.bgColor1 }} />
       </main>

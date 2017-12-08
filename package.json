@@ -49,6 +49,7 @@
     "react-apollo": "^2.0.1",
     "react-dom": "^16.1.1",
     "react-loaders": "^3.0.1",
+    "react-motion": "^0.5.2",
     "react-redux": "^5.0.6",
     "react-scroll-lock-component": "^1.1.2",
     "redux": "^3.7.2",
