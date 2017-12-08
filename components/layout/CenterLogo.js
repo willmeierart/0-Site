@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { binder, fadeColor } from '../../lib/_utils'
-import { AzLogo01 } from '../assets/ZeroLogos'
+import { AzLogo01 } from '../assets/ZeroLogo01'
 
 export default class CenterLogo extends Component {
   constructor (props) {
