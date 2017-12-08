@@ -9,6 +9,8 @@ import { setScrollState } from '../../lib/_navRules'
 import router from '../../router'
 const { Router } = router
 
+// TO DO: refactor some of this data out to an HOC ?
+
 class ScrollOMatic extends Component {
   constructor (props) {
     super(props)
@@ -20,23 +22,12 @@ class ScrollOMatic extends Component {
       scrollInverted: false,
       animValues: 0
     }
-    binder(this, [
-      'handleScroll',
-      // 'initScroll',
-      'resetMin',
-      'resetMax',
-      'navigator',
-      'canIscroll',
-      'getLayoutData',
-      'changeBGcolor'
-    ])
+    binder(this, ['handleScroll', 'resetMin', 'resetMax', 'navigator', 'canIscroll', 'getLayoutData', 'changeBGcolor'])
   }
 
   componentDidMount () {
-    // Router.prefetchRoute('main', { slug: this.props.routeData.nextRoute })
-    // Router.prefetchRoute('main', { slug: this.props.routeData.prevRoute })
-    Router.prefetchRoute(this.props.routeData.nextRoute)
-    Router.prefetchRoute(this.props.routeData.prevRoute)
+    Router.prefetchRoute('main', { slug: this.props.routeData.nextRoute })
+    Router.prefetchRoute('main', { slug: this.props.routeData.prevRoute })
 
     const { type, bgColor1, bgColor2, /* subpages, */ route } = this.props.routeData
 
@@ -49,11 +40,9 @@ class ScrollOMatic extends Component {
 
     console.log(this.props)
 
-    // this.initScroll()
-
-    // this.setState(() => ({
-    //   currentColor: window.scrollTop > 50 ? bgColor2 : bgColor1
-    // }))
+    this.setState(() => ({
+      currentColor: window.scrollTop > 50 ? bgColor2 : bgColor1
+    }))
   }
 
   componentWillReceiveProps (nextProps) {
@@ -80,18 +69,6 @@ class ScrollOMatic extends Component {
   }
 
   componentDidUpdate () { this.calculate() }
-
-  // componentWillUnmount () { window.removeEventListener('scroll', this.handleScroll) }
-
-  // async initScroll () {
-  //   const { scrollPos } = this.props
-  //   await window.scrollTo(scrollPos.x, scrollPos.y)
-  //   // // // // // // // // THIS IS CRUCIAL, ALLOWS FOR NAV BEYOND SAME ROUTE:
-  //   await setTimeout(() => {
-  //     window.addEventListener('scroll', this.handleScroll)
-  //     this.setState({ canScroll: true })
-  //   }, 1000)
-  // }
 
   getLayoutData () {
     const scrollOMatic = DOM.findDOMNode(this.scrollOMatic)
@@ -170,13 +147,13 @@ class ScrollOMatic extends Component {
     if (shouldBePrevRoute) {
       this.props.getRouteState(this.props.routeData.prevRoute)
       Router.pushRoute('main', { slug: this.props.routeData.prevRoute })
-      this.props.setScrollPos({ x: 0, y: trayScrollHeight - 1 })  
+      // this.props.setScrollPos({ x: 0, y: trayScrollHeight - 1 })  
     }
-    if (shouldBeNextRoute) {
-      this.props.getRouteState(this.props.routeData.nextRoute)
-      Router.pushRoute('main', { slug: this.props.routeData.nextRoute })
-      this.props.setScrollPos({ x: 0, y: 1 })
-    }
+    // if (shouldBeNextRoute) {
+    //   this.props.getRouteState(this.props.routeData.nextRoute)
+    //   Router.pushRoute('main', { slug: this.props.routeData.nextRoute })
+    //   // this.props.setScrollPos({ x: 0, y: 1 })
+    // }
   }
 
   handleScroll (e) {
@@ -188,44 +165,23 @@ class ScrollOMatic extends Component {
     const newAnimationVal = (animationVal + mouseY)
     const newAnimationValNeg = (animationVal - mouseY)
 
+    console.log(newAnimationVal)
+
     if (!this.canIscroll()) return
 
     const layout = this.getLayoutData()
     const { currentVal, scrollOMaticHeight, trayScrollHeight } = layout
     const isEndOfPage = -(currentVal - scrollOMaticHeight) + 1 === trayScrollHeight
 
-    this.changeBGcolor()
-    this.navigator()
-
     const scrolling = () => {
       this.state.scrollInverted
         ? this.setState({ animValues: newAnimationValNeg })
         : this.setState({ animValues: newAnimationVal })
     }
+
+    this.changeBGcolor()
+    this.navigator()
     raf(scrolling)
-
-    // const { routeData: { bgColor1, bgColor2 } } = this.props
-    // let { scrollTop, scrollHeight } = e.target
-    // scrollHeight = scrollHeight / 2
-    // const scrollTiplier = scrollTop / scrollHeight
-    // this.setState({
-    //   currentColor: fadeColor(scrollTiplier, [bgColor1, bgColor2])
-    // })
-    // if (this.state.canScroll) {
-    //   if (scrollTop === 0) {
-    //     this.setState({ canScroll: false })
-    //     this.props.getRouteState(this.props.routeData.prevRoute)
-    //     Router.pushRoute('main', { slug: this.props.routeData.prevRoute })
-    //     this.props.setScrollPos({ x: 0, y: scrollHeight - 1 })
-    //   }
-
-    //   if (scrollTiplier === 1) {
-    //     this.setState({ canScroll: false })
-    //     this.props.getRouteState(this.props.routeData.nextRoute)
-    //     Router.pushRoute('main', { slug: this.props.routeData.nextRoute })
-    //     this.props.setScrollPos({ x: 0, y: 1 })
-    //   }
-    // }
   }
 
   render () {

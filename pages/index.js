@@ -23,7 +23,6 @@ router.Router.onRouteChangeStart = () => {
     () => {
       document.body.classList.remove('loading')
       $container.classList.remove('animate-in')
-      // console.log($clone.parentNode)
       $clone.parentNode.removeChild($clone)
     },
     { once: true }
