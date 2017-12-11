@@ -20,9 +20,6 @@ THINGS TO RESEARCH:
   + routing
   + animation (start with color)
 
-
-
-
 --------------------------------------------------------------
 --------------------------------------------------------------
 SCROLL-O-MATIC PSEUDO-RULES && NOTES

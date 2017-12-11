@@ -1,37 +1,14 @@
 import { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-
-import home from './home'
-import converse from './converse'
-import services from './services'
-import us from './us'
-import work from './work'
+import RouteSwitcher from '../components/nav/RouteSwitcher'
 
 export default class Main extends PureComponent {
   render () {
     const { pathname } = this.props
-    let ThisComponent = home
-    switch (true) {
-      case pathname === 'converse':
-        ThisComponent = converse
-        break
-      case pathname === 'services':
-        ThisComponent = services
-        break
-      case pathname === 'us':
-        ThisComponent = us
-        break
-      case pathname === 'work':
-        ThisComponent = work
-        break
-      default:
-        ThisComponent = home
-        break
-    }
     return (
       <div>
         <div id='container'>
-          <ThisComponent />
+          <RouteSwitcher pathname={pathname} />
         </div>
         <style jsx>{`
             @keyframes animateIn {

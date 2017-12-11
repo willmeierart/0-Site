@@ -10,6 +10,11 @@ export default class CustomDocument extends Document {
           <Main />
           <NextScript />
         </body>
+        <style jsx>{`
+          html, body {
+            overflow: hidden;
+          }
+        `}</style>
       </html>
     )
   }

@@ -1,7 +1,7 @@
 // import { graphql, compose } from 'react-apollo'
 // import Loader from 'react-loaders'
 // import withData from '../lib/withData'
-// import faker from 'faker'
+import faker from 'faker'
 // import { checkAllQueriesLoading, checkAllQueriesError } from '../lib/_utils'
 import App from '../../components/App'
 import routeData from '../../router/routeData'
@@ -9,10 +9,10 @@ import routeData from '../../router/routeData'
 
 const content = () => (
   <div className='active'>
-    {/* {faker.lorem.paragraphs(70)} */}
+    {/* {faker.lorem.paragraphs(120)} */}
     <style jsx>{`
       .active {
-        width: 50vw;
+        {/* width: 50vw; */}
         height: 100vh;
       }
     `}</style>

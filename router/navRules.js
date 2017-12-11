@@ -11,7 +11,9 @@ export const setScrollState = type => {
           top: 0,
           left: '100vw',
           minWidth: '300vw',
-          minHeight: '100vh'
+          minHeight: '100vh',
+          backgroundImageForward: '/static/img/arrowRight.png',
+          backgroundImageBack: '/static/img/arrowLeft.png'
         }
       }
       break
@@ -25,7 +27,9 @@ export const setScrollState = type => {
           top: 0,
           left: '100vw',
           minWidth: '200vw',
-          minHeight: '200vh'
+          minHeight: '200vh',
+          backgroundImageForward: '/static/img/arrowDown.png',
+          backgroundImageBack: '/static/img/arrowLeft.png'
         }
       }
       break
@@ -39,7 +43,9 @@ export const setScrollState = type => {
           top: '100vh',
           left: 0,
           minWidth: '100vw',
-          minHeight: '300vh'
+          minHeight: '300vh',
+          backgroundImageForward: '/static/img/arrowDown.png',
+          backgroundImageBack: '/static/img/arrowUp.png'
         }
       }
       break
@@ -53,7 +59,9 @@ export const setScrollState = type => {
           top: '100vh',
           left: 0,
           minWidth: '200vw',
-          minHeight: '200vh'
+          minHeight: '200vh',
+          backgroundImageForward: '/static/img/arrowRight.png',
+          backgroundImageBack: '/static/img/arrowUp.png'
         }
       }
       break
@@ -67,7 +75,9 @@ export const setScrollState = type => {
           top: 0,
           left: '100vw',
           minWidth: '300vw',
-          minHeight: '100%'
+          minHeight: '100%',
+          backgroundImageForward: '/static/img/arrowRight.png',
+          backgroundImageBack: '/static/img/arrowLeft.png'
         }
       }
   }

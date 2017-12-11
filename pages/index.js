@@ -1,5 +1,5 @@
 import { PureComponent } from 'react'
-import AppProvider from '../lib/_redux/AppProvider'
+import AppProvider from '../lib/redux/AppProvider'
 
 import raf from 'raf'
 import router from '../router'
