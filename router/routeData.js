@@ -1,4 +1,4 @@
-import colors from '../components/ui/colors'
+import colors from '../lib/ui/colors'
 
 export default {
   home: {
