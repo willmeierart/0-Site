@@ -8,21 +8,17 @@ import { fadeColor, binder } from '../../lib/_utils'
 import router from '../../router'
 const { Router } = router
 
-// TO DO: refactor some of this data out to an HOC ? ...... get it working first...
-
 class ScrollOMatic extends Component {
   constructor (props) {
     super(props)
 
     const { scrollConfig: { initScrollAxis, style: { backgroundImageForward } }, transitionOrigin: { x, y } } = this.props
 
-    console.log(x, y)
-
     this.state = {
       currentColor: this.props.routeData.bgColor1,
       isEndOfScroll: false,
       canScroll: false,
-      scrollInverted: true,
+      scrollInverted: false,
       animValues: 0,
       animValsY: y,
       animValsX: x,
@@ -52,12 +48,9 @@ class ScrollOMatic extends Component {
     Router.prefetchRoute('main', { slug: this.props.routeData.nextRoute })
     Router.prefetchRoute('main', { slug: this.props.routeData.prevRoute })
 
-    const { routeData: { type, route }, transitionOrigin } = this.props
-    // if (this.props.reduxRouteData.nextRoute === '') { this.props.getRouteState(route) }
-    // if (type !== '') { this.props.configScrollEnv(type) }
+    const { routeData: { type, route } } = this.props
     this.props.getRouteState(route)
     this.props.configScrollEnv(type)
-    // this.setScrollOrigin(transitionOrigin)
   }
 
   componentWillReceiveProps (nextProps) { (this.props.children !== nextProps.children) && this.resetMin() }
@@ -75,9 +68,7 @@ class ScrollOMatic extends Component {
       this.props.children === nextProps.children &&
       this.canIscroll() === false) {
       return false
-      // should only fire if can't scroll
     }
-    console.log('is updating');
     return true
   }
 
@@ -122,7 +113,7 @@ class ScrollOMatic extends Component {
       ? { name: 'animValues', val: animValues }
       : currentScrollAxis === 'x'
         ? { name: 'animValsX', val: animValsX }
-        : { name: 'animValsX', val: animValsY }
+        : { name: 'animValsY', val: animValsY }
     return valSwitch
   }
 
@@ -158,8 +149,7 @@ class ScrollOMatic extends Component {
     const {
       routeData: { nextRoute, prevRoute },
       scrollConfig: { leftUp, rightDown },
-      getRouteState, getTransitionOrigin, setScrollOrigin, transitionOrigin
-    } = this.props
+      getRouteState, getTransitionOrigin, transitionOrigin } = this.props 
     const layout = this.getLayoutData()
     const { scrollOMaticHeight, scrollOMaticWidth, trayScrollHeight, trayScrollWidth } = layout
     const { currentVal } = layout
@@ -184,7 +174,6 @@ class ScrollOMatic extends Component {
       getRouteState(nextRoute)
       Router.pushRoute('main', { slug: nextRoute })
       getTransitionOrigin(nextRoute, 'forward', widthHeight)
-      
       // this.props.setScrollPos({ x: 0, y: 1 })
     }
   }
@@ -195,19 +184,13 @@ class ScrollOMatic extends Component {
     const { x, y } = originData
     const layout = this.getLayoutData()
     const { trayOffsetWidth, scrollOMaticWidth, trayOffsetHeight, scrollOMaticHeight } = layout
-    const { animValsX, animValsY } = this.state
     const thisX = x === 'max' ? scrollOMaticWidth - trayOffsetWidth : 0
     const thisY = y === 'max' ? scrollOMaticHeight - trayOffsetHeight : 0
     const coords = { x: thisX, y: thisY }
     console.log(x, y)
     console.log(layout)
     console.log(coords)
-    // if (isNaN(animValsX) || isNaN(animValsY)) {
-      // this.setState({
-      //   animValsX: thisX,
-      //   animValsY: thisY
-      // })
-    // }
+
     return [thisX, thisY]
   }
 
@@ -245,7 +228,7 @@ class ScrollOMatic extends Component {
     if (currentScrollDir === 'back') {
       if (leftUp === 'left') {
         x = `${amt3}px`
-        y = 0 // or this.state.animValsY if you go that route
+        y = 0
       } else {
         x = 0
         y = `${amt3}px`
@@ -278,12 +261,15 @@ class ScrollOMatic extends Component {
   }
 
   animateTheScroll (e) {
-    const { scrollInverted, currentScrollAxis, dualAxis } = this.state
+    const { scrollInverted } = this.state
     const rawData = e.deltaY ? e.deltaY : e.deltaX
     const mousePos = Math.floor(rawData)
     const animationVal = this.animValSwitch()
     const newAnimationVal = (animationVal.val + mousePos)
     const newAnimationValNeg = (animationVal.val - mousePos)
+
+    console.log(newAnimationVal);
+    console.log(animationVal.name)
 
     this.setScrollDirAxis(mousePos)
 
@@ -305,11 +291,9 @@ class ScrollOMatic extends Component {
     }
 
     raf(scrolling)
-    console.log(raf(scrolling))
   }
 
   handleScroll (e) {
-    console.log(this.animValSwitch())
     e.preventDefault()
     this.setScrollStyleState()
     this.navigator()
@@ -318,9 +302,6 @@ class ScrollOMatic extends Component {
 
   render () {
     const { minHeight, minWidth } = this.props.scrollConfig.style
-    // const { config } = this.props
-    // const { width, height } = style
-    // const springConfig = config || presets.noWobble
     const springConfig = presets.noWobble
     const axisVals = this.animValSwitch().val
     console.log(axisVals)
@@ -349,7 +330,7 @@ class ScrollOMatic extends Component {
                 display: 'inline-flex',
                 position: 'absolute'
               }}>
-              { console.log(this.state, amt) }
+              {/* { console.log(this.state, amt) } */}
               { this.props.children }
             </div>
           )}
