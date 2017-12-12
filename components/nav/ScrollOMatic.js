@@ -43,7 +43,8 @@ class ScrollOMatic extends Component {
       'scrollDirTransformer',
       'animateTheScroll',
       'setScrollOrigin',
-      'setScrollDirAxis'
+      'setScrollDirAxis',
+      'animValSwitcher'
     ])
   }
 
@@ -65,7 +66,9 @@ class ScrollOMatic extends Component {
     if (true &&
       this.calculate.timer !== void 0 &&
       this.props.children === nextProps.children &&
-      this.state.animValues === nextState.animValues) {
+      this.state.animValues === nextState.animValues &&
+      this.state.animValsX === nextState.animValsX &&
+      this.state.animValsY === nextState.animValsY) {
       return false
     }
     if (true &&
@@ -74,20 +77,26 @@ class ScrollOMatic extends Component {
       return false
       // should only fire if can't scroll
     }
+    console.log('is updating');
     return true
   }
 
   componentDidUpdate () { this.calculate() }
 
   getLayoutData () {
-    const { currentScrollAxis } = this.state
+    const { currentScrollAxis, dualAxis, animValues, animValsX, animValsY } = this.state
+    const valSwitch = !dualAxis
+      ? animValues
+      : currentScrollAxis === 'x'
+        ? animValsX
+        : animValsY
+    const currentVal = valSwitch
     const scrollOMatic = DOM.findDOMNode(this.scrollOMatic)
     const scrollTray = DOM.findDOMNode(this.scrollTray)
     const trayScrollHeight = scrollTray.scrollHeight
     const trayScrollWidth = scrollTray.scrollWidth
     const scrollOMaticOffsetHeight = scrollOMatic.offsetHeight
     const scrollOMaticOffsetWidth = scrollOMatic.offsetWidth
-    const currentVal = this.state.animValues
     const scrollOMaticRect = scrollOMatic.getBoundingClientRect()
     return {
       currentVal,
@@ -112,6 +121,10 @@ class ScrollOMatic extends Component {
     }
   }
 
+  animValSwitcher () {
+
+  }
+
   calculate () {
     const layout = this.getLayoutData()
     clearTimeout(this.calculate.timer)
@@ -126,8 +139,24 @@ class ScrollOMatic extends Component {
     })
   }
 
-  resetMin () { this.setState({ animValues: 0 }) }
-  resetMax (x) { this.setState({ animValues: x }) }
+  resetMin () {
+    const { dualAxis, animValues, animValsX, animValsY, currentScrollAxis } = this.state
+    const valSwitch = !dualAxis
+      ? animValues
+      : currentScrollAxis === 'x'
+        ? animValsX
+        : animValsY
+    this.setState({ [valSwitch]: 0 })
+  }
+  resetMax (x) {
+    const { dualAxis, animValues, animValsX, animValsY, currentScrollAxis } = this.state
+    const valSwitch = !dualAxis
+      ? animValues
+      : currentScrollAxis === 'x'
+        ? animValsX
+        : animValsY
+    this.setState({ [valSwitch]: x })
+  }
 
   canIscroll () {
     const layout = this.getLayoutData()
@@ -148,7 +177,7 @@ class ScrollOMatic extends Component {
     } = this.props
     const layout = this.getLayoutData()
     const { scrollOMaticHeight, scrollOMaticWidth, trayScrollHeight, trayScrollWidth } = layout
-    const currentVal = this.state.animValues
+    const { currentVal } = layout
 
     const shouldBeNextRoute = leftUp === 'up'
       ? -(currentVal - scrollOMaticHeight) + 1 >= trayScrollHeight
@@ -157,12 +186,6 @@ class ScrollOMatic extends Component {
     const shouldBePrevRoute = rightDown === 'down'
       ? (currentVal / (scrollOMaticHeight - trayScrollHeight)) < 0
       : (currentVal / (scrollOMaticWidth - trayScrollWidth)) < 0
-
-    // console.log(leftUp, rightDown)
-    // console.log(currentVal, scrollOMaticHeight, trayScrollHeight)
-    // console.log(currentVal, scrollOMaticWidth, trayScrollWidth)
-    // console.log(currentVal, scrollOMaticHeight, trayScrollHeight)
-    // console.log(currentVal, scrollOMaticWidth, trayScrollWidth)
 
     if (shouldBePrevRoute) {
       const widthHeight = this.setScrollOrigin(transitionOrigin)
