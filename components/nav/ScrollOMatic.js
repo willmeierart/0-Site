@@ -44,7 +44,7 @@ class ScrollOMatic extends Component {
       'animateTheScroll',
       'setScrollOrigin',
       'setScrollDirAxis',
-      'animValSwitcher'
+      'animValSwitch'
     ])
   }
 
@@ -84,13 +84,8 @@ class ScrollOMatic extends Component {
   componentDidUpdate () { this.calculate() }
 
   getLayoutData () {
-    const { currentScrollAxis, dualAxis, animValues, animValsX, animValsY } = this.state
-    const valSwitch = !dualAxis
-      ? animValues
-      : currentScrollAxis === 'x'
-        ? animValsX
-        : animValsY
-    const currentVal = valSwitch
+    const { currentScrollAxis } = this.state
+    const currentVal = this.animValSwitch().val
     const scrollOMatic = DOM.findDOMNode(this.scrollOMatic)
     const scrollTray = DOM.findDOMNode(this.scrollTray)
     const trayScrollHeight = scrollTray.scrollHeight
@@ -121,8 +116,14 @@ class ScrollOMatic extends Component {
     }
   }
 
-  animValSwitcher () {
-
+  animValSwitch () {
+    const { dualAxis, animValues, animValsX, animValsY, currentScrollAxis } = this.state
+    const valSwitch = !dualAxis
+      ? { name: 'animValues', val: animValues }
+      : currentScrollAxis === 'x'
+        ? { name: 'animValsX', val: animValsX }
+        : { name: 'animValsX', val: animValsY }
+    return valSwitch
   }
 
   calculate () {
@@ -139,24 +140,8 @@ class ScrollOMatic extends Component {
     })
   }
 
-  resetMin () {
-    const { dualAxis, animValues, animValsX, animValsY, currentScrollAxis } = this.state
-    const valSwitch = !dualAxis
-      ? animValues
-      : currentScrollAxis === 'x'
-        ? animValsX
-        : animValsY
-    this.setState({ [valSwitch]: 0 })
-  }
-  resetMax (x) {
-    const { dualAxis, animValues, animValsX, animValsY, currentScrollAxis } = this.state
-    const valSwitch = !dualAxis
-      ? animValues
-      : currentScrollAxis === 'x'
-        ? animValsX
-        : animValsY
-    this.setState({ [valSwitch]: x })
-  }
+  resetMin () { this.setState({ [this.animValSwitch().name]: 0 }) }
+  resetMax (x) { this.setState({ [this.animValSwitch().name]: x }) }
 
   canIscroll () {
     const layout = this.getLayoutData()
@@ -293,49 +278,30 @@ class ScrollOMatic extends Component {
   }
 
   animateTheScroll (e) {
-    const { scrollInverted, currentScrollAxis, animValsX, animValsY, animValues, dualAxis } = this.state
-    // const yData = e.deltaY ? e.deltaY : e.deltaX
-    // const xData = e.deltaX ? e.deltaX : e.deltaY
-    // const rawData = currentScrollAxis === 'x' ? xData : yData
+    const { scrollInverted, currentScrollAxis, dualAxis } = this.state
     const rawData = e.deltaY ? e.deltaY : e.deltaX
     const mousePos = Math.floor(rawData)
-
-    const animationValOp1 = animValues
-    const animationValOp2 = currentScrollAxis === 'x' ? animValsX : animValsY
-    const animationVal = dualAxis === false ? animationValOp1 : animationValOp2
-
-    const newAnimationVal = (animationVal + mousePos)
-    const newAnimationValNeg = (animationVal - mousePos)
+    const animationVal = this.animValSwitch()
+    const newAnimationVal = (animationVal.val + mousePos)
+    const newAnimationValNeg = (animationVal.val - mousePos)
 
     this.setScrollDirAxis(mousePos)
 
     if (!this.canIscroll()) return
 
-    const scrolling = () => { // if you split animvalues into each axis, you'd set state on one or the other inside ternary here
-      // scrollInverted
-      //   ? this.setState({
-      //     animValues: newAnimationValNeg
-      //   }) : this.setState({
-      //     animValues: newAnimationVal
-      //   })
+    const scrolling = () => {
+      scrollInverted
+        ? this.setState({
+          [animationVal.name]: newAnimationValNeg
+        }) : this.setState({
+          [animationVal.name]: newAnimationVal
+        })
 
       // console.log(dualAxis)
       // console.log(currentScrollAxis)
       // console.log(newAnimationValNeg)
       // console.log(mousePos)
       // console.log(this.state.animValsX)
-
-      !dualAxis
-        ? scrollInverted
-          ? this.setState({ animValues: newAnimationValNeg })
-          : this.setState({ animValues: newAnimationVal })
-        : scrollInverted
-          ? currentScrollAxis === 'x'
-            ? this.setState({ animValsX: newAnimationValNeg }) // right here
-            : this.setState({ animValsY: newAnimationValNeg })
-          : currentScrollAxis === 'x'
-            ? this.setState({ animValsX: newAnimationVal })
-            : this.setState({ animValsY: newAnimationVal })
     }
 
     raf(scrolling)
@@ -343,6 +309,7 @@ class ScrollOMatic extends Component {
   }
 
   handleScroll (e) {
+    console.log(this.animValSwitch())
     e.preventDefault()
     this.setScrollStyleState()
     this.navigator()
@@ -351,14 +318,11 @@ class ScrollOMatic extends Component {
 
   render () {
     const { minHeight, minWidth } = this.props.scrollConfig.style
-    const { currentScrollAxis, animValsX, animValsY, animValues, dualAxis } = this.state
     // const { config } = this.props
     // const { width, height } = style
     // const springConfig = config || presets.noWobble
     const springConfig = presets.noWobble
-    const axisValOp1 = animValues
-    const axisValOp2 = currentScrollAxis === 'x' ? animValsX : animValsY
-    const axisVals = dualAxis === false ? axisValOp1 : axisValOp2
+    const axisVals = this.animValSwitch().val
     console.log(axisVals)
     return (
       <div className='scroll-o-matic' ref={(ref) => { this.scrollOMatic = ref }}
