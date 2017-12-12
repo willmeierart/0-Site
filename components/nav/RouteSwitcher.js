@@ -23,5 +23,5 @@ export default ({ pathname }) => {
       ThisComponent = home
       break
   }
-  return  <ThisComponent />
+  return <ThisComponent />
 }
