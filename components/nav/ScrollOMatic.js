@@ -5,7 +5,6 @@ import { Motion, spring, presets } from 'react-motion'
 import raf from 'raf'
 import { getRouteState, setScrollPos, configScrollEnv, getTransitionDir } from '../../lib/redux/actions'
 import { fadeColor, binder } from '../../lib/_utils'
-import { setScrollState } from '../../router/navRules'
 import router from '../../router'
 const { Router } = router
 
@@ -23,6 +22,7 @@ class ScrollOMatic extends Component {
       animValsY: 0,
       animValsX: 0,
       currentScrollDir: 'forward',
+      currentScrollAxis: this.props.scrollConfig.initScrollAxis,
       bgImage: this.props.scrollConfig.style.backgroundImageForward
     }
     binder(this, [
@@ -34,7 +34,8 @@ class ScrollOMatic extends Component {
       'getLayoutData',
       'setCurrentScrollDir',
       'setScrollStyleState',
-      'scrollDirTransformer'
+      'scrollDirTransformer',
+      'animateTheScroll'
     ])
   }
 
@@ -43,7 +44,6 @@ class ScrollOMatic extends Component {
     Router.prefetchRoute('main', { slug: this.props.routeData.prevRoute })
 
     const { type, route } = this.props.routeData
-
     // if (this.props.reduxRouteData.nextRoute === '') { this.props.getRouteState(route) }
     // if (type !== '') { this.props.configScrollEnv(type) }
     this.props.getRouteState(route)
@@ -51,12 +51,9 @@ class ScrollOMatic extends Component {
     this.setScrollStyleState()
   }
 
-  componentWillReceiveProps (nextProps) {
-    // this.initScroll()
-    if (this.props.children !== nextProps.children) { this.resetMin() }
-  }
+  componentWillReceiveProps (nextProps) { (this.props.children !== nextProps.children) && this.resetMin() }
 
-  shouldComponentUpdate (nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) { 
     if (true &&
       this.calculate.timer !== void 0 &&
       this.props.children === nextProps.children &&
@@ -75,10 +72,13 @@ class ScrollOMatic extends Component {
   componentDidUpdate () { this.calculate() }
 
   getLayoutData () {
+    const { currentScrollAxis } = this.state
     const scrollOMatic = DOM.findDOMNode(this.scrollOMatic)
     const scrollTray = DOM.findDOMNode(this.scrollTray)
     const trayScrollHeight = scrollTray.scrollHeight
+    const trayScrollWidth = scrollTray.scrollWidth
     const scrollOMaticOffsetHeight = scrollOMatic.offsetHeight
+    const scrollOMaticOffsetWidth = scrollOMatic.offsetWidth
     const currentVal = this.state.animValues
     const scrollOMaticRect = scrollOMatic.getBoundingClientRect()
     return {
@@ -87,18 +87,20 @@ class ScrollOMatic extends Component {
       scrollOMatic,
       scrollOMaticRect,
       trayScrollHeight,
+      trayScrollWidth,
+      scrollOMaticOffsetWidth,
       scrollOMaticOffsetHeight,
-      bounds: -(trayScrollHeight - scrollOMaticOffsetHeight),
+      bounds: currentScrollAxis === 'y'
+        ? -(trayScrollHeight - scrollOMaticOffsetHeight)
+        : -(trayScrollWidth - scrollOMaticOffsetWidth),
       trayTop: scrollTray.offsetTop,
       trayLeft: scrollTray.offsetLeft,
       trayOffsetHeight: scrollTray.offsetHeight,
       trayOffsetWidth: scrollTray.offsetWidth,
-      trayScrollWidth: scrollTray.scrollWidth,
       scrollOMaticTop: scrollOMaticRect.top,
       scrollOMaticLeft: scrollOMaticRect.left,
       scrollOMaticWidth: scrollOMaticRect.width,
-      scrollOMaticHeight: scrollOMaticRect.height,
-      scrollOMaticOffsetWidth: scrollOMatic.offsetWidth
+      scrollOMaticHeight: scrollOMaticRect.height
     }
   }
 
@@ -107,7 +109,6 @@ class ScrollOMatic extends Component {
     clearTimeout(this.calculate.timer)
     this.calculate.timer = setTimeout(() => {
       const { bounds, currentVal } = layout
-      // const currentVal = this.state.animValues
       if (currentVal > 1) {
         this.resetMin()
       } else if (currentVal <= bounds) {
@@ -128,39 +129,43 @@ class ScrollOMatic extends Component {
     const verticalConditions = (leftUp === 'up' && currentScrollDir === 'back') || (rightDown === 'down' && currentScrollDir === 'forward')
     const canScrollSideways = horizontalConditions && (layout.trayLeft < layout.scrollOMaticLeft || layout.trayOffsetWidth > layout.scrollOMaticWidth)
     const canScrollVertical = verticalConditions && (layout.trayTop < layout.scrollOMaticTop || layout.trayOffsetHeight > layout.scrollOMaticHeight)
-
     // console.log(currentScrollDir)
     // console.log(this.props)
     // console.log(layout)
     // console.log(verticalConditions)
     // console.log(horizontalConditions)
-    // console.log(canScrollSideways)
-    // console.log(canScrollVertical)
-
     return canScrollVertical || canScrollSideways
   }
 
   navigator () {
-    const { nextRoute, prevRoute } = this.props.routeData
+    const { routeData: { nextRoute, prevRoute }, scrollConfig: { leftUp, rightDown } } = this.props
     const layout = this.getLayoutData()
-    const { currentVal, scrollOMaticHeight, trayScrollHeight } = layout
-    const shouldBeNextRoute = -(currentVal - scrollOMaticHeight) + 1 >= trayScrollHeight
-    const shouldBePrevRoute = (currentVal / (scrollOMaticHeight - trayScrollHeight)) < 0 
+    const { scrollOMaticHeight, scrollOMaticWidth, trayScrollHeight, trayScrollWidth } = layout
+    const currentVal = this.state.animValues
+
+    const shouldBeNextRoute = leftUp === 'up'
+      ? -(currentVal - scrollOMaticHeight) + 1 >= trayScrollHeight
+      : -(currentVal - scrollOMaticWidth) + 1 >= trayScrollWidth
+
+    const shouldBePrevRoute = rightDown === 'down'
+      ? (currentVal / (scrollOMaticHeight - trayScrollHeight)) < 0
+      : (currentVal / (scrollOMaticWidth - trayScrollWidth)) < 0
+
+    // console.log(leftUp, rightDown)
+    // console.log(currentVal, scrollOMaticHeight, trayScrollHeight)
+    // console.log(currentVal, scrollOMaticWidth, trayScrollWidth)
+    // console.log(currentVal, scrollOMaticHeight, trayScrollHeight)
+    // console.log(currentVal, scrollOMaticWidth, trayScrollWidth)
 
     if (shouldBePrevRoute) {
       this.props.getRouteState(prevRoute)
-      Router.pushRoute('main', { slug: this.props.routeData.prevRoute })
-      this.props.setScrollPos({ x: 0, y: trayScrollHeight - 1 })
+      Router.pushRoute('main', { slug: prevRoute })
+      // this.props.setScrollPos({ x: 0, y: trayScrollHeight - 1 })
     }
-
-    // console.log(currentVal)
-    // console.log((currentVal / (scrollOMaticHeight - trayScrollHeight)))
-    // console.log(this.state.animValues)
-
     if (shouldBeNextRoute) {
       this.props.getRouteState(nextRoute)
-      Router.pushRoute('main', { slug: this.props.routeData.nextRoute })
-      this.props.setScrollPos({ x: 0, y: 1 })
+      Router.pushRoute('main', { slug: nextRoute })
+      // this.props.setScrollPos({ x: 0, y: 1 })
     }
   }
 
@@ -190,7 +195,7 @@ class ScrollOMatic extends Component {
   }
 
   scrollDirTransformer (amt) {
-    let amt3 = amt ? amt.toFixed(3) : 0
+    let amt3 = amt ? amt.toFixed(1) : 0
     const { initScrollAxis, leftUp, rightDown } = this.props.scrollConfig
     const { currentScrollDir } = this.state
     let x = 0
@@ -198,7 +203,7 @@ class ScrollOMatic extends Component {
     if (currentScrollDir === 'back') {
       if (leftUp === 'left') {
         x = `${amt3}px`
-        y = 0
+        y = 0 // or this.state.animValsY if you go that route
       } else {
         x = 0
         y = `${amt3}px`
@@ -213,13 +218,17 @@ class ScrollOMatic extends Component {
       }
     }
 
-    return `translate3d(${x},${y},0)`
+    const magicVal = `translate3d(${x},${y},0)`
+    // console.log(magicVal)
+    return magicVal
   }
 
-  handleScroll (e) {
-    e.preventDefault()
+  animateTheScroll (e) {
+    const { scrollInverted, currentScrollDir, currentScrollAxis } = this.state
+    const { leftUp, rightDown } = this.props.scrollConfig
     // const yData = e.deltaY ? e.deltaY : e.deltaX
     // const xData = e.deltaX ? e.deltaX : e.deltaY
+    // const rawData = currentScrollAxis === 'x' ? xData : yData
     const rawData = e.deltaY ? e.deltaY : e.deltaX
     const mousePos = Math.floor(rawData)
     const animationVal = this.state.animValues
@@ -227,15 +236,26 @@ class ScrollOMatic extends Component {
     const newAnimationValNeg = (animationVal - mousePos)
 
     this.setState({
-      currentScrollDir: this.state.scrollInverted
+      currentScrollDir: scrollInverted
         ? (mousePos < 0 ? 'back' : 'forward')
-        : (mousePos < 0 ? 'forward' : 'back')
+        : (mousePos < 0 ? 'forward' : 'back'),
+      currentScrollAxis: currentScrollDir === 'forward'
+        ? (rightDown === 'right' ? 'x' : 'y')
+        : (leftUp === 'left' ? 'x' : 'y')
     })
 
     if (!this.canIscroll()) return
 
-    const scrolling = () => {
-      this.state.scrollInverted
+    console.log(this.scrollTray.style.transform)
+
+    const scrolling = () => { // if you split animvalues into each axis, you'd set state on one or the other inside ternary here
+      // const vals = scrollInverted
+      //   ? (currentScrollAxis === 'x' ? newAnimationVal : newAnimationValNeg)
+      //   : (currentScrollAxis === 'x' ? newAnimationValNeg : newAnimationVal)
+      // this.setState({
+      //   animValues: vals
+      // })
+      scrollInverted
         ? this.setState({
           animValues: newAnimationValNeg
         }) : this.setState({
@@ -243,9 +263,14 @@ class ScrollOMatic extends Component {
         })
     }
 
+    raf(scrolling)
+  }
+
+  handleScroll (e) {
+    e.preventDefault()
     this.setScrollStyleState()
     this.navigator()
-    raf(scrolling)
+    this.animateTheScroll(e)
   }
 
   render () {
@@ -253,12 +278,11 @@ class ScrollOMatic extends Component {
     // const { config } = this.props
     // const { width, height } = style
     // const springConfig = config || presets.noWobble
-    console.log(minHeight, minWidth);
     const springConfig = presets.noWobble
     return (
       <div className='scroll-o-matic' ref={(ref) => { this.scrollOMatic = ref }}
         style={{
-          backgroundColor: this.state.currentColor, 
+          backgroundColor: this.state.currentColor,
           position: 'relative',
           width: '100vw',
           height: '100vh'
@@ -279,7 +303,7 @@ class ScrollOMatic extends Component {
                 display: 'inline-flex',
                 position: 'absolute'
               }}>
-              { console.log(minWidth, minHeight) }
+              {/* { console.log(minWidth, minHeight) } */}
               { this.props.children }
             </div>
           )}
