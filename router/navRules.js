@@ -1,7 +1,7 @@
 export const setScrollState = type => {
   let rules = {}
-  switch (true) {
-    case type === 'topNoSub':
+  switch (type) {
+    case 'topNoSub':
       rules = {
         type,
         leftUp: 'left',
@@ -10,14 +10,14 @@ export const setScrollState = type => {
         style: {
           top: 0,
           left: '100vw',
-          minWidth: '300vw',
-          minHeight: '100vh',
+          width: '3',
+          height: '1',
           backgroundImageForward: '/static/img/arrowLeft.png',
           backgroundImageBack: '/static/img/arrowRight.png'
         }
       }
       break
-    case type === 'topWSub' :
+    case 'topWSub' :
       rules = {
         type,
         leftUp: 'left',
@@ -26,14 +26,14 @@ export const setScrollState = type => {
         style: {
           top: 0,
           left: '100vw',
-          minWidth: '200vw',
-          minHeight: '200vh',
+          width: '2',
+          height: '2',
           backgroundImageForward: '/static/img/arrowUp.png',
           backgroundImageBack: '/static/img/arrowRight.png'
         }
       }
       break
-    case type === 'subMid' :
+    case 'subMid' :
       rules = {
         type,
         leftUp: 'up',
@@ -42,14 +42,14 @@ export const setScrollState = type => {
         style: {
           top: '100vh',
           left: 0,
-          minWidth: '100vw',
-          minHeight: '300vh',
+          width: '1',
+          height: '3',
           backgroundImageForward: '/static/img/arrowUp.png',
           backgroundImageBack: '/static/img/arrowDown.png'
         }
       }
       break
-    case type === 'subLast' :
+    case 'subLast' :
       rules = {
         type,
         leftUp: 'up',
@@ -58,8 +58,8 @@ export const setScrollState = type => {
         style: {
           top: '100vh',
           left: 0,
-          minWidth: '200vw',
-          minHeight: '200vh',
+          width: '2',
+          height: '2',
           backgroundImageForward: '/static/img/arrowLeft.png',
           backgroundImageBack: '/static/img/arrowDown.png'
         }
@@ -74,8 +74,8 @@ export const setScrollState = type => {
         style: {
           top: 0,
           left: '100vw',
-          minWidth: '300vw',
-          minHeight: '100%',
+          width: '3',
+          height: '1',
           backgroundImageForward: '/static/img/arrowRight.png',
           backgroundImageBack: '/static/img/arrowLeft.png'
         }

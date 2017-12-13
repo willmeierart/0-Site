@@ -18,7 +18,7 @@ class ScrollOMatic extends Component {
       currentColor: this.props.routeData.bgColor1,
       isEndOfScroll: false,
       canScroll: false,
-      scrollInverted: false,
+      scrollInverted: true,
       animValues: 0,
       animValsY: y,
       animValsX: x,
@@ -51,6 +51,7 @@ class ScrollOMatic extends Component {
     const { routeData: { type, route } } = this.props
     this.props.getRouteState(route)
     this.props.configScrollEnv(type)
+    console.log(this.props.transitionOrigin)
   }
 
   componentWillReceiveProps (nextProps) { (this.props.children !== nextProps.children) && this.resetMin() }
@@ -76,34 +77,45 @@ class ScrollOMatic extends Component {
 
   getLayoutData () {
     const { currentScrollAxis } = this.state
+    const { leftUp, rightDown } = this.props.scrollConfig
     const currentVal = this.animValSwitch().val
     const scrollOMatic = DOM.findDOMNode(this.scrollOMatic)
     const scrollTray = DOM.findDOMNode(this.scrollTray)
-    const trayScrollHeight = scrollTray.scrollHeight
-    const trayScrollWidth = scrollTray.scrollWidth
-    const scrollOMaticOffsetHeight = scrollOMatic.offsetHeight
-    const scrollOMaticOffsetWidth = scrollOMatic.offsetWidth
     const scrollOMaticRect = scrollOMatic.getBoundingClientRect()
+    const scrollOMaticWidth = scrollOMaticRect.width
+    const scrollOMaticHeight = scrollOMaticRect.height
+    const trayOffsetHeight = scrollTray.offsetHeight
+    const trayOffsetWidth = scrollTray.offsetWidth
     return {
       currentVal,
       scrollTray,
       scrollOMatic,
       scrollOMaticRect,
-      trayScrollHeight,
-      trayScrollWidth,
-      scrollOMaticOffsetWidth,
-      scrollOMaticOffsetHeight,
+      scrollOMaticWidth,
+      scrollOMaticHeight,
+      trayOffsetHeight,
+      trayOffsetWidth,
       bounds: currentScrollAxis === 'y'
-        ? -(trayScrollHeight - scrollOMaticOffsetHeight)
-        : -(trayScrollWidth - scrollOMaticOffsetWidth),
+        ? -(trayOffsetHeight - scrollOMaticHeight)
+        : -(trayOffsetWidth - scrollOMaticWidth),
       trayTop: scrollTray.offsetTop,
       trayLeft: scrollTray.offsetLeft,
-      trayOffsetHeight: scrollTray.offsetHeight,
-      trayOffsetWidth: scrollTray.offsetWidth,
       scrollOMaticTop: scrollOMaticRect.top,
       scrollOMaticLeft: scrollOMaticRect.left,
-      scrollOMaticWidth: scrollOMaticRect.width,
-      scrollOMaticHeight: scrollOMaticRect.height
+      equations: {
+        shouldBePrevRoute: leftUp === 'up'
+          ? -(currentVal - scrollOMaticHeight) + 1
+          : -(currentVal - scrollOMaticWidth) + 1,
+        shouldBePrevRouteBool: leftUp === 'up'
+          ? -(currentVal - scrollOMaticHeight) + 1 >= trayOffsetHeight
+          : -(currentVal - scrollOMaticWidth) + 1 >= trayOffsetWidth,
+        shouldBeNextRoute: rightDown === 'down'
+          ? (currentVal / (scrollOMaticHeight - trayOffsetHeight))
+          : (currentVal / (scrollOMaticWidth - trayOffsetWidth)),
+        shouldBeNextRouteBool: rightDown === 'down'
+          ? (currentVal / (scrollOMaticHeight - trayOffsetHeight)) < 0
+          : (currentVal / (scrollOMaticWidth - trayOffsetWidth)) < 0
+      }
     }
   }
 
@@ -149,32 +161,35 @@ class ScrollOMatic extends Component {
     const {
       routeData: { nextRoute, prevRoute },
       scrollConfig: { leftUp, rightDown },
-      getRouteState, getTransitionOrigin, transitionOrigin } = this.props 
+      getRouteState, getTransitionOrigin } = this.props
     const layout = this.getLayoutData()
-    const { scrollOMaticHeight, scrollOMaticWidth, trayScrollHeight, trayScrollWidth } = layout
-    const { currentVal } = layout
+    const { equations: { shouldBeNextRouteBool, shouldBePrevRouteBool },
+      scrollOMaticHeight, scrollOMaticWidth, trayOffsetHeight, trayOffsetWidth } = layout
 
-    const shouldBeNextRoute = leftUp === 'up'
-      ? -(currentVal - scrollOMaticHeight) + 1 >= trayScrollHeight
-      : -(currentVal - scrollOMaticWidth) + 1 >= trayScrollWidth
-
-    const shouldBePrevRoute = rightDown === 'down'
-      ? (currentVal / (scrollOMaticHeight - trayScrollHeight)) < 0
-      : (currentVal / (scrollOMaticWidth - trayScrollWidth)) < 0
-
-    if (shouldBePrevRoute) {
-      const widthHeight = this.setScrollOrigin(transitionOrigin)
+    if (shouldBePrevRouteBool) {
+      // const widthHeight = this.setScrollOrigin(scrollPos)
+      const widthHeight = [scrollOMaticWidth, scrollOMaticHeight]
+      getTransitionOrigin(prevRoute, 'back', widthHeight)
+      const scrollPosObj = {
+        x: leftUp === 'up' ? 0 : -trayOffsetHeight + 1,
+        y: leftUp === 'up' ? -trayOffsetWidth + 1 : 0
+      }
+      this.props.setScrollPos(scrollPosObj)
       getRouteState(prevRoute)
       Router.pushRoute('main', { slug: prevRoute })
-      getTransitionOrigin(prevRoute, 'back', widthHeight)
-      // this.props.setScrollPos({ x: 0, y: trayScrollHeight - 1 })
     }
-    if (shouldBeNextRoute) {
-      const widthHeight = this.setScrollOrigin(transitionOrigin)
+    if (shouldBeNextRouteBool) {
+      // const widthHeight = this.setScrollOrigin(scrollPos)
+      const widthHeight = [scrollOMaticWidth, scrollOMaticHeight]
+      getTransitionOrigin(nextRoute, 'forward', widthHeight)
+      const scrollPosObj = {
+        x: rightDown === 'down' ? 0 : -1,
+        y: rightDown === 'down' ? -1 : 0
+      }
+      this.props.setScrollPos(scrollPosObj)
+      // this.props.setScrollPos({ x: 0, y: -1 })
       getRouteState(nextRoute)
       Router.pushRoute('main', { slug: nextRoute })
-      getTransitionOrigin(nextRoute, 'forward', widthHeight)
-      // this.props.setScrollPos({ x: 0, y: 1 })
     }
   }
 
@@ -191,16 +206,18 @@ class ScrollOMatic extends Component {
     console.log(layout)
     console.log(coords)
 
-    return [thisX, thisY]
+    // return [thisX, thisY]
+    return [x, y]
   }
 
   setScrollStyleState () {
     const layout = this.getLayoutData()
-    const { currentVal, scrollOMaticHeight, scrollOMaticWidth, trayScrollHeight, trayScrollWidth } = layout
+    console.log(layout)
+    const { currentVal, scrollOMaticHeight, scrollOMaticWidth, trayOffsetHeight, trayOffsetWidth } = layout
     const { bgColor1, bgColor2 } = this.props.routeData
     const { style: { backgroundImageBack, backgroundImageForward } } = this.props.scrollConfig
     const scrollOMaticDim = this.state.currentScrollAxis === 'x' ? scrollOMaticWidth : scrollOMaticHeight
-    const trayScrollDim = this.state.currentScrollAxis === 'x' ? trayScrollWidth : trayScrollHeight
+    const trayScrollDim = this.state.currentScrollAxis === 'x' ? trayOffsetWidth : trayOffsetHeight
 
      // THIS IS THE CORRECT FORMULA FOR CHANGING COLOR:
     const scrollTiplier = ((currentVal / (scrollOMaticDim - trayScrollDim))).toFixed(3)
@@ -268,9 +285,6 @@ class ScrollOMatic extends Component {
     const newAnimationVal = (animationVal.val + mousePos)
     const newAnimationValNeg = (animationVal.val - mousePos)
 
-    console.log(newAnimationVal);
-    console.log(animationVal.name)
-
     this.setScrollDirAxis(mousePos)
 
     if (!this.canIscroll()) return
@@ -301,7 +315,7 @@ class ScrollOMatic extends Component {
   }
 
   render () {
-    const { minHeight, minWidth } = this.props.scrollConfig.style
+    const { height, width } = this.props.scrollConfig.style
     const springConfig = presets.noWobble
     const axisVals = this.animValSwitch().val
     console.log(axisVals)
@@ -323,8 +337,8 @@ class ScrollOMatic extends Component {
                 borderRight: '10px solid pink',
                 borderMargin: '10px solid salmon',          
                 background: `url(${this.state.bgImage})`,
-                height: minHeight,
-                width: minWidth,
+                height: `${height}00vh`,
+                width: `${width}00vw`,
                 transform: this.scrollDirTransformer(amt),
                 willChange: 'transform',
                 display: 'inline-flex',
