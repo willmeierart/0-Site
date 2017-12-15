@@ -1,4 +1,4 @@
-export const setScrollState = type => {
+const navRules = type => {
   let rules = {}
   switch (type) {
     case 'topNoSub':
@@ -83,3 +83,5 @@ export const setScrollState = type => {
   }
   return rules
 }
+
+export default navRules

@@ -5,7 +5,7 @@ import faker from 'faker'
 // import { checkAllQueriesLoading, checkAllQueriesError } from '../lib/_utils'
 import App from '../../components/App'
 import routeData from '../../router/routeData'
-// import CenterLogo from '../components/layout/CenterLogo'
+import navRules from '../../router/navRules'
 
 const content = () => (
   <div className='active'>
@@ -15,19 +15,22 @@ const content = () => (
         {/* width: 50vw; */}
         height: 100vh;
       }
-    `}</style>
+    `}</style> 
   </div>
 )
 
 // include boilerplate for global loader dependent on graphql req's:
-export default () => {
+export default ({ pathname }) => {
   // const indexRoute = routeData.find(route => route.title === 'home')
+
+  const thisRouteData = { ...routeData.home }
+  thisRouteData.navRules = navRules(thisRouteData.type)
   return (
-    <App routeData={routeData.home} title='home'>
+    <App pathname={pathname} routeData={thisRouteData} title='home'>
       <div className='content'>
         {/* const allQueries = [allThings1, allThings2]
           checkAllQueriesLoading(allQueries, content) */}
-        { content() }
+        {content()}
       </div>
       <style jsx>{`
         .content {

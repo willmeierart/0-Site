@@ -3,13 +3,13 @@ import Head from './Head'
 import ScrollOMatic from './nav/ScrollOMatic'
 import CenterLogo from '../components/layout/CenterLogo'
 
-export default ({ children, title, routeData }) => {
+export default ({ children, title, routeData, pathname }) => {
   return (
     <div className='App'>
       <Head title={title} />
       <main>
         <div className='logo-clip-path'>
-          <ScrollOMatic routeData={routeData} className='scroll-o-matic'>
+          <ScrollOMatic className='scroll-o-matic' pathname={pathname} title={title} routeData={routeData} scrollInverted dualAxis>
             { children }
           </ScrollOMatic>
         </div>
