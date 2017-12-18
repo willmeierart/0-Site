@@ -131,6 +131,8 @@ class ScrollOMatic extends Component {
     const { current } = this.state
     const { layout: { scrollOMaticHeight, scrollOMaticWidth, widthMargin, heightMargin }, routeData: { nextRoute, prevRoute, type }, getNewOriginPos } = this.props
 
+    console.log(current)
+
     const shouldBePrevRoute = current >= 0
     const shouldBeNextRoute = type.indexOf('top') !== 0
       ? heightMargin >= current
@@ -145,6 +147,7 @@ class ScrollOMatic extends Component {
 
     if (shouldBeNextRoute || shouldBePrevRoute) {
       const widthHeight = [scrollOMaticWidth, scrollOMaticHeight]
+      console.log(widthHeight, nextRoute, prevRoute)
       shouldBeNextRoute
         ? getNewOriginPos(nextRoute, 'forward', widthHeight)
         : getNewOriginPos(prevRoute, 'back', widthHeight)
@@ -207,16 +210,16 @@ class ScrollOMatic extends Component {
     // along other axis, it needs to hug that max axis
     // instead of snapping to 0
 
-    let amt3 = amt ? amt.toFixed(0) : 0
+    let amt3 = amt ? amt.toFixed(0) : -1
     const { type } = this.props.routeData
     const { animValsX, animValsY } = this.state
     let x = animValsX
     let y = animValsY
     if (type.indexOf('top') === 0) {
       x = `${amt3}px`
-      y = '0px' // `${animValsY}px`
+      y = '-1px' // `${animValsY}px`
     } else {
-      x = '0px' // `${animValsX}px`
+      x = '-1px' // `${animValsX}px`
       y = `${amt3}px`
     }
 

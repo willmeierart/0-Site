@@ -5,8 +5,6 @@ const navRules = type => {
       rules = {
         type,
         style: {
-          top: 0,
-          left: '100vw',
           width: '3',
           height: '1',
           backgroundImageForward: '/static/img/arrowLeft.png',
@@ -18,8 +16,6 @@ const navRules = type => {
       rules = {
         type,
         style: {
-          top: 0,
-          left: '100vw',
           width: '3',
           height: '1',
           backgroundImageForward: '/static/img/arrowLeft.png',
@@ -31,8 +27,6 @@ const navRules = type => {
       rules = {
         type,
         style: {
-          top: '100vh',
-          left: 0,
           width: '1',
           height: '3',
           backgroundImageForward: '/static/img/arrowUp.png',
@@ -44,8 +38,6 @@ const navRules = type => {
       rules = {
         type,
         style: {
-          top: '100vh',
-          left: 0,
           width: '1',
           height: '3',
           backgroundImageForward: '/static/img/arrowUp.png',
@@ -54,11 +46,10 @@ const navRules = type => {
       }
       break
     default :
+      console.log('default')
       rules = {
         type,
         style: {
-          top: 0,
-          left: '100vw',
           width: '3',
           height: '1',
           backgroundImageForward: '/static/img/arrowRight.png',
