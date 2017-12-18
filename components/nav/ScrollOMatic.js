@@ -14,8 +14,6 @@ class ScrollOMatic extends Component {
 
     const { routeData: { bgColor1, bgColor2, navRules: { style: { backgroundImageForward, backgroundImageBack } } }, transitionOrigin: { x, y }, transitionDirection } = props
 
-    console.log(x, y)
-
     this.state = {
       currentColor: transitionDirection === 'forward' ? bgColor1 : bgColor2,
       isEndOfScroll: false,
@@ -34,7 +32,6 @@ class ScrollOMatic extends Component {
       'resetMax',
       'navigator',
       'canIscroll',
-      // 'getLayoutData',
       'setCurrentScrollDir',
       'setScrollStyleState',
       'scrollDirTransformer',
@@ -131,8 +128,6 @@ class ScrollOMatic extends Component {
     const { current } = this.state
     const { layout: { scrollOMaticHeight, scrollOMaticWidth, widthMargin, heightMargin }, routeData: { nextRoute, prevRoute, type }, getNewOriginPos } = this.props
 
-    console.log(current)
-
     const shouldBePrevRoute = current >= 0
     const shouldBeNextRoute = type.indexOf('top') !== 0
       ? heightMargin >= current
@@ -147,7 +142,6 @@ class ScrollOMatic extends Component {
 
     if (shouldBeNextRoute || shouldBePrevRoute) {
       const widthHeight = [scrollOMaticWidth, scrollOMaticHeight]
-      console.log(widthHeight, nextRoute, prevRoute)
       shouldBeNextRoute
         ? getNewOriginPos(nextRoute, 'forward', widthHeight)
         : getNewOriginPos(prevRoute, 'back', widthHeight)
@@ -206,10 +200,6 @@ class ScrollOMatic extends Component {
   }
 
   scrollDirTransformer (amt) {
-    // if tray starts at max justification but then scrolls
-    // along other axis, it needs to hug that max axis
-    // instead of snapping to 0
-
     let amt3 = amt ? amt.toFixed(0) : -1
     const { type } = this.props.routeData
     const { animValsX, animValsY } = this.state
@@ -217,9 +207,9 @@ class ScrollOMatic extends Component {
     let y = animValsY
     if (type.indexOf('top') === 0) {
       x = `${amt3}px`
-      y = '-1px' // `${animValsY}px`
+      y = '-1px'
     } else {
-      x = '-1px' // `${animValsX}px`
+      x = '-1px'
       y = `${amt3}px`
     }
 
@@ -246,12 +236,6 @@ class ScrollOMatic extends Component {
         }) : this.setState({
           [animationVal.name]: newAnimationVal
         })
-
-      // console.log(dualAxis)
-      // console.log(currentScrollAxis)
-      // console.log(newAnimationValNeg)
-      // console.log(mousePos)
-      // console.log(this.state.animValsX)
     }
 
     raf(scrolling)
@@ -269,7 +253,6 @@ class ScrollOMatic extends Component {
     const { height, width } = this.props.routeData.navRules.style
     const springConfig = presets.noWobble
     const axisVals = this.animValSwitch().val
-    // console.log(axisVals)
     return (
       <div className='scroll-o-matic' ref={(ref) => { this.scrollOMatic = ref }}
         style={{
@@ -284,7 +267,6 @@ class ScrollOMatic extends Component {
             <div className='scroll-tray' ref={(scrollTray) => { this.scrollTray = scrollTray }}
               style={{
                 boxSizing: 'border-box',
-                // border: '10px solid white',
                 background: `url(${this.state.bgImage})`,
                 height: `${height}00vh`,
                 width: `${width}00vw`,
@@ -293,14 +275,14 @@ class ScrollOMatic extends Component {
                 display: 'inline-flex',
                 position: 'absolute'
               }}>
-              {/* { console.log(this.state, amt) } */}
               { this.props.children }
             </div>
           )}
         </Motion>
         <style jsx>{`
-          .scroll-o-matic {
-            background-color: ${this.state.currentColor};
+          .scroll-o-matic {}
+          .scroll-tray {
+            z-index:0;
           }
         `}</style>
       </div>
@@ -313,7 +295,6 @@ function mapStateToProps (state) {
     transitionOrigin: state.router.transitionOrigin,
     transitionDirection: state.router.transitionDirection,
     layout: state.scroll.layout
-    // state.
   }
 }
 

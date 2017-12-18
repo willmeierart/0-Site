@@ -119,3 +119,8 @@ CurrentRoute.methods = {
   onFinishLastRoute(),
   onClickFocusThisRoute()
 }
+
+
+
+TO DO before break:
+[] 

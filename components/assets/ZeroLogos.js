@@ -5,7 +5,7 @@ export function AzLogo01 ({ color }) {
   // red glyph with no background:
   // console.log(color)
   return (
-    <div className='az-logo-01'>
+    <div className='az-logo-01' style={{width: '120%', marginLeft: '-10%'}}>
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 103.33 152'>
         <title>AZ-LOGO-01</title>
         <path style={{ fill: 'none' }} className='cls-1' d='M57.57,35.17H45.76a11.61,11.61,0,0,0-11.6,11.59V75.53l35-14.82v-14A11.6,11.6,0,0,0,57.57,35.17Z' />
@@ -14,6 +14,7 @@ export function AzLogo01 ({ color }) {
       <style jsx>{`
         .cls-1 { fill: none; }
         .cls-2 { fill: ${color}; }
+        .az-logo-01 { width: 120%; margin-left: -10%; }
       `}</style>
     </div>
   )
