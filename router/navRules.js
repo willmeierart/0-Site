@@ -4,9 +4,6 @@ const navRules = type => {
     case 'topNoSub':
       rules = {
         type,
-        leftUp: 'left',
-        rightDown: 'right',
-        initScrollAxis: ['x', 'x'],
         style: {
           top: 0,
           left: '100vw',
@@ -20,15 +17,12 @@ const navRules = type => {
     case 'topWSub' :
       rules = {
         type,
-        leftUp: 'up', // 'left',
-        rightDown: 'down',
-        initScrollAxis: ['y', 'x'],
         style: {
           top: 0,
           left: '100vw',
           width: '3',
-          height: '3',
-          backgroundImageForward: '/static/img/arrowUp.png',
+          height: '1',
+          backgroundImageForward: '/static/img/arrowLeft.png',
           backgroundImageBack: '/static/img/arrowRight.png'
         }
       }
@@ -36,13 +30,10 @@ const navRules = type => {
     case 'subMid' :
       rules = {
         type,
-        leftUp: 'up',
-        rightDown: 'down',
-        initScrollAxis: ['y', 'y'],
         style: {
           top: '100vh',
           left: 0,
-          width: '3',
+          width: '1',
           height: '3',
           backgroundImageForward: '/static/img/arrowUp.png',
           backgroundImageBack: '/static/img/arrowDown.png'
@@ -52,15 +43,12 @@ const navRules = type => {
     case 'subLast' :
       rules = {
         type,
-        leftUp: 'left', // 'up',
-        rightDown: 'right',
-        initScrollAxis: ['x', 'y'],
         style: {
           top: '100vh',
           left: 0,
-          width: '3',
+          width: '1',
           height: '3',
-          backgroundImageForward: '/static/img/arrowLeft.png',
+          backgroundImageForward: '/static/img/arrowUp.png',
           backgroundImageBack: '/static/img/arrowDown.png'
         }
       }
@@ -68,9 +56,6 @@ const navRules = type => {
     default :
       rules = {
         type,
-        leftUp: 'left',
-        rightDown: 'right',
-        initScrollAxis: ['x', 'x'],
         style: {
           top: 0,
           left: '100vw',
