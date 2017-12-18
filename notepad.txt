@@ -20,9 +20,6 @@ THINGS TO RESEARCH:
   + routing
   + animation (start with color)
 
-
-
-
 --------------------------------------------------------------
 --------------------------------------------------------------
 SCROLL-O-MATIC PSEUDO-RULES && NOTES
@@ -122,3 +119,8 @@ CurrentRoute.methods = {
   onFinishLastRoute(),
   onClickFocusThisRoute()
 }
+
+
+
+TO DO before break:
+[] 
