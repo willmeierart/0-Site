@@ -1,4 +1,4 @@
-import faker from 'faker'
+// import faker from 'faker'
 import App from '../../components/App'
 import routeData from '../../router/routeData'
 import navRules from '../../router/navRules'
@@ -10,7 +10,7 @@ export default ({ pathname }) => {
   return (
     <App pathname={pathname} routeData={thisRouteData} title='converse'>
       <div>
-        {faker.lorem.paragraphs(120)}
+        {/* {faker.lorem.paragraphs(120)} */}
       </div>
       <style jsx>{``}</style>
     </App>

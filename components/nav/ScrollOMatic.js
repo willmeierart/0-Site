@@ -318,7 +318,7 @@ class ScrollOMatic extends Component {
             <div className='scroll-tray' ref={(scrollTray) => { this.scrollTray = scrollTray }}
               style={{
                 boxSizing: 'border-box',
-                border: '10px solid white',
+                // border: '10px solid white',
                 background: `url(${this.state.bgImage})`,
                 height: `${height}00vh`,
                 width: `${width}00vw`,
