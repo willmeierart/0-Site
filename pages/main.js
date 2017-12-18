@@ -44,6 +44,7 @@ export default class Main extends PureComponent {
               justify-content: center;
               width: 100%;
               height: 100%;
+              background:black;
             }
             #container[class*="animate-"] {
               position: fixed;

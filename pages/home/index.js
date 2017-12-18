@@ -9,7 +9,7 @@ import navRules from '../../router/navRules'
 
 const content = () => (
   <div className='active'>
-    {/* {faker.lorem.paragraphs(120)} */}
+    {faker.lorem.paragraphs(120)}
     <style jsx>{`
       .active {
         {/* width: 50vw; */}
@@ -34,7 +34,6 @@ export default ({ pathname }) => {
       </div>
       <style jsx>{`
         .content {
-          width: 100vw;
         }
       `}</style>
     </App>
