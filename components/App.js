@@ -19,9 +19,6 @@ class App extends Component {
   handleMouseLeave () {
     this.props.toggleMenu(false)
   }
-  // handleColorChange (colorObj) {
-  //   this.props.setColorScheme(colorObj)
-  // }
   render () {
     const { children, title, routeData, pathname, menuOpen } = this.props
     return (
@@ -35,7 +32,7 @@ class App extends Component {
               { children }
             </ScrollOMatic>
           </div>
-          <CenterLogo openMenu={this.handleMouseEnter} closeMenu={this.handleMouseLeave} /*colors={{ current: cur2 }}*/ />
+          <CenterLogo openMenu={this.handleMouseEnter} closeMenu={this.handleMouseLeave} />
           { menuOpen &&
             <div onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}
               className='menu-wrapper' style={{

@@ -201,13 +201,6 @@ class ScrollOMatic extends Component {
       cur2: fadeColor(scrollTiplier, [bgColor2, bgColor1])
     })
 
-    // handleColorChange({
-    //   cur1: fadeColor(scrollTiplier, [bgColor1, bgColor2]),
-    //   cur2: fadeColor(scrollTiplier, [bgColor2, bgColor1])
-    // })
-   
-    // console.log(this.props.colors.cur2)
-
     this.setState({
       bgImage
     })
