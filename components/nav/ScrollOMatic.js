@@ -3,7 +3,7 @@ import DOM from 'react-dom'
 import { connect } from 'react-redux'
 import { Motion, spring, presets } from 'react-motion'
 import raf from 'raf'
-import { getNewOriginPos, transitionRoute, setScrollLayoutRules } from '../../lib/redux/actions'
+import { getNewOriginPos, transitionRoute, setScrollLayoutRules, setColorScheme } from '../../lib/redux/actions'
 import { fadeColor, binder } from '../../lib/_utils'
 import router from '../../router'
 const { Router } = router
@@ -45,17 +45,20 @@ class ScrollOMatic extends Component {
   componentWillUnmount () { window.removeEventListener('resize', this.props.setScrollLayoutRules) }
 
   componentDidMount () {
-    Router.prefetchRoute('main', { slug: this.props.routeData.nextRoute })
-    Router.prefetchRoute('main', { slug: this.props.routeData.prevRoute })
+    const { routeData: { nextRoute, prevRoute, bgColor1, bgColor2 }, setScrollLayoutRules, setColorScheme } = this.props
+
+    Router.prefetchRoute('main', { slug: nextRoute })
+    Router.prefetchRoute('main', { slug: prevRoute })
 
     const scrollOMatic = DOM.findDOMNode(this.scrollOMatic)
     const scrollTray = DOM.findDOMNode(this.scrollTray)
 
     this.trackCurrentPosition()
 
-    this.props.setScrollLayoutRules({ scrollOMatic, scrollTray })
+    setScrollLayoutRules({ scrollOMatic, scrollTray })
+    setColorScheme({ base1: bgColor1, base2: bgColor2 })
 
-    window.addEventListener('resize', () => this.props.setScrollLayoutRules({ scrollOMatic, scrollTray }))
+    window.addEventListener('resize', () => setScrollLayoutRules({ scrollOMatic, scrollTray }))
 
     console.log(this.props)
   }
@@ -175,7 +178,7 @@ class ScrollOMatic extends Component {
             backgroundImageForward
           }
         }
-      }
+      }, setColorScheme, handleColorChange
      } = this.props
     const { current } = this.state
 
@@ -188,14 +191,18 @@ class ScrollOMatic extends Component {
     const dirSwitcher = (b, f) => this.state.currentScrollDir === 'back' ? b : f
 
     const styles = {
-      bgImage: dirSwitcher(backgroundImageBack, backgroundImageForward),
-      currentColor: fadeColor(scrollTiplier, [bgColor1, bgColor2])
+      bgImage: dirSwitcher(backgroundImageBack, backgroundImageForward)
     }
-    const { bgImage, currentColor } = styles
+    const { bgImage } = styles
+
+
+    setColorScheme({
+      cur1: fadeColor(scrollTiplier, [bgColor1, bgColor2]),
+      cur2: fadeColor(scrollTiplier, [bgColor2, bgColor1])
+    })
 
     this.setState({
-      bgImage,
-      currentColor
+      bgImage
     })
   }
 
@@ -250,13 +257,13 @@ class ScrollOMatic extends Component {
   }
 
   render () {
-    const { height, width } = this.props.routeData.navRules.style
+    const { routeData: { navRules: { style: { height, width } } }, colors: { cur1 } } = this.props
     const springConfig = presets.noWobble
     const axisVals = this.animValSwitch().val
     return (
       <div className='scroll-o-matic' ref={(ref) => { this.scrollOMatic = ref }}
         style={{
-          backgroundColor: this.state.currentColor,
+          backgroundColor: cur1,
           position: 'relative',
           width: '100vw',
           height: '100vh',
@@ -294,7 +301,8 @@ function mapStateToProps (state) {
   return {
     transitionOrigin: state.router.transitionOrigin,
     transitionDirection: state.router.transitionDirection,
-    layout: state.scroll.layout
+    layout: state.scroll.layout,
+    colors: state.ui.colors
   }
 }
 
@@ -302,7 +310,8 @@ function mapDispatchToProps (dispatch) {
   return {
     getNewOriginPos: (transRoute, transDir, widthHeight) => dispatch(getNewOriginPos(transRoute, transDir, widthHeight)),
     transitionRoute: routerData => dispatch(transitionRoute(routerData)),
-    setScrollLayoutRules: layoutData => dispatch(setScrollLayoutRules(layoutData))
+    setScrollLayoutRules: layoutData => dispatch(setScrollLayoutRules(layoutData)),
+    setColorScheme: colorObj => dispatch(setColorScheme(colorObj))
   }
 }
 

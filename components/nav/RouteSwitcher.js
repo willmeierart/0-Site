@@ -6,7 +6,9 @@ export default ({ pathname }) => {
   // console.log(splitPath)
   // const thisRoute = routeData[pathEnd]
   // const ThisComponent = thisRoute.component
-  const ThisComponent = routeData[pathname].component
+  // console.log(pathname)
+  const isHome = pathname === '' || pathname === '/'
+  const ThisComponent = isHome ? routeData.home.component : routeData[pathname].component
 
   return <ThisComponent pathname={pathname} />
 }

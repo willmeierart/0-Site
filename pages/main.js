@@ -44,11 +44,11 @@ export default class Main extends PureComponent {
               justify-content: center;
               width: 100%;
               height: 100%;
-              background:black;
+              background: var(--az-red);
             }
             #container[class*="animate-"] {
               position: fixed;
-              animation: animateIn .75s ease-in-out forwards;
+              animation: animateIn .75s ease-in-out forwards; 
               transform-origin: center;
               will-change: transform opacity;
             }
