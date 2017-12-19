@@ -26,7 +26,6 @@ const Menu = (props) => {
       )
     })
   }
-  console.log(renderList)
   return (
     <div className='outer-wrapper'>
       <ul style={{listStyle: 'none', color: 'rgba(255,0,0,1)', textAlign: 'right', textShadow: '0 0 30px black'}}>

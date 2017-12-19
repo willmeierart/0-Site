@@ -2,7 +2,7 @@
 import react, { Component } from 'react'
 import { connect } from 'react-redux'
 import { binder } from '../lib/_utils'
-import { toggleMenu } from '../lib/redux/actions'
+import { toggleMenu, setColorScheme } from '../lib/redux/actions'
 import Head from './Head'
 import ScrollOMatic from './nav/ScrollOMatic'
 import CenterLogo from './layout/CenterLogo'
@@ -19,6 +19,9 @@ class App extends Component {
   handleMouseLeave () {
     this.props.toggleMenu(false)
   }
+  // handleColorChange (colorObj) {
+  //   this.props.setColorScheme(colorObj)
+  // }
   render () {
     const { children, title, routeData, pathname, menuOpen } = this.props
     return (
@@ -28,11 +31,11 @@ class App extends Component {
           <div className='logo-clip-path'>
             <ScrollOMatic className='scroll-o-matic'
               pathname={pathname} title={title}
-              routeData={routeData} scrollInverted dualAxis>
+              routeData={routeData} scrollInverted dualAxis handleColorChange={this.handleColorChange}>
               { children }
             </ScrollOMatic>
           </div>
-          <CenterLogo colors={{ color1: routeData.bgColor2, color2: routeData.bgColor1 }} />
+          <CenterLogo openMenu={this.handleMouseEnter} closeMenu={this.handleMouseLeave} /*colors={{ current: cur2 }}*/ />
           { menuOpen &&
             <div onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}
               className='menu-wrapper' style={{
@@ -68,13 +71,15 @@ class App extends Component {
 
 function mapStateToProps (state) {
   return {
-    menuOpen: state.ui.menuOpen
+    menuOpen: state.ui.menuOpen,
+    colors: state.ui.colors
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    toggleMenu: bool => dispatch(toggleMenu(bool))
+    toggleMenu: bool => dispatch(toggleMenu(bool)),
+    setColorScheme: colorObj => dispatch(setColorScheme(colorObj))
   }
 }
 

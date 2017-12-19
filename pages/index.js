@@ -1,4 +1,5 @@
 import { PureComponent } from 'react'
+import { connect } from 'react-redux'
 import AppProvider from '../lib/redux/AppProvider'
 
 import raf from 'raf'

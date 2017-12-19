@@ -178,7 +178,7 @@ class ScrollOMatic extends Component {
             backgroundImageForward
           }
         }
-      }, setColorScheme
+      }, setColorScheme, handleColorChange
      } = this.props
     const { current } = this.state
 
@@ -191,19 +191,25 @@ class ScrollOMatic extends Component {
     const dirSwitcher = (b, f) => this.state.currentScrollDir === 'back' ? b : f
 
     const styles = {
-      bgImage: dirSwitcher(backgroundImageBack, backgroundImageForward),
-      currentColor: fadeColor(scrollTiplier, [bgColor1, bgColor2])
+      bgImage: dirSwitcher(backgroundImageBack, backgroundImageForward)
     }
-    const { bgImage, currentColor } = styles
+    const { bgImage } = styles
+
 
     setColorScheme({
       cur1: fadeColor(scrollTiplier, [bgColor1, bgColor2]),
       cur2: fadeColor(scrollTiplier, [bgColor2, bgColor1])
     })
 
+    // handleColorChange({
+    //   cur1: fadeColor(scrollTiplier, [bgColor1, bgColor2]),
+    //   cur2: fadeColor(scrollTiplier, [bgColor2, bgColor1])
+    // })
+   
+    // console.log(this.props.colors.cur2)
+
     this.setState({
-      bgImage,
-      currentColor
+      bgImage
     })
   }
 
