@@ -37,12 +37,12 @@ class App extends Component {
             <div onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}
               className='menu-wrapper' style={{
                 position: 'absolute',
-                height: '30%',
-                width: '50%',
+                height: '10%',
+                width: '200%',
                 right: 0,
                 top: '30%',
                 zIndex: 5,
-                paddingRight: '20vw'
+                marginRight: '2vw'
               }}>
               <Menu closeMenu={() => this.props.toggleMenu(false)} />
             </div>

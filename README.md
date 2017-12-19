@@ -11,7 +11,11 @@ developed by Will Meier at Agency Zero
 ### **TODO:**
 
 [x] get scrollOMatic page nav working backward
+
 [ ] parse out any of scrollOMatic possible to other files
+
 [x] refactor any of scrollOMatic to use routeType instead of scrollAxis or anything else contingent
+
 [x] start working on programmatic nav via menu icon
+
 [ ] add PropTypes to all files

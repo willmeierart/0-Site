@@ -40,8 +40,9 @@ class CenterLogo extends Component {
     // const { colors } = this.props
     return (
       <div className='logo-wrapper'>
-        <div onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} className='logo-inner-wrapper'>
-          <AzLogo01 color={this.props.menuOpen ? 'rgba(0, 255, 255, 1)' : this.state.currentColor} />
+        <div //onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} 
+        className='logo-inner-wrapper'>
+          <AzLogo01 handleMouseEnter={this.handleMouseEnter} handleMouseLeave={this.handleMouseLeave} color={this.props.menuOpen ? 'rgba(0, 255, 255, 1)' : this.state.currentColor} />
         </div>
         <style jsx>{`
           .logo-wrapper {
