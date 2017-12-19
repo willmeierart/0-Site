@@ -18,7 +18,7 @@ developed by Will Meier at Agency Zero
 
 [x] start working on programmatic nav via menu icon
 
-[ ] add PropTypes to all files
+[x] add PropTypes to all files
 
 [ ] work on animations opening menu, extra flourish, any color effects, etc.
 
