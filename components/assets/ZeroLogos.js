@@ -3,7 +3,6 @@ const AZ_RED = 'var(--AZ-RED)'
 
 export function AzLogo01 ({ color, handleMouseEnter, handleMouseLeave }) {
   // red glyph with no background:
-  // console.log(color)
   return (
     <div className='az-logo-01' style={{width: '120%', marginLeft: '-10%'}}>
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 103.33 152'>

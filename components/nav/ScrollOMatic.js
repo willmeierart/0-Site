@@ -84,8 +84,6 @@ class ScrollOMatic extends Component {
 
   componentDidUpdate () { this.calculate() }
 
-  preventNativeScrollNav () {}
-
   canIscroll () {
     const { layout, routeData: { type } } = this.props
     const canScrollSideways = type.indexOf('top') === 0 && (layout.trayLeft < layout.scrollOMaticLeft || layout.trayOffsetWidth > layout.scrollOMaticWidth)
@@ -161,25 +159,7 @@ class ScrollOMatic extends Component {
   }
 
   setScrollStyleState () {
-    const {
-      layout: {
-        scrollOMaticHeight,
-        scrollOMaticWidth,
-        trayOffsetHeight,
-        trayOffsetWidth
-      },
-      routeData: {
-        type,
-        bgColor1,
-        bgColor2,
-        navRules: {
-          style: {
-            backgroundImageBack,
-            backgroundImageForward
-          }
-        }
-      }, setColorScheme, handleColorChange
-     } = this.props
+    const { layout: { scrollOMaticHeight, scrollOMaticWidth, trayOffsetHeight, trayOffsetWidth }, routeData: { type, bgColor1, bgColor2, navRules: { style: { backgroundImageBack, backgroundImageForward } } }, setColorScheme } = this.props
     const { current } = this.state
 
     const scrollOMaticDim = type.indexOf('top') === 0 ? scrollOMaticWidth : scrollOMaticHeight
