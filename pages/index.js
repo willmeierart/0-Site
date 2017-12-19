@@ -1,5 +1,6 @@
 import { PureComponent } from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import AppProvider from '../lib/redux/AppProvider'
 
 import raf from 'raf'
@@ -42,4 +43,8 @@ export default class Index extends PureComponent {
       </AppProvider>
     )
   }
+}
+
+Index.PropTypes = {
+  query: PropTypes.string.isRequired
 }

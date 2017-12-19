@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import { toggleMenu, setColorScheme } from '../../lib/redux/actions'
 import { binder } from '../../lib/_utils'
 import { AzLogo01 } from '../assets/ZeroLogos'
@@ -58,3 +59,9 @@ function mapDispatchToProps (dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CenterLogo)
+
+CenterLogo.PropTypes = {
+  toggleMenu: PropTypes.func.isRequired,
+  menuOpen: PropTypes.bool.isRequired,
+  colors: PropTypes.object.isRequired
+}

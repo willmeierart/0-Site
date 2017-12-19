@@ -1,6 +1,7 @@
 // main wrapper component - layout, universal styles, etc.
 import react, { Component } from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import { binder } from '../lib/_utils'
 import { toggleMenu, setColorScheme } from '../lib/redux/actions'
 import Head from './Head'
@@ -13,12 +14,8 @@ class App extends Component {
     super(props)
     binder(this, ['handleMouseEnter', 'handleMouseLeave'])
   }
-  handleMouseEnter () {
-    this.props.toggleMenu(true)
-  }
-  handleMouseLeave () {
-    this.props.toggleMenu(false)
-  }
+  handleMouseEnter () { this.props.toggleMenu(true) }
+  handleMouseLeave () { this.props.toggleMenu(false) }
   render () {
     const { children, title, routeData, pathname, menuOpen } = this.props
     return (
@@ -28,11 +25,11 @@ class App extends Component {
           <div className='logo-clip-path'>
             <ScrollOMatic className='scroll-o-matic'
               pathname={pathname} title={title}
-              routeData={routeData} scrollInverted dualAxis handleColorChange={this.handleColorChange}>
+              routeData={routeData} scrollInverted>
               { children }
             </ScrollOMatic>
           </div>
-          <CenterLogo openMenu={this.handleMouseEnter} closeMenu={this.handleMouseLeave} />
+          <CenterLogo />
           { menuOpen &&
             <div onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}
               className='menu-wrapper' style={{
@@ -81,3 +78,13 @@ function mapDispatchToProps (dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
+
+App.PropTypes = {
+  toggleMenu: PropTypes.func.isRequired,
+  setColorScheme: PropTypes.func.isRequired,
+  menuOpen: PropTypes.bool.isRequired,
+  colors: PropTypes.object.isRequired,
+  pathname: PropTypes.string.isRequired,
+  routeData: PropTypes.object.isRequired,
+  title: PropTypes.string.isRequired
+}

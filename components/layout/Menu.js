@@ -1,8 +1,9 @@
 import routeData from '../../router/routeData'
 import router from '../../router'
+import PropTypes from 'prop-types'
 const { Link } = router
 
-const Menu = (props) => {
+const Menu = ({ closeMenu }) => {
   const pageList = Object.keys(routeData)
   const topPages = pageList.filter(route => {
     return routeData[route].type.indexOf('top') === 0
@@ -12,7 +13,7 @@ const Menu = (props) => {
   const renderList = () => {
     return topPageData.map((each, i) => {
       return (
-        <li onClick={props.closeMenu} key={i}>
+        <li onClick={closeMenu} key={i}>
           <Link prefetch route='main' params={{slug: each.route}}>
             <a style={{textDecoration: 'none', color: 'inherit'}}><h1>{ each.route }</h1></a>
           </Link>
@@ -47,3 +48,7 @@ const Menu = (props) => {
 }
 
 export default Menu
+
+Menu.PropTypes = {
+  closeMenu: PropTypes.func.isRequired
+}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import DOM from 'react-dom'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Motion, spring, presets } from 'react-motion'
 import raf from 'raf'
@@ -37,8 +38,7 @@ class ScrollOMatic extends Component {
       'scrollDirTransformer',
       'animateTheScroll',
       'animValSwitch',
-      'trackCurrentPosition',
-      'preventNativeScrollNav'
+      'trackCurrentPosition'
     ])
   }
 
@@ -59,8 +59,6 @@ class ScrollOMatic extends Component {
     setColorScheme({ base1: bgColor1, base2: bgColor2 })
 
     window.addEventListener('resize', () => setScrollLayoutRules({ scrollOMatic, scrollTray }))
-
-    console.log(this.props)
   }
 
   componentWillReceiveProps (nextProps) { (this.props.children !== nextProps.children) && this.resetMin() }
@@ -296,3 +294,17 @@ function mapDispatchToProps (dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ScrollOMatic)
+
+ScrollOMatic.PropTypes = {
+  getNewOriginPos: PropTypes.func.isRequired,
+  transitionRoute: PropTypes.func.isRequired,
+  setScrollLayoutRules: PropTypes.func.isRequired,
+  setColorScheme: PropTypes.func.isRequired,
+  layout: PropTypes.object.isRequired,
+  colors: PropTypes.object.isRequired,
+  transitionOrigin: PropTypes.object.isRequired,
+  transitionDirection: PropTypes.string.isRequired,
+  pathname: PropTypes.string.isRequired,
+  routeData: PropTypes.object.isRequired,
+  scrollInverted: PropTypes.bool.isRequired
+}
