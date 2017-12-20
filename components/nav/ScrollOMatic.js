@@ -253,6 +253,7 @@ class ScrollOMatic extends Component {
               style={{
                 boxSizing: 'border-box',
                 background: `url(${this.state.bgImage})`,
+                filter: 'invert(50%)',
                 height: `${height}00vh`,
                 width: `${width}00vw`,
                 transform: this.scrollDirTransformer(amt),

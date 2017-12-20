@@ -29,7 +29,7 @@ const Menu = ({ closeMenu }) => {
   }
   return (
     <div className='outer-wrapper'>
-      <ul style={{listStyle: 'none', color: 'rgba(255,0,0,1)', textAlign: 'right', textShadow: '0 0 30px black'}}>
+      <ul style={{listStyle: 'none', color: 'rgba(0,255,255,1)', textAlign: 'right', textShadow: '0 0 30px black'}}>
         { renderList() }
       </ul>
       <style jsx>{`
@@ -38,7 +38,9 @@ const Menu = ({ closeMenu }) => {
         }
         ul {
           list-style:none;
-          color: rgba(255, 0, 0, 1);
+          text-transform: uppercase;
+          font-family: helvetica, sans-serif;
+          color: rgba(0, 255, 255, 1);
           text-align:right;
           text-shadow: 0 0 30px rgb(0,0,0);
         }

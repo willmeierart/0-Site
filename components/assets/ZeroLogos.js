@@ -12,7 +12,10 @@ export function AzLogo01 ({ color, handleMouseEnter, handleMouseLeave }) {
       </svg>
       <style jsx>{`
         .cls-1 { fill: none; }
-        .cls-2 { fill: ${color}; }
+        .cls-2 {
+          fill: ${color};
+          transition: fill .5s ease-in-out;
+        }
         .az-logo-01 { width: 120%; margin-left: -10%; }
       `}</style>
     </div>

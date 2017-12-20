@@ -4,7 +4,7 @@ import routeData from '../../router/routeData'
 import navRules from '../../router/navRules'
 
 export default ({ pathname }) => {
-  const thisRouteData = { ...routeData.services }
+  const thisRouteData = { ...routeData.skills }
   thisRouteData.navRules = navRules(thisRouteData.type)
   return (
     <App pathname={pathname} routeData={thisRouteData} title='services'>

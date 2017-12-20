@@ -37,7 +37,7 @@ class App extends Component {
                 height: '10%',
                 width: '200%',
                 right: 0,
-                top: '30%',
+                top: '40%',
                 zIndex: 5,
                 marginRight: '2vw'
               }}>
@@ -52,9 +52,10 @@ class App extends Component {
             height: 30%;
             width: 50%;
             right: 0;
-            top: 30%;
+            top: 35%;
             z-index:5;
             padding-right: 20vw;
+            {/* transition: opacity 1s ease-in-out; */}
           }
         `}</style>
         {/* <style dangerouslySetInnerHTML={{ __html: globalStyles }} /> */}

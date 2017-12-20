@@ -1,6 +1,6 @@
 import home from '../pages/home'
 import converse from '../pages/converse'
-import services from '../pages/services'
+import skills from '../pages/skills'
 import us from '../pages/us'
 import fun from '../pages/us/fun'
 import what from '../pages/us/what'
@@ -131,14 +131,14 @@ export default {
     route: 'mountainsmith',
     type: 'subMid',
     parent: 'work',
-    nextRoute: 'services',
+    nextRoute: 'skills',
     prevRoute: 'fit36',
     bgColor1: colors[1],
     bgColor2: colors[0]
   },
-  services: {
-    component: services,
-    route: 'services',
+  skills: {
+    component: skills,
+    route: 'skills',
     type: 'topWSub',
     subpages: [],
     nextRoute: 'converse',
@@ -152,7 +152,7 @@ export default {
     type: 'topNoSub',
     subpages: [],
     nextRoute: 'home',
-    prevRoute: 'services',
+    prevRoute: 'skills',
     bgColor1: colors[1],
     bgColor2: colors[0]
   }

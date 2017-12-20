@@ -20,6 +20,8 @@ developed by Will Meier at Agency Zero
 
 [x] add PropTypes to all files
 
+[ ] disable color flash somehow
+
 [ ] work on animations opening menu, extra flourish, any color effects, etc.
 
 [ ] deploy
