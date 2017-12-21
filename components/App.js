@@ -35,8 +35,8 @@ class App extends Component {
               className='menu-wrapper' style={{
                 position: 'absolute',
                 height: '10%',
-                width: '200%',
-                right: 0,
+                width: '30%',
+                right: '8%',
                 top: '40%',
                 zIndex: 5,
                 marginRight: '2vw'
@@ -48,7 +48,7 @@ class App extends Component {
         <style jsx>{`
           .scroll-o-matic {}
           .menu-wrapper {
-            position: absolute;
+            position: fixed;
             height: 30%;
             width: 50%;
             right: 0;

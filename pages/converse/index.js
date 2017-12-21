@@ -12,7 +12,7 @@ export default ({ pathname }) => {
       <div>
         {/* {faker.lorem.paragraphs(120)} */}
       </div>
-      <style jsx>{``}</style>
+      {/* <style jsx>{``}</style> */}
     </App>
   )
 }

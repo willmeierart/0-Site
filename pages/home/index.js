@@ -32,10 +32,10 @@ export default ({ pathname }) => {
           checkAllQueriesLoading(allQueries, content) */}
         {content()}
       </div>
-      <style jsx>{`
+      {/* <style jsx>{`
         .content {
         }
-      `}</style>
+      `}</style> */}
     </App>
   )
 }
