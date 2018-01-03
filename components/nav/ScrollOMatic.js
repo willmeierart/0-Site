@@ -50,7 +50,6 @@ class ScrollOMatic extends Component {
       await setPrevNextRoutes(route)
       const prevNextRoutes = await this.props.prevNextRoutes
       const { prevRoute, nextRoute } = prevNextRoutes
-      console.log(prevRoute, nextRoute)
       Router.prefetchRoute('main', { slug: nextRoute })
       Router.prefetchRoute('main', { slug: prevRoute })
     }

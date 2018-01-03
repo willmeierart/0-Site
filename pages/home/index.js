@@ -15,7 +15,7 @@ export default ({ pathname }) => {
   thisRouteData.navRules = navRules(thisRouteData.type)
   return (
     <App pathname={pathname} routeData={thisRouteData} title='home'>
-      <div className='content'>
+      <div className='main-content'>
         {/* const allQueries = [allThings1, allThings2]
           checkAllQueriesLoading(allQueries, content) */}
       </div>

@@ -1,0 +1,34 @@
+@font-face {
+  font-family: BebasNeue;
+  src: url('static/styles/fonts/BebasNeue/BEBASNEUELIGHT.OTF') format('opentype');
+  font-weight: lighter;
+  font-style: normal;
+}
+@font-face {
+  font-family: BebasNeue;
+  src: url('static/styles/fonts/BebasNeue/BEBASNEUEREGULAR.OTF') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: InvescolInterstate;
+  src: url('static/styles/fonts/InvescolInterstate/InvescolInterstate-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: InvescolInterstate;
+  src: url('static/styles/fonts/InvescolInterstate/InvescolInterstate-Light.otf') format('opentype');
+  font-weight: lighter;
+  font-style: normal;
+}
+@font-face {
+  font-family: InvescolInterstate;
+  src: url('static/styles/fonts/InvescolInterstate/InvescolInterstate-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+$font-base: sans-serif !default;
+$font-zero-header: BebasNeue, sans-serif;
+$font-zero-secondary: InvescolInterstate, sans-serif;

@@ -6,8 +6,8 @@ import { binder } from '../lib/_utils'
 import { toggleMenu, setColorScheme } from '../lib/redux/actions'
 import Head from './Head'
 import ScrollOMatic from './nav/ScrollOMatic'
-import CenterLogo from './layout/CenterLogo'
-import Menu from './layout/Menu'
+import CenterLogo from './nav/CenterLogo'
+import Menu from './nav/Menu'
 
 class App extends Component {
   constructor (props) {
@@ -23,7 +23,7 @@ class App extends Component {
         <Head title={title} />
         <main>
           <div className='logo-clip-path'>
-            <div className='page-title'>{ title }</div>
+            <h1 className='main-page-title'>{ title }</h1>
             <ScrollOMatic className='scroll-o-matic'
               pathname={pathname} title={title}
               routeData={routeData} scrollInverted>
@@ -47,16 +47,23 @@ class App extends Component {
           }
         </main>
         <style jsx>{`
-          .page-title {
-            font-family: Helvetica, sans-serif;
-            margin: .5em;
-            font-size: 4em;
+          .main-page-title {
+            {/* font-family: Helvetica, sans-serif; */}
+            font-size: 20vw;
+            font-weight: bold;
+            width: 100%;
+            height: 100%;
+            top:0;
+            left:0;
             text-transform: uppercase;
             background: transparent;
             position: fixed;
-            top: .5em;
-            left: .5em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             z-index: 5;
+            pointer-events: none;
+            opacity: .5;
           }
           .scroll-o-matic {}
           .menu-wrapper {
@@ -70,7 +77,6 @@ class App extends Component {
             {/* transition: opacity 1s ease-in-out; */}
           }
         `}</style>
-        {/* <style dangerouslySetInnerHTML={{ __html: globalStyles }} /> */}
       </div>
     )
   }

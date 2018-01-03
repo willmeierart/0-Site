@@ -9,10 +9,21 @@ export default ({ pathname }) => {
 
   return (
     <App pathname={pathname} routeData={thisRouteData} title='converse'>
-      <div>
+      <div className='main-content'>
         {/* {faker.lorem.paragraphs(120)} */}
+        <h3>Contact Info</h3>
+        <div>WE WANT YOU! (maybe)</div>
+        <div>[jobs]</div>
+        <div>Hello, is it you we're looking for?</div>
       </div>
-      {/* <style jsx>{``}</style> */}
+      <style jsx>{`
+        .main-content {
+          {/* position: absolute; */}
+          width: 100%;
+          height: 100%;
+          padding: 10vw;
+        }
+      `}</style>
     </App>
   )
 }

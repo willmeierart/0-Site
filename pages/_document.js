@@ -12,11 +12,11 @@ export default class CustomDocument extends Document {
     return (
       <html lang='en-US' onWheel={(e) => { this.preventScrollNav(e) }}>
         <Head />
-        <body style={{background:'rgba(151,13,17,1)'}} onWheel={(e) => { this.preventScrollNav(e) }}>
+        <body style={{background: 'rgba(151,13,17,1)'}} onWheel={(e) => { this.preventScrollNav(e) }}>
           <Main />
           <NextScript />
         </body>
-        <style jsx>{`
+        <style jsx global>{`
           html, body {
             overflow: hidden;
             {/* background: black; */}

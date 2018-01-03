@@ -141,13 +141,45 @@ export default {
     route: 'nooku',
     type: 'subMid',
     parent: 'work',
-    bgColor1: colors[1],
-    bgColor2: colors[0]
+    bgColor1: colors[0],
+    bgColor2: colors[1]
   },
   romantix: {
     component: romantix,
     route: 'romantix',
     type: 'subMid',
+    parent: 'work',
+    bgColor1: colors[1],
+    bgColor2: colors[0]
+  },
+  smashburger: {
+    component: smashburger,
+    route: 'smashburger',
+    type: 'subMid',
+    parent: 'work',
+    bgColor1: colors[0],
+    bgColor2: colors[1]
+  },
+  sundance: {
+    component: sundance,
+    route: 'sundance',
+    type: 'subMid',
+    parent: 'work',
+    bgColor1: colors[1],
+    bgColor2: colors[0]
+  },
+  branding: {
+    component: branding,
+    route: 'branding',
+    type: 'subMid',
+    parent: 'work',
+    bgColor1: colors[0],
+    bgColor2: colors[1]
+  },
+  pitchwork: {
+    component: pitchwork,
+    route: 'pitchwork',
+    type: 'subLast',
     parent: 'work',
     bgColor1: colors[1],
     bgColor2: colors[0]
