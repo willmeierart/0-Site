@@ -6,7 +6,7 @@ const { Link } = router
 const Menu = ({ closeMenu, title }) => {
   const pageList = Object.keys(routeData)
   const topPages = pageList.filter(route => {
-    return routeData[route].type.indexOf('top') === 0 && routeData[route].route !== title
+    return routeData[route].route !== title
   })
   const topPageData = topPages.map((route) => routeData[route])
 

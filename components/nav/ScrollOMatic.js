@@ -24,7 +24,8 @@ class ScrollOMatic extends Component {
       animValsX: x,
       currentScrollDir: transitionDirection,
       current: -1,
-      bounds: -1
+      bounds: -1,
+      scrollTimerDone: false
     }
     binder(this, [
       'handleScroll',
@@ -53,6 +54,8 @@ class ScrollOMatic extends Component {
       Router.prefetchRoute('main', { slug: prevRoute })
     }
     fetchEm()
+
+    setTimeout(() => { this.setState({ scrollTimerDone: true }) }, 1000)
 
     const scrollOMatic = DOM.findDOMNode(this.scrollOMatic)
     const scrollTray = DOM.findDOMNode(this.scrollTray)
@@ -87,9 +90,10 @@ class ScrollOMatic extends Component {
   componentDidUpdate () { this.calculate() }
 
   canIscroll () {
+    const { scrollTimerDone } = this.state
     const { layout, routeData: { type } } = this.props
-    const canScrollSideways = type === 'horizontal' && (layout.trayLeft < layout.scrollOMaticLeft || layout.trayOffsetWidth > layout.scrollOMaticWidth)
-    const canScrollVertical = type === 'vertical' && (layout.trayTop < layout.scrollOMaticTop || layout.trayOffsetHeight > layout.scrollOMaticHeight)
+    const canScrollSideways = type === 'horizontal' && scrollTimerDone && (layout.trayLeft < layout.scrollOMaticLeft || layout.trayOffsetWidth > layout.scrollOMaticWidth)
+    const canScrollVertical = type === 'vertical' && scrollTimerDone && (layout.trayTop < layout.scrollOMaticTop || layout.trayOffsetHeight > layout.scrollOMaticHeight)
     return canScrollVertical || canScrollSideways
   }
 

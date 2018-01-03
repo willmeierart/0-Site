@@ -3,11 +3,6 @@ import converse from '../pages/converse'
 import skills from '../pages/skills'
 import us from '../pages/us'
 import work from '../pages/work'
-// import fun from '../pages/us/fun'
-// import what from '../pages/us/what'
-// import who from '../pages/us/who'
-// import why from '../pages/us/why'
-// import writings from '../pages/us/writings'
 // import coupestudios from '../pages/work/coupestudios'
 // import elementsmassage from '../pages/work/elementsmassage'
 // import fit36 from '../pages/work/fit36'
@@ -38,46 +33,6 @@ export default {
     bgColor1: colors[0],
     bgColor2: colors[1]
   },
-  // fun: {
-  //   component: fun,
-  //   route: 'fun',
-  //   type: 'subMid',
-  //   parent: 'us',
-  //   bgColor1: colors[1],
-  //   bgColor2: colors[0]
-  // },
-  // what: {
-  //   component: what,
-  //   route: 'what',
-  //   type: 'subMid',
-  //   parent: 'us',
-  //   bgColor1: colors[0],
-  //   bgColor2: colors[1]
-  // },
-  // who: {
-  //   component: who,
-  //   route: 'who',
-  //   type: 'subMid',
-  //   parent: 'us',
-  //   bgColor1: colors[1],
-  //   bgColor2: colors[0]
-  // },
-  // why: {
-  //   component: why,
-  //   route: 'why',
-  //   type: 'subMid',
-  //   parent: 'us',
-  //   bgColor1: colors[1],
-  //   bgColor2: colors[0]
-  // },
-  // writings: {
-  //   component: writings,
-  //   route: 'writings',
-  //   type: 'subLast',
-  //   parent: 'us',
-  //   bgColor1: colors[0],
-  //   bgColor2: colors[1]
-  // },
   work: {
     component: work,
     route: 'work',

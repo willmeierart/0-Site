@@ -55,7 +55,7 @@ class App extends Component {
             width: 50%;
             right: 0;
             top: 35%;
-            z-index:5;
+            z-index:10;
             padding-right: 20vw;
             {/* transition: opacity 1s ease-in-out; */}
           }
