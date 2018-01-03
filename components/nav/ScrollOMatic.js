@@ -13,7 +13,7 @@ class ScrollOMatic extends Component {
   constructor (props) {
     super(props)
 
-    const { routeData: { bgColor1, bgColor2, navRules: { style: { backgroundImageForward, backgroundImageBack } } }, transitionOrigin: { x, y }, transitionDirection } = props
+    const { routeData: { bgColor1, bgColor2 }, transitionOrigin: { x, y }, transitionDirection } = props
 
     this.state = {
       currentColor: transitionDirection === 'forward' ? bgColor1 : bgColor2,
@@ -23,7 +23,6 @@ class ScrollOMatic extends Component {
       animValsY: y,
       animValsX: x,
       currentScrollDir: transitionDirection,
-      bgImage: transitionDirection === 'forward' ? backgroundImageForward : backgroundImageBack,
       current: -1,
       bounds: -1
     }
@@ -89,8 +88,8 @@ class ScrollOMatic extends Component {
 
   canIscroll () {
     const { layout, routeData: { type } } = this.props
-    const canScrollSideways = type.indexOf('top') === 0 && (layout.trayLeft < layout.scrollOMaticLeft || layout.trayOffsetWidth > layout.scrollOMaticWidth)
-    const canScrollVertical = type.indexOf('top') === -1 && (layout.trayTop < layout.scrollOMaticTop || layout.trayOffsetHeight > layout.scrollOMaticHeight)
+    const canScrollSideways = type === 'horizontal' && (layout.trayLeft < layout.scrollOMaticLeft || layout.trayOffsetWidth > layout.scrollOMaticWidth)
+    const canScrollVertical = type === 'vertical' && (layout.trayTop < layout.scrollOMaticTop || layout.trayOffsetHeight > layout.scrollOMaticHeight)
     return canScrollVertical || canScrollSideways
   }
 
@@ -113,7 +112,7 @@ class ScrollOMatic extends Component {
   animValSwitch () {
     const { animValsX, animValsY } = this.state
     const { routeData: { type } } = this.props
-    const valSwitch = type.indexOf('top') === 0
+    const valSwitch = type === 'horizontal'
       ? { name: 'animValsX', val: animValsX }
       : { name: 'animValsY', val: animValsY }
     return valSwitch
@@ -121,21 +120,17 @@ class ScrollOMatic extends Component {
 
   trackCurrentPosition () {
     const { layout: { widthMargin, heightMargin }, routeData: { type } } = this.props
-    const bounds = type.indexOf('top') !== 0
-      ? heightMargin
-      : widthMargin
+    const bounds = type === 'vertical' ? heightMargin : widthMargin
     const current = this.animValSwitch().val
     this.setState({ bounds: bounds, current: current })
   }
 
   navigator () {
     const { current } = this.state
-    const { layout: { scrollOMaticHeight, scrollOMaticWidth, widthMargin, heightMargin }, routeData: { type, route }, getNewOriginPos } = this.props
+    const { layout: { scrollOMaticHeight, scrollOMaticWidth, widthMargin, heightMargin }, routeData: { type }, getNewOriginPos } = this.props
     const { nextRoute, prevRoute } = this.props.prevNextRoutes
     const shouldBePrevRoute = current >= 0
-    const shouldBeNextRoute = type.indexOf('top') !== 0
-      ? heightMargin >= current
-      : widthMargin >= current
+    const shouldBeNextRoute = type === 'vertical' ? heightMargin >= current : widthMargin >= current
 
     const routerData = {
       prevTrigger: shouldBePrevRoute,
@@ -165,8 +160,8 @@ class ScrollOMatic extends Component {
     const { layout: { scrollOMaticHeight, scrollOMaticWidth, trayOffsetHeight, trayOffsetWidth }, routeData: { type, bgColor1, bgColor2, navRules: { style: { backgroundImageBack, backgroundImageForward } } }, setColorScheme } = this.props
     const { current } = this.state
 
-    const scrollOMaticDim = type.indexOf('top') === 0 ? scrollOMaticWidth : scrollOMaticHeight
-    const trayScrollDim = type.indexOf('top') === 0 ? trayOffsetWidth : trayOffsetHeight
+    const scrollOMaticDim = type === 'horizontal' ? scrollOMaticWidth : scrollOMaticHeight
+    const trayScrollDim = type === 'horizontal' ? trayOffsetWidth : trayOffsetHeight
 
      // THIS IS THE CORRECT FORMULA FOR CHANGING COLOR:
     const scrollTiplier = ((current / (scrollOMaticDim - trayScrollDim))).toFixed(3)
@@ -194,7 +189,7 @@ class ScrollOMatic extends Component {
     const { animValsX, animValsY } = this.state
     let x = animValsX
     let y = animValsY
-    if (type.indexOf('top') === 0) {
+    if (type === 'horizontal') {
       x = `${amt3}px`
       y = '-1px'
     } else {
@@ -240,6 +235,8 @@ class ScrollOMatic extends Component {
 
   render () {
     const { routeData: { navRules: { style: { height, width } } }, colors: { cur1 } } = this.props
+    // const width = type === 'horizontal' ? '150vw' : '100vw'
+    // const height = type === 'horizontal' ? '100vh' : '300vh'
     const springConfig = presets.noWobble
     const axisVals = this.animValSwitch().val
     return (
@@ -257,8 +254,8 @@ class ScrollOMatic extends Component {
               style={{
                 boxSizing: 'border-box',
                 filter: 'invert(50%)',
-                height: `${height}00vh`,
-                width: `${width}00vw`,
+                height: `${Math.floor(height * 100)}vh`,
+                width: `${Math.floor(width * 100)}vw`,
                 transform: this.scrollDirTransformer(amt),
                 willChange: 'transform',
                 display: 'inline-flex',

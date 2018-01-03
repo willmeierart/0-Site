@@ -3,9 +3,9 @@
 // import withData from '../lib/withData'
 // import faker from 'faker'
 // import { checkAllQueriesLoading, checkAllQueriesError } from '../lib/_utils'
-import App from '../../components/App'
-import routeData from '../../router/routeData'
-import navRules from '../../router/navRules'
+import App from '../components/App'
+import routeData from '../router/routeData'
+import navRules from '../router/navRules'
 
 // include boilerplate for global loader dependent on graphql req's:
 export default ({ pathname }) => {

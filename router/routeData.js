@@ -27,16 +27,14 @@ export default {
   home: {
     component: home,
     route: 'home',
-    type: 'topNoSub',
-    subpages: [],
+    type: 'horizontal',
     bgColor1: colors[1],
     bgColor2: colors[0]
   },
   us: {
     component: us,
     route: 'us',
-    type: 'topWSub',
-    subpages: ['fun', 'what', 'who', 'why', 'writings'],
+    type: 'vertical',
     bgColor1: colors[0],
     bgColor2: colors[1]
   },
@@ -83,8 +81,7 @@ export default {
   work: {
     component: work,
     route: 'work',
-    type: 'topWSub',
-    subpages: ['coupestudios', 'elementsmassage', 'fit36', 'mountainsmith'],
+    type: 'vertical',
     bgColor1: colors[1],
     bgColor2: colors[0]
   },
@@ -187,16 +184,14 @@ export default {
   skills: {
     component: skills,
     route: 'skills',
-    type: 'topWSub',
-    subpages: [],
+    type: 'vertical',
     bgColor1: colors[0],
     bgColor2: colors[1]
   },
   converse: {
     component: converse,
     route: 'converse',
-    type: 'topNoSub',
-    subpages: [],
+    type: 'horizontal',
     bgColor1: colors[1],
     bgColor2: colors[0]
   }

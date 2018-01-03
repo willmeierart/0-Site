@@ -1,47 +1,21 @@
 const navRules = type => {
   let rules = {}
   switch (type) {
-    case 'topNoSub':
+    case 'horizontal':
       rules = {
         type,
         style: {
-          width: '3',
-          height: '1',
-          backgroundImageForward: '/static/img/arrowLeft.png',
-          backgroundImageBack: '/static/img/arrowRight.png'
+          width: '1.5',
+          height: '1'
         }
       }
       break
-    case 'topWSub' :
+    case 'vertical' :
       rules = {
         type,
         style: {
           width: '1',
-          height: '3',
-          backgroundImageForward: '/static/img/arrowLeft.png',
-          backgroundImageBack: '/static/img/arrowRight.png'
-        }
-      }
-      break
-    case 'subMid' :
-      rules = {
-        type,
-        style: {
-          width: '1',
-          height: '3',
-          backgroundImageForward: '/static/img/arrowUp.png',
-          backgroundImageBack: '/static/img/arrowDown.png'
-        }
-      }
-      break
-    case 'subLast' :
-      rules = {
-        type,
-        style: {
-          width: '1',
-          height: '3',
-          backgroundImageForward: '/static/img/arrowUp.png',
-          backgroundImageBack: '/static/img/arrowDown.png'
+          height: '3'
         }
       }
       break
