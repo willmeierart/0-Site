@@ -8,6 +8,7 @@ import Head from './Head'
 import ScrollOMatic from './nav/ScrollOMatic'
 import CenterLogo from './nav/CenterLogo'
 import Menu from './nav/Menu'
+import PageTitle from './nav/PageTitle'
 
 class App extends Component {
   constructor (props) {
@@ -23,7 +24,7 @@ class App extends Component {
         <Head title={title} />
         <main>
           <div className='logo-clip-path'>
-            <h1 className='main-page-title'>{ title }</h1>
+            <PageTitle title={title} />
             <ScrollOMatic className='scroll-o-matic'
               pathname={pathname} title={title}
               routeData={routeData} scrollInverted>
@@ -47,24 +48,6 @@ class App extends Component {
           }
         </main>
         <style jsx>{`
-          .main-page-title {
-            {/* font-family: Helvetica, sans-serif; */}
-            font-size: 20vw;
-            font-weight: bold;
-            width: 100%;
-            height: 100%;
-            top:0;
-            left:0;
-            text-transform: uppercase;
-            background: transparent;
-            position: fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 5;
-            pointer-events: none;
-            opacity: .5;
-          }
           .scroll-o-matic {}
           .menu-wrapper {
             position: fixed;

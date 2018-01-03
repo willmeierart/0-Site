@@ -16,8 +16,8 @@ const navRules = type => {
       rules = {
         type,
         style: {
-          width: '3',
-          height: '1',
+          width: '1',
+          height: '3',
           backgroundImageForward: '/static/img/arrowLeft.png',
           backgroundImageBack: '/static/img/arrowRight.png'
         }

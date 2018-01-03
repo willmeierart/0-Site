@@ -17,7 +17,7 @@ export default (props = initialProps) => {
     <link rel='shortcut icon' href='/static/zero.ico' />
     {/* <script async src='https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXX-X' /> */}
     {/* <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css' /> */}
-    <link href='https://cdn.bootcss.com/loaders.css/0.1.2/loaders.min.css' rel='stylesheet' />
+    {/* <link href='https://cdn.bootcss.com/loaders.css/0.1.2/loaders.min.css' rel='stylesheet' /> */}
     <style dangerouslySetInnerHTML={{ __html: globalStyles }} />
   </Head>
 }
