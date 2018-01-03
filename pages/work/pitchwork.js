@@ -4,10 +4,10 @@ import routeData from '../../router/routeData'
 import navRules from '../../router/navRules'
 
 export default ({ pathname }) => {
-  const thisRouteData = { ...routeData.who }
+  const thisRouteData = { ...routeData.pitchwork }
   thisRouteData.navRules = navRules(thisRouteData.type)
   return (
-    <App pathname={pathname} routeData={thisRouteData} title='who'>
+    <App pathname={pathname} routeData={thisRouteData} title='pitch work'>
       <div>
         {/* {faker.lorem.paragraphs(120)} */}
       </div>

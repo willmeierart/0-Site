@@ -27,10 +27,10 @@ class CenterLogo extends Component {
         </div>
         <style jsx>{`
           .logo-wrapper {
-            width:12%;
-            height:12%;
+            width:6%;
+            height:6%;
             z-index:5;
-            position:fixed; top:44%; left:44%;
+            position:fixed; top:47%; left:47%;
             display: flex; justify-content: center; align-items: center;
             {/* pointer-events: none; */}
           }

@@ -7,7 +7,7 @@ export default ({ pathname }) => {
   const thisRouteData = { ...routeData.coupestudios }
   thisRouteData.navRules = navRules(thisRouteData.type)
   return (
-    <App pathname={pathname} routeData={thisRouteData} title='us'>
+    <App pathname={pathname} routeData={thisRouteData} title='coupe studios'>
       <div>
         {/* {faker.lorem.paragraphs(120)} */}
       </div>

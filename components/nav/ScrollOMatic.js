@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Motion, spring, presets } from 'react-motion'
 import raf from 'raf'
-import { getNewOriginPos, transitionRoute, setScrollLayoutRules, setColorScheme } from '../../lib/redux/actions'
+import { getNewOriginPos, transitionRoute, setPrevNextRoutes, setScrollLayoutRules, setColorScheme } from '../../lib/redux/actions'
 import { fadeColor, binder } from '../../lib/_utils'
 import router from '../../router'
 const { Router } = router
@@ -45,10 +45,16 @@ class ScrollOMatic extends Component {
   componentWillUnmount () { window.removeEventListener('resize', this.props.setScrollLayoutRules) }
 
   componentDidMount () {
-    const { routeData: { nextRoute, prevRoute, bgColor1, bgColor2 }, setScrollLayoutRules, setColorScheme } = this.props
-
-    Router.prefetchRoute('main', { slug: nextRoute })
-    Router.prefetchRoute('main', { slug: prevRoute })
+    const { routeData: { bgColor1, bgColor2, route }, setScrollLayoutRules, setColorScheme, setPrevNextRoutes } = this.props
+    const fetchEm = async () => {
+      await setPrevNextRoutes(route)
+      const prevNextRoutes = await this.props.prevNextRoutes
+      const { prevRoute, nextRoute } = prevNextRoutes
+      console.log(prevRoute, nextRoute)
+      Router.prefetchRoute('main', { slug: nextRoute })
+      Router.prefetchRoute('main', { slug: prevRoute })
+    }
+    fetchEm()
 
     const scrollOMatic = DOM.findDOMNode(this.scrollOMatic)
     const scrollTray = DOM.findDOMNode(this.scrollTray)
@@ -125,8 +131,8 @@ class ScrollOMatic extends Component {
 
   navigator () {
     const { current } = this.state
-    const { layout: { scrollOMaticHeight, scrollOMaticWidth, widthMargin, heightMargin }, routeData: { nextRoute, prevRoute, type }, getNewOriginPos } = this.props
-
+    const { layout: { scrollOMaticHeight, scrollOMaticWidth, widthMargin, heightMargin }, routeData: { type, route }, getNewOriginPos } = this.props
+    const { nextRoute, prevRoute } = this.props.prevNextRoutes
     const shouldBePrevRoute = current >= 0
     const shouldBeNextRoute = type.indexOf('top') !== 0
       ? heightMargin >= current
@@ -172,7 +178,6 @@ class ScrollOMatic extends Component {
       bgImage: dirSwitcher(backgroundImageBack, backgroundImageForward)
     }
     const { bgImage } = styles
-
 
     setColorScheme({
       cur1: fadeColor(scrollTiplier, [bgColor1, bgColor2]),
@@ -252,7 +257,6 @@ class ScrollOMatic extends Component {
             <div className='scroll-tray' ref={(scrollTray) => { this.scrollTray = scrollTray }}
               style={{
                 boxSizing: 'border-box',
-                background: `url(${this.state.bgImage})`,
                 filter: 'invert(50%)',
                 height: `${height}00vh`,
                 width: `${width}00vw`,
@@ -279,6 +283,7 @@ class ScrollOMatic extends Component {
 function mapStateToProps (state) {
   return {
     transitionOrigin: state.router.transitionOrigin,
+    prevNextRoutes: state.router.prevNextRoutes,
     transitionDirection: state.router.transitionDirection,
     layout: state.scroll.layout,
     colors: state.ui.colors
@@ -289,6 +294,7 @@ function mapDispatchToProps (dispatch) {
   return {
     getNewOriginPos: (transRoute, transDir, widthHeight) => dispatch(getNewOriginPos(transRoute, transDir, widthHeight)),
     transitionRoute: routerData => dispatch(transitionRoute(routerData)),
+    setPrevNextRoutes: routerData => dispatch(setPrevNextRoutes(routerData)),
     setScrollLayoutRules: layoutData => dispatch(setScrollLayoutRules(layoutData)),
     setColorScheme: colorObj => dispatch(setColorScheme(colorObj))
   }
@@ -298,6 +304,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(ScrollOMatic)
 
 ScrollOMatic.PropTypes = {
   getNewOriginPos: PropTypes.func.isRequired,
+  prevNextRoutes: PropTypes.object.isRequired,
   transitionRoute: PropTypes.func.isRequired,
   setScrollLayoutRules: PropTypes.func.isRequired,
   setColorScheme: PropTypes.func.isRequired,

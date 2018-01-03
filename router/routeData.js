@@ -12,6 +12,14 @@ import coupestudios from '../pages/work/coupestudios'
 import elementsmassage from '../pages/work/elementsmassage'
 import fit36 from '../pages/work/fit36'
 import mountainsmith from '../pages/work/mountainsmith'
+import branding from '../pages/work/branding'
+import drytown from '../pages/work/drytown'
+import giordanos from '../pages/work/giordanos'
+import nooku from '../pages/work/nooku'
+import pitchwork from '../pages/work/pitchwork'
+import romantix from '../pages/work/romantix'
+import smashburger from '../pages/work/smashburger'
+import sundance from '../pages/work/sundance'
 
 import colors from '../lib/ui/colors'
 
@@ -21,8 +29,6 @@ export default {
     route: 'home',
     type: 'topNoSub',
     subpages: [],
-    nextRoute: 'us',
-    prevRoute: 'converse',
     bgColor1: colors[1],
     bgColor2: colors[0]
   },
@@ -31,28 +37,22 @@ export default {
     route: 'us',
     type: 'topWSub',
     subpages: ['fun', 'what', 'who', 'why', 'writings'],
-    nextRoute: 'fun',
-    prevRoute: 'home',
     bgColor1: colors[0],
     bgColor2: colors[1]
   },
   fun: {
     component: fun,
-    route: 'us/fun',
+    route: 'fun',
     type: 'subMid',
     parent: 'us',
-    nextRoute: 'what',
-    prevRoute: 'us',
     bgColor1: colors[1],
     bgColor2: colors[0]
   },
   what: {
     component: what,
-    route: 'us/what',
+    route: 'what',
     type: 'subMid',
     parent: 'us',
-    nextRoute: 'who',
-    prevRoute: 'fun',
     bgColor1: colors[0],
     bgColor2: colors[1]
   },
@@ -61,8 +61,6 @@ export default {
     route: 'who',
     type: 'subMid',
     parent: 'us',
-    nextRoute: 'why',
-    prevRoute: 'what',
     bgColor1: colors[1],
     bgColor2: colors[0]
   },
@@ -71,8 +69,6 @@ export default {
     route: 'why',
     type: 'subMid',
     parent: 'us',
-    nextRoute: 'writings',
-    prevRoute: 'what',
     bgColor1: colors[1],
     bgColor2: colors[0]
   },
@@ -81,8 +77,6 @@ export default {
     route: 'writings',
     type: 'subLast',
     parent: 'us',
-    nextRoute: 'work',
-    prevRoute: 'why',
     bgColor1: colors[0],
     bgColor2: colors[1]
   },
@@ -91,8 +85,6 @@ export default {
     route: 'work',
     type: 'topWSub',
     subpages: ['coupestudios', 'elementsmassage', 'fit36', 'mountainsmith'],
-    nextRoute: 'coupestudios',
-    prevRoute: 'writings',
     bgColor1: colors[1],
     bgColor2: colors[0]
   },
@@ -101,8 +93,6 @@ export default {
     route: 'coupestudios',
     type: 'subMid',
     parent: 'work',
-    nextRoute: 'elementsmassage',
-    prevRoute: 'work',
     bgColor1: colors[0],
     bgColor2: colors[1]
   },
@@ -111,8 +101,6 @@ export default {
     route: 'elementsmassage',
     type: 'subMid',
     parent: 'work',
-    nextRoute: 'fit36',
-    prevRoute: 'coupestudios',
     bgColor1: colors[1],
     bgColor2: colors[0]
   },
@@ -121,8 +109,6 @@ export default {
     route: 'fit36',
     type: 'subMid',
     parent: 'work',
-    nextRoute: 'mountainsmith',
-    prevRoute: 'elementsmassage',
     bgColor1: colors[0],
     bgColor2: colors[1]
   },
@@ -131,8 +117,38 @@ export default {
     route: 'mountainsmith',
     type: 'subMid',
     parent: 'work',
-    nextRoute: 'skills',
-    prevRoute: 'fit36',
+    bgColor1: colors[1],
+    bgColor2: colors[0]
+  },
+  drytown: {
+    component: drytown,
+    route: 'drytown',
+    type: 'subMid',
+    parent: 'work',
+    bgColor1: colors[0],
+    bgColor2: colors[1]
+  },
+  giordanos: {
+    component: giordanos,
+    route: 'giordanos',
+    type: 'subMid',
+    parent: 'work',
+    bgColor1: colors[1],
+    bgColor2: colors[0]
+  },
+  nooku: {
+    component: nooku,
+    route: 'nooku',
+    type: 'subMid',
+    parent: 'work',
+    bgColor1: colors[1],
+    bgColor2: colors[0]
+  },
+  romantix: {
+    component: romantix,
+    route: 'romantix',
+    type: 'subMid',
+    parent: 'work',
     bgColor1: colors[1],
     bgColor2: colors[0]
   },
@@ -141,8 +157,6 @@ export default {
     route: 'skills',
     type: 'topWSub',
     subpages: [],
-    nextRoute: 'converse',
-    prevRoute: 'mountainsmith',
     bgColor1: colors[0],
     bgColor2: colors[1]
   },
@@ -151,8 +165,6 @@ export default {
     route: 'converse',
     type: 'topNoSub',
     subpages: [],
-    nextRoute: 'home',
-    prevRoute: 'skills',
     bgColor1: colors[1],
     bgColor2: colors[0]
   }

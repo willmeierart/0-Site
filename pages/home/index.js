@@ -7,18 +7,6 @@ import App from '../../components/App'
 import routeData from '../../router/routeData'
 import navRules from '../../router/navRules'
 
-const content = () => (
-  <div className='active'>
-    {/* {faker.lorem.paragraphs(120)} */}
-    <style jsx>{`
-      .active {
-        {/* width: 50vw; */}
-        height: 100vh;
-      }
-    `}</style> 
-  </div>
-)
-
 // include boilerplate for global loader dependent on graphql req's:
 export default ({ pathname }) => {
   // const indexRoute = routeData.find(route => route.title === 'home')
@@ -30,7 +18,6 @@ export default ({ pathname }) => {
       <div className='content'>
         {/* const allQueries = [allThings1, allThings2]
           checkAllQueriesLoading(allQueries, content) */}
-        {content()}
       </div>
       {/* <style jsx>{`
         .content {

@@ -3,10 +3,10 @@ import router from '../../router'
 import PropTypes from 'prop-types'
 const { Link } = router
 
-const Menu = ({ closeMenu }) => {
+const Menu = ({ closeMenu, title }) => {
   const pageList = Object.keys(routeData)
   const topPages = pageList.filter(route => {
-    return routeData[route].type.indexOf('top') === 0
+    return routeData[route].type.indexOf('top') === 0 && routeData[route].route !== title
   })
   const topPageData = topPages.map((route) => routeData[route])
 
@@ -29,7 +29,7 @@ const Menu = ({ closeMenu }) => {
   }
   return (
     <div className='outer-wrapper'>
-      <ul style={{listStyle: 'none', textTransform: 'uppercase', fontFamily: 'helvetica, sans-serif', fontSize:'.8vw', color: 'rgba(0,255,255,1)', textAlign: 'right', textShadow: '0 0 30px black'}}>
+      <ul style={{listStyle: 'none', textTransform: 'uppercase', fontFamily: 'helvetica, sans-serif', fontSize: '.8vw', color: 'rgba(0,255,255,1)', textAlign: 'right', textShadow: '0 0 30px black'}}>
         { renderList() }
       </ul>
     </div>

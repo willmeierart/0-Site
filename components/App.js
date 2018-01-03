@@ -1,5 +1,5 @@
 // main wrapper component - layout, universal styles, etc.
-import react, { Component } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { binder } from '../lib/_utils'
@@ -23,6 +23,7 @@ class App extends Component {
         <Head title={title} />
         <main>
           <div className='logo-clip-path'>
+            <div className='page-title'>{ title }</div>
             <ScrollOMatic className='scroll-o-matic'
               pathname={pathname} title={title}
               routeData={routeData} scrollInverted>
@@ -41,11 +42,22 @@ class App extends Component {
                 zIndex: 5,
                 marginRight: '2vw'
               }}>
-              <Menu closeMenu={() => this.props.toggleMenu(false)} />
+              <Menu title={title} closeMenu={() => this.props.toggleMenu(false)} />
             </div>
           }
         </main>
         <style jsx>{`
+          .page-title {
+            font-family: Helvetica, sans-serif;
+            margin: .5em;
+            font-size: 4em;
+            text-transform: uppercase;
+            background: transparent;
+            position: fixed;
+            top: .5em;
+            left: .5em;
+            z-index: 5;
+          }
           .scroll-o-matic {}
           .menu-wrapper {
             position: fixed;
