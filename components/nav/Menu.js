@@ -29,7 +29,7 @@ const Menu = ({ closeMenu, title }) => {
   }
   return (
     <div className='outer-wrapper'>
-      <ul style={{listStyle: 'none', textTransform: 'uppercase', fontFamily: 'helvetica, sans-serif', fontSize: '.8vw', color: 'rgba(0,255,255,1)', textAlign: 'right', textShadow: '0 0 30px black'}}>
+      <ul style={{listStyle: 'none', textTransform: 'uppercase', fontFamily: 'helvetica, sans-serif', fontSize: '.8vw', color: 'rgba(0,255,255,1)', textAlign: 'right'}}>
         { renderList() }
       </ul>
     </div>
