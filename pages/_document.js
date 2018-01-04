@@ -12,7 +12,10 @@ export default class CustomDocument extends Document {
     return (
       <html lang='en-US' onWheel={(e) => { this.preventScrollNav(e) }}>
         <Head />
-        <body style={{background: 'rgba(151,13,17,1)'}} onWheel={(e) => { this.preventScrollNav(e) }}>
+        <body style={{background: 'rgba(151,13,17,1)'}}
+          onTouchStart={(e) => { this.preventScrollNav(e) }}
+          onTouchMove={(e) => { this.preventScrollNav(e) }}
+          onWheel={(e) => { this.preventScrollNav(e) }}>
           <Main />
           <NextScript />
         </body>
