@@ -8,7 +8,7 @@ import routeData from '../router/routeData'
 import navRules from '../router/navRules'
 
 // include boilerplate for global loader dependent on graphql req's:
-export default ({ pathname }) => {
+export default ({ pathname, isMobile }) => {
   // const indexRoute = routeData.find(route => route.title === 'home')
 
   const thisRouteData = { ...routeData.home }

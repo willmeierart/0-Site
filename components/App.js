@@ -3,33 +3,38 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { binder } from '../lib/_utils'
-import { toggleMenu, setColorScheme } from '../lib/redux/actions'
+import { toggleMenu, setColorScheme, checkIfMobile } from '../lib/redux/actions'
 import Head from './Head'
 import ScrollOMatic from './nav/ScrollOMatic'
 import CenterLogo from './nav/CenterLogo'
 import Menu from './nav/Menu'
 import PageTitle from './nav/PageTitle'
+import MobileScrollOMatic from './nav/MobileScrollOMatic';
 
 class App extends Component {
   constructor (props) {
     super(props)
     binder(this, ['handleMouseEnter', 'handleMouseLeave'])
   }
+  componentWillMount () { this.props.checkIfMobile() }
   handleMouseEnter () { this.props.toggleMenu(true) }
   handleMouseLeave () { this.props.toggleMenu(false) }
   render () {
-    const { children, title, routeData, pathname, menuOpen } = this.props
+    const { children, title, routeData, pathname, menuOpen, isMobile } = this.props
     return (
       <div className='App'>
         <Head title={title} />
         <main>
           <div className='logo-clip-path'>
             <PageTitle title={title} />
-            <ScrollOMatic className='scroll-o-matic'
-              pathname={pathname} title={title}
-              routeData={routeData} scrollInverted>
-              { children }
-            </ScrollOMatic>
+            { isMobile
+              ? <MobileScrollOMatic pathname={pathname} title={title} routeData={routeData}>
+                { children }
+              </MobileScrollOMatic>
+              : <ScrollOMatic pathname={pathname} title={title} routeData={routeData} scrollInverted>
+                { children }
+              </ScrollOMatic>
+            }
           </div>
           <CenterLogo />
           { menuOpen &&
@@ -67,6 +72,7 @@ class App extends Component {
 
 function mapStateToProps (state) {
   return {
+    isMobile: state.functional.isMobile,
     menuOpen: state.ui.menuOpen,
     colors: state.ui.colors
   }
@@ -74,6 +80,7 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
+    checkIfMobile: () => dispatch(checkIfMobile()),
     toggleMenu: bool => dispatch(toggleMenu(bool)),
     setColorScheme: colorObj => dispatch(setColorScheme(colorObj))
   }
@@ -82,6 +89,8 @@ function mapDispatchToProps (dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(App)
 
 App.PropTypes = {
+  checkIfMobile: PropTypes.func.isRequired,
+  isMobile: PropTypes.bool.isRequired,
   toggleMenu: PropTypes.func.isRequired,
   setColorScheme: PropTypes.func.isRequired,
   menuOpen: PropTypes.bool.isRequired,

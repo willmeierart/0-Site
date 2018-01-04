@@ -131,24 +131,18 @@ class ScrollOMatic extends Component {
 
   navigator () {
     const { current } = this.state
-    const { layout: { scrollOMaticHeight, scrollOMaticWidth, widthMargin, heightMargin }, routeData: { type }, getNewOriginPos } = this.props
-    const { nextRoute, prevRoute } = this.props.prevNextRoutes
-    const shouldBePrevRoute = current >= 0
-    const shouldBeNextRoute = type === 'vertical' ? heightMargin >= current : widthMargin >= current
+    const { prevNextRoutes: { nextRoute, prevRoute }, layout: { scrollOMaticHeight, scrollOMaticWidth, widthMargin, heightMargin }, routeData: { type }, getNewOriginPos, transitionRoute } = this.props
+    const prevTrigger = current >= 0
+    const nextTrigger = type === 'vertical' ? heightMargin >= current : widthMargin >= current
 
-    const routerData = {
-      prevTrigger: shouldBePrevRoute,
-      nextTrigger: shouldBeNextRoute,
-      prevRoute,
-      nextRoute
-    }
+    const routerData = { prevTrigger, nextTrigger, prevRoute, nextRoute }
 
-    if (shouldBeNextRoute || shouldBePrevRoute) {
+    if (nextTrigger || prevTrigger) {
       const widthHeight = [scrollOMaticWidth, scrollOMaticHeight]
-      shouldBeNextRoute
+      nextTrigger
         ? getNewOriginPos(nextRoute, 'forward', widthHeight)
         : getNewOriginPos(prevRoute, 'back', widthHeight)
-      this.props.transitionRoute(routerData)
+      transitionRoute(routerData)
     }
   }
 
