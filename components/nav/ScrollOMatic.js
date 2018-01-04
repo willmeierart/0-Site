@@ -251,7 +251,7 @@ class ScrollOMatic extends Component {
           width: '100vw',
           height: '100vh',
           boxSizing: 'border-box'
-        }} onWheel={this.handleScroll}>
+        }} onWheel={this.handleScroll} onTouchMove={this.handleScroll}>
         <Motion style={{ amt: spring(axisVals, springConfig) }}>
           { ({ amt }) => (
             <div className='scroll-tray' ref={(scrollTray) => { this.scrollTray = scrollTray }}
