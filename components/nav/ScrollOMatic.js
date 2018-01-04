@@ -132,12 +132,13 @@ class ScrollOMatic extends Component {
   navigator () {
     const { current } = this.state
     const { prevNextRoutes: { nextRoute, prevRoute }, layout: { scrollOMaticHeight, scrollOMaticWidth, widthMargin, heightMargin }, routeData: { type }, getNewOriginPos, transitionRoute } = this.props
-    const prevTrigger = current >= 0
-    const nextTrigger = type === 'vertical' ? heightMargin >= current : widthMargin >= current
+    let prevTrigger = current >= 0
+    let nextTrigger = type === 'vertical' ? heightMargin >= current : widthMargin >= current
 
     const routerData = { prevTrigger, nextTrigger, prevRoute, nextRoute }
 
     if (nextTrigger || prevTrigger) {
+      console.log(nextTrigger, prevTrigger)
       const widthHeight = [scrollOMaticWidth, scrollOMaticHeight]
       nextTrigger
         ? getNewOriginPos(nextRoute, 'forward', widthHeight)

@@ -16,6 +16,7 @@ class App extends Component {
     super(props)
     binder(this, ['handleMouseEnter', 'handleMouseLeave'])
   }
+  // componentDidMount () { console.log(this.props.isMobile) }
   componentWillMount () { this.props.checkIfMobile() }
   handleMouseEnter () { this.props.toggleMenu(true) }
   handleMouseLeave () { this.props.toggleMenu(false) }
