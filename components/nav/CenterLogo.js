@@ -8,7 +8,7 @@ import { AzLogo01 } from '../assets/ZeroLogos'
 class CenterLogo extends Component {
   constructor (props) {
     super(props)
-    binder(this, ['handleMouseEnter', 'handleMouseLeave'])
+    binder(this, ['handleMouseEnter', 'handleMouseLeave', 'handleClick'])
   }
 
   handleMouseEnter () { this.props.toggleMenu(true) }

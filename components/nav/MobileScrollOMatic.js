@@ -26,13 +26,8 @@ class MobileScrollOMatic extends Component {
     setTimeout(() => { this.setState({ canScroll: true }) }, 500)
 
     type === 'horizontal' ? document.scrollingElement.scrollLeft = 1 : document.scrollingElement.scrollTop = 1
-    if (type === 'horizontal') {
-      document.scrollingElement.scrollLeft = 1
-      console.log('horizontal', document.scrollingElement.scrollLeft)
-    } else if (type === 'vertical') {
-      document.scrollingElement.scrollTop = 1
-      console.log('vertical', document.scrollingElement.scrollTop)
-    }
+    // if (type === 'horizontal') { document.scrollingElement.scrollLeft = 1}
+    // else if (type === 'vertical') { document.scrollingElement.scrollTop = 1 }
 
     const fetchEm = async () => {
       await setPrevNextRoutes(route)
@@ -44,7 +39,6 @@ class MobileScrollOMatic extends Component {
     fetchEm()
 
     setColorScheme({ base1: bgColor1, base2: bgColor2 })
-    // console.log(this.props.prevNextRoutes)
   }
 
   componentWillUnmount () {
@@ -110,15 +104,6 @@ class MobileScrollOMatic extends Component {
     if (canScroll) {
       throttle(this.navigator(e), 1000)
     }
-    // else {
-    //   if (type === 'horizontal') {
-    //     document.scrollingElement.scrollLeft = 1
-    //     // console.log('horizontal', document.scrollingElement.scrollLeft)
-    //   } else if (type === 'vertical') {
-    //     document.scrollingElement.scrollTop = 1
-    //     // console.log('vertical', document.scrollingElement.scrollTop)
-    //   }
-    // }
   }
 
   render () {
@@ -130,10 +115,9 @@ class MobileScrollOMatic extends Component {
         width: `${Math.floor(width * 100)}vw`,
         height: `${Math.floor(height * 100)}vh`,
         boxSizing: 'border-box',
-        backgroundColor: currentColor,
-        overflowScrolling: 'touch',
-        WebkitOverflowScrolling: 'touch'
-        // zIndex: -1
+        backgroundColor: currentColor
+        // overflowScrolling: 'touch',
+        // WebkitOverflowScrolling: 'touch'
       }}>
         { this.props.children }
         <style jsx global>{`
