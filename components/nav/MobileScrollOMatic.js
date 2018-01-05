@@ -23,15 +23,13 @@ class MobileScrollOMatic extends Component {
 
     this.setState({ canScroll: false })
     setTimeout(() => { this.setState({ canScroll: true }) }, 500)
-    
+
     type === 'horizontal' ? document.scrollingElement.scrollLeft = 1 : document.scrollingElement.scrollTop = 1
     if (type === 'horizontal') {
-      console.log('horizontal', document.scrollingElement.scrollLeft)
-      document.scrollingElement.scrollLeft = 2
+      document.scrollingElement.scrollLeft = 1
       console.log('horizontal', document.scrollingElement.scrollLeft)
     } else if (type === 'vertical') {
-      console.log('vertical', document.scrollingElement.scrollTop)
-      document.scrollingElement.scrollTop = 2
+      document.scrollingElement.scrollTop = 1
       console.log('vertical', document.scrollingElement.scrollTop)
     }
 
@@ -55,38 +53,38 @@ class MobileScrollOMatic extends Component {
 
   navigator (e) {
     const { routeData: { type }, getNewOriginPos, transitionRoute, prevNextRoutes: { nextRoute, prevRoute } } = this.props
-    const widthHeight = [window.innerWidth, window.innerHeight]
     const { innerWidth, innerHeight } = window
+    const widthHeight = [innerWidth, innerHeight]
     const scrollTop = typeof e.srcElement.scrollingElement.scrollTop !== 'undefined' ? e.srcElement.scrollingElement.scrollTop : 0
     const scrollLeft = typeof e.srcElement.scrollingElement.scrollLeft !== 'undefined' ? e.srcElement.scrollingElement.scrollLeft : 0
     const scrollHeight = typeof e.srcElement.scrollingElement.scrollHeight !== 'undefined' ? e.srcElement.scrollingElement.scrollHeight : 0
     const scrollWidth = typeof e.srcElement.scrollingElement.scrollWidth !== 'undefined' ? e.srcElement.scrollingElement.scrollWidth : 0
-    
-    let thisScrollWidth = innerWidth + scrollLeft
-    let thisScrollHeight = innerHeight + scrollTop
-    
-    // console.log(thisScrollHeight, thisScrollWidth, scrollHeight, scrollWidth)
 
+    const thisScrollWidth = innerWidth + scrollLeft - 1
+    const thisScrollHeight = innerHeight + scrollTop - 1
 
-    const prevTrigger = type === 'horizontal' ? scrollLeft < 0 : scrollTop < 0
+    const prevTrigger = type === 'horizontal' ? scrollLeft <= 0 : scrollTop <= 0
     const nextTrigger = type === 'horizontal' ? thisScrollWidth - scrollWidth - 1 <= 0 : thisScrollHeight - scrollHeight - 1 <= 0
 
     const routerData = { prevTrigger, nextTrigger, prevRoute, nextRoute }
 
     if ((nextTrigger || prevTrigger) && this.state.canScroll) {
+      console.log(scrollLeft, scrollTop)
       switch (true) {
-        case nextTrigger :
-          getNewOriginPos(nextRoute, 'forward', widthHeight)
-          console.log('next')
-          console.log({
-            thisScrollWidth,
-            scrollWidth,
-            thisScrollHeight,
-            scrollHeight
-          })
-          transitionRoute(routerData)        
-          this.setState({ canScroll: false })
-          break
+        // case nextTrigger :
+        //   getNewOriginPos(nextRoute, 'forward', widthHeight)
+        //   console.log('next')
+        //   console.log({
+        //     thisScrollWidth,
+        //     scrollWidth,
+        //     thisScrollHeight,
+        //     scrollHeight
+        //   })
+        //   window.removeEventListener('scroll', (e) => { this.handleScroll(e) })
+        //   window.removeEventListener('touchmove', (e) => { this.handleScroll(e) })
+        //   transitionRoute(routerData)   
+        //   this.setState({ canScroll: false })
+        //   break
         case prevTrigger :
           getNewOriginPos(prevRoute, 'back', widthHeight)
           console.log('prev')
@@ -96,6 +94,8 @@ class MobileScrollOMatic extends Component {
             thisScrollHeight,
             scrollHeight
           })
+          window.removeEventListener('scroll', (e) => { this.handleScroll(e) })
+          window.removeEventListener('touchmove', (e) => { this.handleScroll(e) })
           transitionRoute(routerData)
           this.setState({ canScroll: false })
           break
@@ -107,7 +107,7 @@ class MobileScrollOMatic extends Component {
 
   handleScroll (e) {
     const { current, canScroll } = this.state
-    const { setColorScheme, routeData: { bgColor1, bgColor2, type } } = this.props
+    const { setColorScheme, routeData: { bgColor1, bgColor2 } } = this.props
 
     setColorScheme({
       cur1: fadeColor(current, [bgColor1, bgColor2]),
@@ -118,10 +118,10 @@ class MobileScrollOMatic extends Component {
     }
     // else {
     //   if (type === 'horizontal') {
-    //     document.scrollingElement.scrollLeft = 2
+    //     document.scrollingElement.scrollLeft = 1
     //     // console.log('horizontal', document.scrollingElement.scrollLeft)
     //   } else if (type === 'vertical') {
-    //     document.scrollingElement.scrollTop = 2
+    //     document.scrollingElement.scrollTop = 1
     //     // console.log('vertical', document.scrollingElement.scrollTop)
     //   }
     // }
@@ -129,21 +129,21 @@ class MobileScrollOMatic extends Component {
 
   render () {
     const { currentColor } = this.state
-    const { routeData: { navRules: { height, width } } } = this.props
+    const { routeData: { type, navRules: { style: { height, width } } } } = this.props
 
     return (
       <div className='mobile-matic' style={{
         width: `${Math.floor(width * 100)}vw`,
         height: `${Math.floor(height * 100)}vh`,
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        backgroundColor: currentColor
         // zIndex: -1
       }}>
         { this.props.children }
-        <style jsx>{`
-          .mobile-matic {
-            {/* width: ${Math.floor(width * 100)}vw;
-            height: ${Math.floor(height * 100)}vh; */}
-            background-color: ${currentColor};
+        <style jsx global>{`
+          html, body {
+            overflow-x: ${type === 'horizontal' ? 'visible' : 'hidden'}!important;
+            overflow-y: ${type === 'vertical' ? 'visible' : 'hidden'}!important;
           }
         `}</style>
       </div>

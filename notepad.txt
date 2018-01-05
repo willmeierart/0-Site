@@ -4,3 +4,4 @@ TO-DO:
 [] refactor scrolling to work differently:
   + it's the last subpage (or if there's no subpages) that scrolls right
   + there aren't really 'subpages' -- top level pages lock at the top and then scroll downward
+[] start laying in Head content for SEO

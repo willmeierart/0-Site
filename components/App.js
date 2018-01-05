@@ -14,12 +14,41 @@ import MobileScrollOMatic from './nav/MobileScrollOMatic';
 class App extends Component {
   constructor (props) {
     super(props)
-    binder(this, ['handleMouseEnter', 'handleMouseLeave'])
+    binder(this, ['handleMouseEnter', 'handleMouseLeave', 'renderMenu'])
   }
   // componentDidMount () { console.log(this.props.isMobile) }
   componentWillMount () { this.props.checkIfMobile() }
   handleMouseEnter () { this.props.toggleMenu(true) }
   handleMouseLeave () { this.props.toggleMenu(false) }
+  renderMenu () {
+    const { title } = this.props
+    return (
+      <div onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}
+        className='menu-wrapper' style={{
+          position: 'absolute',
+          height: '10%',
+          width: '30%',
+          right: '8%',
+          top: '40%',
+          zIndex: 5,
+          marginRight: '2vw'
+        }}>
+        <Menu title={title} closeMenu={() => this.props.toggleMenu(false)} />
+        <style jsx>{`
+          .menu-wrapper {
+            position: fixed;
+            height: 30%;
+            width: 50%;
+            right: 0;
+            top: 35%;
+            z-index:10;
+            padding-right: 20vw;
+            {/* transition: opacity 1s ease-in-out; */}
+          }
+        `}</style>
+      </div>
+    )
+  }
   render () {
     const { children, title, routeData, pathname, menuOpen, isMobile } = this.props
     return (
@@ -38,33 +67,10 @@ class App extends Component {
             }
           </div>
           <CenterLogo />
-          { menuOpen &&
-            <div onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}
-              className='menu-wrapper' style={{
-                position: 'absolute',
-                height: '10%',
-                width: '30%',
-                right: '8%',
-                top: '40%',
-                zIndex: 5,
-                marginRight: '2vw'
-              }}>
-              <Menu title={title} closeMenu={() => this.props.toggleMenu(false)} />
-            </div>
-          }
+          { menuOpen && this.renderMenu() }
         </main>
         <style jsx>{`
-          .scroll-o-matic {}
-          .menu-wrapper {
-            position: fixed;
-            height: 30%;
-            width: 50%;
-            right: 0;
-            top: 35%;
-            z-index:10;
-            padding-right: 20vw;
-            {/* transition: opacity 1s ease-in-out; */}
-          }
+          
         `}</style>
       </div>
     )
