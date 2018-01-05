@@ -65,6 +65,9 @@ class App extends Component {
                 { children }
               </ScrollOMatic>
             }
+            {/* <ScrollOMatic pathname={pathname} title={title} routeData={routeData} scrollInverted>
+              { children }
+            </ScrollOMatic> */}
           </div>
           <CenterLogo />
           { menuOpen && this.renderMenu() }

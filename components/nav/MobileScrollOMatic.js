@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import throttle from 'lodash.throttle'
 import { transitionRoute, setColorScheme, setPrevNextRoutes, getNewOriginPos } from '../../lib/redux/actions'
 import { binder, fadeColor } from '../../lib/_utils'
 import router from '../../router'
@@ -64,27 +65,27 @@ class MobileScrollOMatic extends Component {
     const thisScrollHeight = innerHeight + scrollTop - 1
 
     const prevTrigger = type === 'horizontal' ? scrollLeft <= 0 : scrollTop <= 0
-    const nextTrigger = type === 'horizontal' ? thisScrollWidth - scrollWidth - 1 <= 0 : thisScrollHeight - scrollHeight - 1 <= 0
+    const nextTrigger = type === 'horizontal' ? scrollWidth - thisScrollWidth - 1 <= 0 : scrollHeight - thisScrollHeight - 1 <= 0
 
     const routerData = { prevTrigger, nextTrigger, prevRoute, nextRoute }
 
     if ((nextTrigger || prevTrigger) && this.state.canScroll) {
       console.log(scrollLeft, scrollTop)
       switch (true) {
-        // case nextTrigger :
-        //   getNewOriginPos(nextRoute, 'forward', widthHeight)
-        //   console.log('next')
-        //   console.log({
-        //     thisScrollWidth,
-        //     scrollWidth,
-        //     thisScrollHeight,
-        //     scrollHeight
-        //   })
-        //   window.removeEventListener('scroll', (e) => { this.handleScroll(e) })
-        //   window.removeEventListener('touchmove', (e) => { this.handleScroll(e) })
-        //   transitionRoute(routerData)   
-        //   this.setState({ canScroll: false })
-        //   break
+        case nextTrigger :
+          getNewOriginPos(nextRoute, 'forward', widthHeight)
+          console.log('next')
+          console.log({
+            thisScrollWidth,
+            scrollWidth,
+            thisScrollHeight,
+            scrollHeight
+          })
+          window.removeEventListener('scroll', (e) => { this.handleScroll(e) })
+          window.removeEventListener('touchmove', (e) => { this.handleScroll(e) })
+          transitionRoute(routerData)   
+          this.setState({ canScroll: false })
+          break
         case prevTrigger :
           getNewOriginPos(prevRoute, 'back', widthHeight)
           console.log('prev')
@@ -114,7 +115,7 @@ class MobileScrollOMatic extends Component {
       cur2: fadeColor(current, [bgColor2, bgColor1])
     })
     if (canScroll) {
-      this.navigator(e)
+      throttle(this.navigator(e), 200)
     }
     // else {
     //   if (type === 'horizontal') {
@@ -136,7 +137,9 @@ class MobileScrollOMatic extends Component {
         width: `${Math.floor(width * 100)}vw`,
         height: `${Math.floor(height * 100)}vh`,
         boxSizing: 'border-box',
-        backgroundColor: currentColor
+        backgroundColor: currentColor,
+        overflowScrolling: 'touch',
+        WebKitOverflowScrolling: 'touch'
         // zIndex: -1
       }}>
         { this.props.children }
