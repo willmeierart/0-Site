@@ -23,7 +23,8 @@ class App extends Component {
   renderMenu () {
     const { title } = this.props
     return (
-      <div onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}
+      <div onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
         className='menu-wrapper' style={{
           position: 'absolute',
           height: '10%',

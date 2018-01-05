@@ -247,7 +247,7 @@ class ScrollOMatic extends Component {
           height: '100vh',
           boxSizing: 'border-box',
           overflowScrolling: 'touch',
-          WebKitOverflowScrolling: 'touch'
+          WebkitOverflowScrolling: 'touch'
         }} onWheel={this.handleScroll} onTouchMove={this.handleScroll}>
         <Motion style={{ amt: spring(axisVals, springConfig) }}>
           { ({ amt }) => (
@@ -262,7 +262,7 @@ class ScrollOMatic extends Component {
                 display: 'inline-flex',
                 position: 'absolute',
                 overflowScrolling: 'touch',
-                WebKitOverflowScrolling: 'touch'
+                WebkitOverflowScrolling: 'touch'
               }}>
               { this.props.children }
             </div>

@@ -68,37 +68,30 @@ class MobileScrollOMatic extends Component {
     const nextTrigger = type === 'horizontal' ? scrollWidth - thisScrollWidth - 1 <= 0 : scrollHeight - thisScrollHeight - 1 <= 0
 
     const routerData = { prevTrigger, nextTrigger, prevRoute, nextRoute }
-
     if ((nextTrigger || prevTrigger) && this.state.canScroll) {
       console.log(scrollLeft, scrollTop)
+      const that = this
+      const doTransitionStuff = (dir) => {
+        const route = dir === 'forward' ? nextRoute : prevRoute
+        getNewOriginPos(route, dir, widthHeight)
+        console.log(dir)
+        console.log({
+          thisScrollWidth,
+          scrollWidth,
+          thisScrollHeight,
+          scrollHeight
+        })
+        window.removeEventListener('scroll', (e) => { that.handleScroll(e) })
+        window.removeEventListener('touchmove', (e) => { that.handleScroll(e) })
+        transitionRoute(routerData)
+        that.setState({ canScroll: false })
+      }
       switch (true) {
         case nextTrigger :
-          getNewOriginPos(nextRoute, 'forward', widthHeight)
-          console.log('next')
-          console.log({
-            thisScrollWidth,
-            scrollWidth,
-            thisScrollHeight,
-            scrollHeight
-          })
-          window.removeEventListener('scroll', (e) => { this.handleScroll(e) })
-          window.removeEventListener('touchmove', (e) => { this.handleScroll(e) })
-          transitionRoute(routerData)   
-          this.setState({ canScroll: false })
+          doTransitionStuff('forward')
           break
         case prevTrigger :
-          getNewOriginPos(prevRoute, 'back', widthHeight)
-          console.log('prev')
-          console.log({
-            thisScrollWidth,
-            scrollWidth,
-            thisScrollHeight,
-            scrollHeight
-          })
-          window.removeEventListener('scroll', (e) => { this.handleScroll(e) })
-          window.removeEventListener('touchmove', (e) => { this.handleScroll(e) })
-          transitionRoute(routerData)
-          this.setState({ canScroll: false })
+          doTransitionStuff('back')
           break
         default:
           return null
@@ -115,7 +108,7 @@ class MobileScrollOMatic extends Component {
       cur2: fadeColor(current, [bgColor2, bgColor1])
     })
     if (canScroll) {
-      throttle(this.navigator(e), 200)
+      throttle(this.navigator(e), 1000)
     }
     // else {
     //   if (type === 'horizontal') {
@@ -139,7 +132,7 @@ class MobileScrollOMatic extends Component {
         boxSizing: 'border-box',
         backgroundColor: currentColor,
         overflowScrolling: 'touch',
-        WebKitOverflowScrolling: 'touch'
+        WebkitOverflowScrolling: 'touch'
         // zIndex: -1
       }}>
         { this.props.children }
