@@ -25,9 +25,7 @@ class MobileScrollOMatic extends Component {
     this.setState({ canScroll: false })
     setTimeout(() => { this.setState({ canScroll: true }) }, 500)
 
-    type === 'horizontal' ? document.scrollingElement.scrollLeft = 1 : document.scrollingElement.scrollTop = 1
-    // if (type === 'horizontal') { document.scrollingElement.scrollLeft = 1}
-    // else if (type === 'vertical') { document.scrollingElement.scrollTop = 1 }
+    document.scrollingElement.scrollTop = 1
 
     const fetchEm = async () => {
       await setPrevNextRoutes(route)
@@ -51,27 +49,22 @@ class MobileScrollOMatic extends Component {
     const { innerWidth, innerHeight } = window
     const widthHeight = [innerWidth, innerHeight]
     const scrollTop = typeof e.srcElement.scrollingElement.scrollTop !== 'undefined' ? e.srcElement.scrollingElement.scrollTop : 0
-    const scrollLeft = typeof e.srcElement.scrollingElement.scrollLeft !== 'undefined' ? e.srcElement.scrollingElement.scrollLeft : 0
     const scrollHeight = typeof e.srcElement.scrollingElement.scrollHeight !== 'undefined' ? e.srcElement.scrollingElement.scrollHeight : 0
-    const scrollWidth = typeof e.srcElement.scrollingElement.scrollWidth !== 'undefined' ? e.srcElement.scrollingElement.scrollWidth : 0
 
-    const thisScrollWidth = innerWidth + scrollLeft - 1
     const thisScrollHeight = innerHeight + scrollTop - 1
 
-    const prevTrigger = type === 'horizontal' ? scrollLeft <= 0 : scrollTop <= 0
-    const nextTrigger = type === 'horizontal' ? scrollWidth - thisScrollWidth - 1 <= 0 : scrollHeight - thisScrollHeight - 1 <= 0
+    const prevTrigger = scrollTop <= 0
+    const nextTrigger = scrollHeight - thisScrollHeight - 1 <= 0
 
     const routerData = { prevTrigger, nextTrigger, prevRoute, nextRoute }
     if ((nextTrigger || prevTrigger) && this.state.canScroll) {
-      console.log(scrollLeft, scrollTop)
+      console.log(scrollTop)
       const that = this
       const doTransitionStuff = (dir) => {
         const route = dir === 'forward' ? nextRoute : prevRoute
         getNewOriginPos(route, dir, widthHeight)
         console.log(dir)
         console.log({
-          thisScrollWidth,
-          scrollWidth,
           thisScrollHeight,
           scrollHeight
         })
@@ -108,11 +101,11 @@ class MobileScrollOMatic extends Component {
 
   render () {
     const { currentColor } = this.state
-    const { routeData: { type, navRules: { style: { height, width } } } } = this.props
+    const { routeData: { type, navRules: { style: { height } } } } = this.props
 
     return (
       <div className='mobile-matic' style={{
-        width: `${Math.floor(width * 100)}vw`,
+        width: '100vw',
         height: `${Math.floor(height * 100)}vh`,
         boxSizing: 'border-box',
         backgroundColor: currentColor
