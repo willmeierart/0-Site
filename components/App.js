@@ -51,13 +51,13 @@ class App extends Component {
     )
   }
   render () {
-    const { children, title, routeData, pathname, menuOpen, isMobile, titleStyle, splitSpans } = this.props
+    const { children, title, routeData, pathname, menuOpen, isMobile } = this.props
     return (
       <div className='App'>
         <Head title={title} />
         <main>
           <div className='logo-clip-path'>
-            <PageTitle splitSpans={splitSpans} title={title} titleStyle={titleStyle} />
+            <PageTitle routeData={routeData} />
             { isMobile
               ? <MobileScrollOMatic pathname={pathname} title={title} routeData={routeData}>
                 { children }

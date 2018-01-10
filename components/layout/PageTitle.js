@@ -1,33 +1,79 @@
-// import ReactFitText from 'react-fittext'
-import { splitTitleToSpans } from '../../lib/_utils'
+import { splitToSpans } from '../../lib/_utils'
 
-const PageTitle = ({ title, titleStyle, splitSpans }) => {
-  const splitTitle = splitTitleToSpans(title)
+const PageTitle = ({ routeData }) => {
+  const { titleCopy } = routeData
+  let titleWrapperStyles = {
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    background: 'transparent',
+    position: 'fixed',
+    margin: 0,
+    lineHeight: '1.5em',
+    zIndex: 5,
+    pointerEvents: 'none',
+    opacity: 0.125,
+    display: 'grid'
+  }
+  let titleStyles = {}
+
+  switch (routeData.route) {
+    case 'home': {
+      const newTitleStyles = {
+        display: 'flex',
+        justifyContent: 'space-between'
+      }
+      const newWrapperStyles = {
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gridTemplateRows: 'repeat(3, 1fr)',
+        fontSize: '10vw',
+        width: '55vw',
+        height: '55vh',
+        bottom: 0,
+        left: 0
+        // verticalAlign: 'bottom'
+      }
+      titleWrapperStyles = { ...titleWrapperStyles, ...newWrapperStyles }
+      titleStyles = { ...titleStyles, ...newTitleStyles }
+      break
+    }
+    case 'work': {
+      const newTitleStyles = {}
+      const newWrapperStyles = {}
+      titleWrapperStyles = { ...titleWrapperStyles, ...newWrapperStyles }
+      titleStyles = { ...titleStyles, ...newTitleStyles }
+      break
+    }
+    case 'skills': {
+      const newTitleStyles = {}
+      const newWrapperStyles = {}
+      titleWrapperStyles = { ...titleWrapperStyles, ...newWrapperStyles }
+      titleStyles = { ...titleStyles, ...newTitleStyles }
+      break
+    }
+    case 'us': {
+      const newTitleStyles = {}
+      const newWrapperStyles = {}
+      titleWrapperStyles = { ...titleWrapperStyles, ...newWrapperStyles }
+      titleStyles = { ...titleStyles, ...newTitleStyles }
+      break
+    }
+    default :
+      break
+  }
+
+  const brokenTitleCopy = titleCopy.split(' ')
+  const splitTitleCopy = brokenTitleCopy.map((section, i) => {
+    const wdLength = section.length
+    const lineStyles = {
+      gridArea: `${i + 1}/${1}/${i + 2}/${wdLength + 1}`
+    }
+    return (
+      <h1 className={`section-${i}`} style={{...lineStyles, ...titleStyles}}>{ splitToSpans(section) }</h1>
+    )
+  })
+
   return (
-    <div /* className='main-page-title' */>
-      {/* <ReactFitText> */}
-      <h1 className='main-page-title' style={titleStyle}>{ splitSpans ? splitTitle : title }</h1>
-      {/* </ReactFitText> */}
-      {/* <style jsx>{`
-        .main-page-title {
-            font-size: 20vw;
-            font-weight: bold;
-            width: 100vw;
-            height: 100vh;
-            top:0;
-            left:0;
-            text-transform: uppercase;
-            background: transparent;
-            position: fixed;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 5;
-            pointer-events: none;
-            opacity: .125;
-          }
-      `}</style> */}
-    </div>
+    <div className='main-page-title' style={titleWrapperStyles}>{ splitTitleCopy }</div>
   )
 }
 export default PageTitle

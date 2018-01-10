@@ -6,13 +6,13 @@ import navRules from '../router/navRules'
 export default ({ pathname }) => {
   const thisRouteData = { ...routeData.us }
   thisRouteData.navRules = navRules(thisRouteData.type)
-   const titleStyle = {
+  const titleStyle = {
     fontSize: '70vw',
     fontWeight: 'bold',
     width: '100vw',
     height: '100vh',
-    top:0,
-    left:0,
+    top: 0,
+    left: 0,
     textTransform: 'uppercase',
     background: 'transparent',
     position: 'fixed',
@@ -21,7 +21,7 @@ export default ({ pathname }) => {
     alignItems: 'center',
     zIndex: 5,
     pointerEvents: 'none',
-    opacity: .125
+    opacity: 0.125
   }
   return (
     <App splitSpans titleStyle={titleStyle} pathname={pathname} routeData={thisRouteData} title='us'>
