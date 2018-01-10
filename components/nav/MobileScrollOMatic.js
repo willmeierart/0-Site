@@ -107,8 +107,6 @@ class MobileScrollOMatic extends Component {
         height: `${Math.floor(height * 100)}vh`,
         boxSizing: 'border-box',
         backgroundColor: cur1
-        // overflowScrolling: 'touch',
-        // WebkitOverflowScrolling: 'touch'
       }}>
         { this.props.children }
         <style jsx global>{`
