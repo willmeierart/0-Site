@@ -21,6 +21,8 @@ class MobileScrollOMatic extends Component {
 
     window.addEventListener('scroll', (e) => { this.handleScroll(e) })
     window.addEventListener('touchmove', (e) => { this.handleScroll(e) })
+    window.addEventListener('touchstart', (e) => { this.handleScroll(e) })
+    window.addEventListener('touchend', (e) => { this.handleScroll(e) })
 
     this.setState({ canScroll: false })
     setTimeout(() => { this.setState({ canScroll: true }) }, 500)
@@ -42,6 +44,8 @@ class MobileScrollOMatic extends Component {
   componentWillUnmount () {
     window.removeEventListener('scroll', (e) => { this.handleScroll(e) })
     window.removeEventListener('touchmove', (e) => { this.handleScroll(e) })
+    window.removeEventListener('touchstart', (e) => { this.handleScroll(e) })
+    window.removeEventListener('touchend', (e) => { this.handleScroll(e) })
   }
 
   changeColors () {
@@ -67,8 +71,8 @@ class MobileScrollOMatic extends Component {
       console.log('transitionDirection')
       const route = dir === 'forward' ? nextRoute : prevRoute
       getNewOriginPos(route, dir, [innerWidth, innerHeight])
-      window.removeEventListener('scroll', (e) => { that.handleScroll(e) })
-      window.removeEventListener('touchmove', (e) => { that.handleScroll(e) })
+      // window.removeEventListener('scroll', (e) => { that.handleScroll(e) })
+      // window.removeEventListener('touchmove', (e) => { that.handleScroll(e) })
       transitionRoute(routerData)
       that.setState({ canScroll: false })
     }
@@ -84,6 +88,7 @@ class MobileScrollOMatic extends Component {
   }
 
   handleScroll (e) {
+    // e.preventDefault()
     const { canScroll } = this.state
     const { routeData: { bgColor1, bgColor2 } } = this.props
 

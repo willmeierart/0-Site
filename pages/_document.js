@@ -47,6 +47,8 @@ export default class CustomDocument extends Document {
         <style jsx global>{`
           html, body {
             overflow: hidden;
+            overflowScrolling: 'touch';
+            -webkit-overflow-scrolling: 'touch';
           }
         `}</style>
       </html>
