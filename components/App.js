@@ -6,10 +6,10 @@ import { binder } from '../lib/_utils'
 import { toggleMenu, setColorScheme, checkIfMobile } from '../lib/redux/actions'
 import Head from './Head'
 import ScrollOMatic from './nav/ScrollOMatic'
-import CenterLogo from './nav/CenterLogo'
-import Menu from './nav/Menu'
-import PageTitle from './nav/PageTitle'
-import MobileScrollOMatic from './nav/MobileScrollOMatic';
+import CenterLogo from './layout/CenterLogo'
+import Menu from './layout/Menu'
+import PageTitle from './layout/PageTitle'
+import MobileScrollOMatic from './nav/MobileScrollOMatic'
 
 class App extends Component {
   constructor (props) {
@@ -51,13 +51,13 @@ class App extends Component {
     )
   }
   render () {
-    const { children, title, routeData, pathname, menuOpen, isMobile } = this.props
+    const { children, title, routeData, pathname, menuOpen, isMobile, titleStyle, splitSpans } = this.props
     return (
       <div className='App'>
         <Head title={title} />
         <main>
           <div className='logo-clip-path'>
-            <PageTitle title={title} />
+            <PageTitle splitSpans={splitSpans} title={title} titleStyle={titleStyle} />
             { isMobile
               ? <MobileScrollOMatic pathname={pathname} title={title} routeData={routeData}>
                 { children }

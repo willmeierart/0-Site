@@ -1,14 +1,14 @@
 // import ReactFitText from 'react-fittext'
-import { splitToSpans } from '../../lib/_utils'
+import { splitTitleToSpans } from '../../lib/_utils'
 
-const PageTitle = ({ title }) => {
-  const splitTitle = splitToSpans(title)
+const PageTitle = ({ title, titleStyle, splitSpans }) => {
+  const splitTitle = splitTitleToSpans(title)
   return (
     <div /* className='main-page-title' */>
       {/* <ReactFitText> */}
-      <h1 className='main-page-title'>{ splitTitle }</h1>
+      <h1 className='main-page-title' style={titleStyle}>{ splitSpans ? splitTitle : title }</h1>
       {/* </ReactFitText> */}
-      <style jsx>{`
+      {/* <style jsx>{`
         .main-page-title {
             font-size: 20vw;
             font-weight: bold;
@@ -26,7 +26,7 @@ const PageTitle = ({ title }) => {
             pointer-events: none;
             opacity: .125;
           }
-      `}</style>
+      `}</style> */}
     </div>
   )
 }
