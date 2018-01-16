@@ -12,9 +12,12 @@ export default class CustomDocument extends Document {
     e.preventDefault()
     e.stopPropagation()
   }
-  // componentDidMount () {
-  //   this.windowCheck()
-  // }
+  componentDidMount () {
+    window.addEventListener('scroll', (e) => { this.preventScrollNav(e) })
+    window.addEventListener('touchmove', (e) => { this.preventScrollNav(e) })
+    window.addEventListener('touchstart', (e) => { this.preventScrollNav(e) })
+    window.addEventListener('touchend', (e) => { this.preventScrollNav(e) })
+  }
   // windowCheck () {
   //   // console.log('windowCheck')
   //   // if (typeof window !== 'undefined') {
@@ -50,8 +53,8 @@ export default class CustomDocument extends Document {
         <style jsx global>{`
           html, body {
             overflow: hidden;
-            {/* overflowScrolling: 'touch';
-            -webkit-overflow-scrolling: 'touch'; */}
+            overflowScrolling: 'touch';
+            -webkit-overflow-scrolling: 'touch';
           }
         `}</style>
       </html>

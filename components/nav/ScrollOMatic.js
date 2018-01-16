@@ -141,7 +141,6 @@ class ScrollOMatic extends Component {
     const routerData = { prevTrigger, nextTrigger, prevRoute, nextRoute }
 
     if (nextTrigger || prevTrigger) {
-      // console.log(nextTrigger, prevTrigger)
       const widthHeight = [scrollOMaticWidth, scrollOMaticHeight]
       nextTrigger
         ? getNewOriginPos(nextRoute, 'forward', widthHeight)
@@ -214,11 +213,6 @@ class ScrollOMatic extends Component {
   animateTheScroll (e) {
     const { scrollInverted, isMobile } = this.props
     const { touchStartX, touchStartY } = this.state
-    // const rawData = isMobile
-    //   ? Math.abs(this.animValSwitch().val + e.touches[0].clientY) > Math.abs(this.animValSwitch().val + e.touches[0].clientX)
-    //     ? this.animValSwitch().val + e.touches[0].clientY
-    //     : this.animValSwitch().val + e.touches[0].clientX
-    //   : Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX
     const rawData = () => {
       if (isMobile) {
         if (e.touches[0].clientY !== touchStartY || e.touches[0].clientX !== touchStartX) {
@@ -296,7 +290,8 @@ class ScrollOMatic extends Component {
           position: 'relative',
           width: '100vw',
           height: '100vh',
-          boxSizing: 'border-box'
+          boxSizing: 'border-box',
+          overflow: 'hidden'
         }} onWheel={this.handleScroll} onTouchMove={this.handleScroll} onTouchStart={this.handleTouchStart}>
         <Motion style={{ amt: spring(axisVals, springConfig) }}>
           { ({ amt }) => (
@@ -309,7 +304,10 @@ class ScrollOMatic extends Component {
                 transform: this.scrollDirTransformer(amt),
                 willChange: 'transform',
                 display: 'inline-flex',
-                position: 'absolute'
+                position: 'absolute',
+                overflowScrolling: 'touch',
+                WebkitOverflowScrolling: 'touch',
+                overflow: 'hidden'
               }}>
               { this.props.children }
             </div>
@@ -349,6 +347,7 @@ function mapDispatchToProps (dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(ScrollOMatic)
 
 ScrollOMatic.PropTypes = {
+  isMobile: PropTypes.bool.isRequired,
   getNewOriginPos: PropTypes.func.isRequired,
   prevNextRoutes: PropTypes.object.isRequired,
   transitionRoute: PropTypes.func.isRequired,
