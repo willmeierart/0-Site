@@ -22,6 +22,7 @@ export default {
   home: {
     component: home,
     route: 'home',
+    titleCopy: 'wel come home',
     type: 'horizontal',
     bgColor1: colors[1],
     bgColor2: colors[0]
@@ -29,6 +30,7 @@ export default {
   us: {
     component: us,
     route: 'us',
+    titleCopy: 'us',
     type: 'vertical',
     bgColor1: colors[0],
     bgColor2: colors[1]
@@ -36,6 +38,7 @@ export default {
   work: {
     component: work,
     route: 'work',
+    titleCopy: 'work',
     type: 'vertical',
     bgColor1: colors[1],
     bgColor2: colors[0]
@@ -139,6 +142,7 @@ export default {
   skills: {
     component: skills,
     route: 'skills',
+    titleCopy: 'skills',
     type: 'vertical',
     bgColor1: colors[0],
     bgColor2: colors[1]
@@ -146,6 +150,7 @@ export default {
   converse: {
     component: converse,
     route: 'converse',
+    titleCopy: 'con verse',
     type: 'horizontal',
     bgColor1: colors[1],
     bgColor2: colors[0]
