@@ -183,6 +183,10 @@ class ScrollOMatic extends Component {
       cur1: fadeColor(isMobile ? spring(scrollTiplier, { stiffness: 120, damping: 20 }).val : scrollTiplier, [bgColor1, bgColor2]),
       cur2: fadeColor(isMobile ? spring(scrollTiplier, { stiffness: 120, damping: 20 }).val : scrollTiplier, [bgColor2, bgColor1])
     })
+    // setColorScheme({
+    //   cur1: fadeColor(isMobile ? spring(scrollTiplier, { stiffness: 120, damping: 20 }).val : spring(scrollTiplier, presets.noWobble).val, [bgColor1, bgColor2]),
+    //   cur2: fadeColor(isMobile ? spring(scrollTiplier, { stiffness: 120, damping: 20 }).val : spring(scrollTiplier, presets.noWobble).val, [bgColor2, bgColor1])
+    // })
 
     this.setState({
       bgImage
