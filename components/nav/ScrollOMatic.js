@@ -159,7 +159,7 @@ class ScrollOMatic extends Component {
   }
 
   setScrollStyleState () {
-    const { layout: { scrollOMaticHeight, scrollOMaticWidth, trayOffsetHeight, trayOffsetWidth }, routeData: { type, bgColor1, bgColor2, navRules: { style: { backgroundImageBack, backgroundImageForward } } }, setColorScheme } = this.props
+    const { isMobile, layout: { scrollOMaticHeight, scrollOMaticWidth, trayOffsetHeight, trayOffsetWidth }, routeData: { type, bgColor1, bgColor2, navRules: { style: { backgroundImageBack, backgroundImageForward } } }, setColorScheme } = this.props
     const { current } = this.state
 
     const scrollOMaticDim = type === 'horizontal' ? scrollOMaticWidth : scrollOMaticHeight
@@ -175,9 +175,13 @@ class ScrollOMatic extends Component {
     }
     const { bgImage } = styles
 
+    // setColorScheme({
+    //   cur1: fadeColor(scrollTiplier, [bgColor1, bgColor2]),
+    //   cur2: fadeColor(scrollTiplier, [bgColor2, bgColor1])
+    // })
     setColorScheme({
-      cur1: fadeColor(scrollTiplier, [bgColor1, bgColor2]),
-      cur2: fadeColor(scrollTiplier, [bgColor2, bgColor1])
+      cur1: fadeColor(isMobile ? spring(scrollTiplier, { stiffness: 120, damping: 20 }).val : scrollTiplier, [bgColor1, bgColor2]),
+      cur2: fadeColor(isMobile ? spring(scrollTiplier, { stiffness: 120, damping: 20 }).val : scrollTiplier, [bgColor2, bgColor1])
     })
 
     this.setState({
@@ -243,9 +247,6 @@ class ScrollOMatic extends Component {
     const newAnimationVal = (animationVal.val + mousePos)
     const newAnimationValNeg = (animationVal.val - mousePos)
 
-    // console.log(this.animValSwitch().val + e.touches[0].clientY, this.animValSwitch().val + e.touches[0].clientX)
-    console.log(animationVal.val, mousePos)
-
     this.setCurrentScrollDir(mousePos)
 
     if (!this.canIscroll()) return
@@ -281,10 +282,8 @@ class ScrollOMatic extends Component {
   }
 
   render () {
-    const { routeData: { navRules: { style: { height, width } } }, colors: { cur1 } } = this.props
-    // const width = type === 'horizontal' ? '150vw' : '100vw'
-    // const height = type === 'horizontal' ? '100vh' : '300vh'
-    const springConfig = presets.noWobble
+    const { routeData: { navRules: { style: { height, width } } }, colors: { cur1 }, isMobile } = this.props
+    const springConfig = isMobile ? { stiffness: 85, damping: 15 } : presets.noWobble
     const axisVals = this.animValSwitch().val
     return (
       <div className='scroll-o-matic' ref={(ref) => { this.scrollOMatic = ref }}

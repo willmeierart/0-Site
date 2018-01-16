@@ -35,9 +35,12 @@ export default class CustomDocument extends Document {
     //   }
     // }
     return (
-      <html lang='en-US' onWheel={(e) => { this.preventScrollNav(e) }}>
+      <html lang='en-US'
+        onWheel={(e) => { this.preventScrollNav(e) }}
+        onTouchStart={(e) => { this.preventScrollNav(e) }}
+        onTouchMove={(e) => { this.preventScrollNav(e) }}>
         <Head />
-        <body style={{background: 'rgba(151,13,17,1)'}}
+        <body style={{ background: 'rgba(151,13,17,1)' }}
           onTouchStart={(e) => { this.preventScrollNav(e) }}
           onTouchMove={(e) => { this.preventScrollNav(e) }}
           onWheel={(e) => { this.preventScrollNav(e) }}>
@@ -47,8 +50,8 @@ export default class CustomDocument extends Document {
         <style jsx global>{`
           html, body {
             overflow: hidden;
-            overflowScrolling: 'touch';
-            -webkit-overflow-scrolling: 'touch';
+            {/* overflowScrolling: 'touch';
+            -webkit-overflow-scrolling: 'touch'; */}
           }
         `}</style>
       </html>
