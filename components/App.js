@@ -9,7 +9,7 @@ import ScrollOMatic from './nav/ScrollOMatic'
 import CenterLogo from './nav/CenterLogo'
 import Menu from './nav/Menu'
 import PageTitle from './nav/PageTitle'
-import MobileScrollOMatic from './nav/MobileScrollOMatic';
+import MobileScrollOMatic from './nav/MobileScrollOMatic'
 
 class App extends Component {
   constructor (props) {
@@ -58,17 +58,17 @@ class App extends Component {
         <main>
           <div className='logo-clip-path'>
             <PageTitle title={title} />
-            { isMobile
+            {/* { isMobile
               ? <MobileScrollOMatic pathname={pathname} title={title} routeData={routeData}>
                 { children }
               </MobileScrollOMatic>
               : <ScrollOMatic pathname={pathname} title={title} routeData={routeData} scrollInverted>
                 { children }
               </ScrollOMatic>
-            }
-            {/* <ScrollOMatic pathname={pathname} title={title} routeData={routeData} scrollInverted>
+            } */}
+            <ScrollOMatic isMobile={isMobile} pathname={pathname} title={title} routeData={routeData} scrollInverted>
               { children }
-            </ScrollOMatic> */}
+            </ScrollOMatic>
           </div>
           <CenterLogo />
           { menuOpen && this.renderMenu() }

@@ -25,7 +25,9 @@ class ScrollOMatic extends Component {
       currentScrollDir: transitionDirection,
       current: -1,
       bounds: -1,
-      scrollTimerDone: false
+      scrollTimerDone: false,
+      touchStartX: 0,
+      touchStartY: 0
     }
     binder(this, [
       'handleScroll',
@@ -38,7 +40,8 @@ class ScrollOMatic extends Component {
       'scrollDirTransformer',
       'animateTheScroll',
       'animValSwitch',
-      'trackCurrentPosition'
+      'trackCurrentPosition',
+      'handleTouchStart'
     ])
   }
 
@@ -138,7 +141,7 @@ class ScrollOMatic extends Component {
     const routerData = { prevTrigger, nextTrigger, prevRoute, nextRoute }
 
     if (nextTrigger || prevTrigger) {
-      console.log(nextTrigger, prevTrigger)
+      // console.log(nextTrigger, prevTrigger)
       const widthHeight = [scrollOMaticWidth, scrollOMaticHeight]
       nextTrigger
         ? getNewOriginPos(nextRoute, 'forward', widthHeight)
@@ -201,12 +204,47 @@ class ScrollOMatic extends Component {
   }
 
   animateTheScroll (e) {
-    const { scrollInverted } = this.props
-    const rawData = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX
-    const mousePos = Math.floor(rawData)
+    const { scrollInverted, isMobile } = this.props
+    const { touchStartX, touchStartY } = this.state
+    // const rawData = isMobile
+    //   ? Math.abs(this.animValSwitch().val + e.touches[0].clientY) > Math.abs(this.animValSwitch().val + e.touches[0].clientX)
+    //     ? this.animValSwitch().val + e.touches[0].clientY
+    //     : this.animValSwitch().val + e.touches[0].clientX
+    //   : Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX
+    const rawData = () => {
+      if (isMobile) {
+        if (e.touches[0].clientY !== touchStartY || e.touches[0].clientX !== touchStartX) {
+          if (Math.abs(e.touches[0].clientY - touchStartY) > Math.abs(e.touches[0].clientX - touchStartX)){
+            const returnVal = e.touches[0].clientY - touchStartY
+            this.setState({
+              touchStartY: e.touches[0].clientY,
+              touchStartX: e.touches[0].clientX
+            })
+            return returnVal
+          } else {
+            const returnVal = e.touches[0].clientX - touchStartX
+            this.setState({
+              touchStartX: e.touches[0].clientX,
+              touchStartY: e.touches[0].clientY
+            })
+            return returnVal
+          }
+        }
+      } else {
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+          return e.deltaY
+        } else {
+          return e.deltaX
+        }
+      }
+    }
+    const mousePos = Math.floor(rawData())
     const animationVal = this.animValSwitch()
     const newAnimationVal = (animationVal.val + mousePos)
     const newAnimationValNeg = (animationVal.val - mousePos)
+
+    // console.log(this.animValSwitch().val + e.touches[0].clientY, this.animValSwitch().val + e.touches[0].clientX)
+    console.log(animationVal.val, mousePos)
 
     this.setCurrentScrollDir(mousePos)
 
@@ -222,6 +260,16 @@ class ScrollOMatic extends Component {
     }
 
     raf(scrolling)
+  }
+
+  handleTouchStart (e) {
+    const { isMobile } = this.props
+    if (isMobile) {
+      this.setState({
+        touchStartX: e.touches[0].clientX,
+        touchStartY: e.touches[0].clientY
+      })
+    }
   }
 
   handleScroll (e) {
@@ -246,7 +294,7 @@ class ScrollOMatic extends Component {
           width: '100vw',
           height: '100vh',
           boxSizing: 'border-box'
-        }} onWheel={this.handleScroll} onTouchMove={this.handleScroll}>
+        }} onWheel={this.handleScroll} onTouchMove={this.handleScroll} onTouchStart={this.handleTouchStart}>
         <Motion style={{ amt: spring(axisVals, springConfig) }}>
           { ({ amt }) => (
             <div className='scroll-tray' ref={(scrollTray) => { this.scrollTray = scrollTray }}
@@ -267,7 +315,7 @@ class ScrollOMatic extends Component {
         <style jsx>{`
           .scroll-o-matic {}
           .scroll-tray {
-            z-index:0;
+            z-index: 0;
           }
         `}</style>
       </div>
