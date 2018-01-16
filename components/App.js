@@ -14,9 +14,27 @@ import MobileScrollOMatic from './nav/MobileScrollOMatic'
 class App extends Component {
   constructor (props) {
     super(props)
+    this.state = {
+      width: 0,
+      height: 0
+    }
     binder(this, ['handleMouseEnter', 'handleMouseLeave', 'renderMenu'])
   }
   componentWillMount () { this.props.checkIfMobile() }
+  componentDidMount () {
+    this.setState({
+      // width: typeof window !== 'undefined' ? window.innerWidth : 0,
+      // height: typeof window !== 'undefined' ? window.innerHeight : 0
+      width: window.innerWidth,
+      height: window.innerHeight
+    })
+    window.addEventListener('resize', () => {
+      this.setState({
+        width: window.innerWidth,
+        height: window.innerHeight
+      })
+    })
+  }
   handleMouseEnter () { this.props.toggleMenu(true) }
   handleMouseLeave () { this.props.toggleMenu(false) }
   renderMenu () {
@@ -51,12 +69,13 @@ class App extends Component {
   }
   render () {
     const { children, title, routeData, pathname, menuOpen, isMobile } = this.props
+    const { width, height } = this.state
     return (
-      <div className='App'>
+      <div className='App' style={{ overflow: 'hidden' }}>
         <Head title={title} />
-        <main>
-          <div className='logo-clip-path'>
-            <PageTitle routeData={routeData} />
+        <main style={{ overflow: 'hidden' }}>
+          <div className='logo-clip-path' style={{ overflow: 'hidden' }}>
+            <PageTitle routeData={routeData} width={width} height={height} />
             {/* { isMobile
               ? <MobileScrollOMatic pathname={pathname} title={title} routeData={routeData}>
                 { children }
@@ -72,9 +91,6 @@ class App extends Component {
           <CenterLogo />
           { menuOpen && this.renderMenu() }
         </main>
-        <style jsx>{`
-          
-        `}</style>
       </div>
     )
   }

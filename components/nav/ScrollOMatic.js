@@ -45,7 +45,7 @@ class ScrollOMatic extends Component {
     ])
   }
 
-  componentWillUnmount () { window.removeEventListener('resize', this.props.setScrollLayoutRules) }
+  componentWillUnmount () { window.removeEventListener('resize', () => this.props.setScrollLayoutRules) }
 
   componentDidMount () {
     const { routeData: { bgColor1, bgColor2, route }, setScrollLayoutRules, setColorScheme, setPrevNextRoutes } = this.props
@@ -236,9 +236,9 @@ class ScrollOMatic extends Component {
         }
       } else {
         if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-          return e.deltaY
+          return e.deltaY * 0.99
         } else {
-          return e.deltaX
+          return e.deltaX * 0.99
         }
       }
     }

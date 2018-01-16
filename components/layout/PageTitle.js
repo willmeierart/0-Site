@@ -1,7 +1,9 @@
 import { splitToSpans } from '../../lib/_utils'
 
-const PageTitle = ({ routeData }) => {
+const PageTitle = ({ routeData, width, height }) => {
   const { titleCopy } = routeData
+  const wider = width > height
+
   let titleWrapperStyles = {
     fontWeight: 'bold',
     textTransform: 'uppercase',
@@ -82,7 +84,12 @@ const PageTitle = ({ routeData }) => {
       const newTitleStyles = {
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'flex-end'
+        alignItems: 'center',
+        marginBottom: '-.15em'
+        // width: '100vw',
+        // height: '100vh',
+        // display: 'grid',
+        // gridTemplateColumns: '1fr 1fr'
       }
       const newWrapperStyles = {
         display: 'flex',
@@ -92,28 +99,35 @@ const PageTitle = ({ routeData }) => {
         left: 0,
         width: '100vw',
         height: '100vh',
-        fontSize: '50vw',
+        fontSize: '50vh',
         lineHeight: '1.5em'
       }
       titleWrapperStyles = { ...titleWrapperStyles, ...newWrapperStyles }
       titleStyles = { ...titleStyles, ...newTitleStyles }
       break
     }
+
+    // THIS IS THE ONE THAT IS FURTHER ALONG:
     case 'converse': {
+      const fontSize = wider ? `${~~(height / 6)}px` : ~~(1.5 * width / 6)
+
       const newTitleStyles = {
-        display: 'flex',
-        justifyContent: 'space-between'
+        // display: 'flex',
+        // justifyContent: 'space-between'
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        gridTemplateRows: 'repeat(2, 1fr)'
       }
       const newWrapperStyles = {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gridTemplateRows: 'repeat(2, 1fr)',
-        fontSize: '11vh',
+        // display: 'grid',
+        // gridTemplateColumns: 'repeat(4, 1fr)',
+        // gridTemplateRows: 'repeat(2, 1fr)',
+        fontSize,
         width: '55vw',
-        height: '40vh',
+        height: '55vh',
         top: '45vh',
         left: 0,
-        lineHeight: '1.4em'
+        lineHeight: '.9em'
         // verticalAlign: 'bottom'
       }
       titleWrapperStyles = { ...titleWrapperStyles, ...newWrapperStyles }
@@ -131,7 +145,13 @@ const PageTitle = ({ routeData }) => {
       gridArea: `${i + 1}/${1}/${i + 2}/${wdLength + 1}`
     }
     return (
-      <h1 key={i} className={`section-${i}`} style={{...lineStyles, ...titleStyles}}>{ splitToSpans(section) }</h1>
+      <h1 key={i} className={`section-${i}`} style={{...lineStyles, ...titleStyles}}>{ splitToSpans(section, {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        verticalAlign: 'center'
+      }) }</h1>
     )
   })
 
