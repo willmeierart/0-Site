@@ -58,9 +58,12 @@ class MobileScrollOMatic extends Component {
   }
 
   navigator (e) {
-    const { routeData: { type, navRules: { style: { height } } }, getNewOriginPos, transitionRoute, prevNextRoutes: { nextRoute, prevRoute } } = this.props
+    const { getNewOriginPos, transitionRoute, prevNextRoutes: { nextRoute, prevRoute } } = this.props
     const { innerWidth, innerHeight } = window
-    const { scrollTop, scrollHeight } = e.srcElement.scrollingElement
+    const { srcElement } = e
+    const { scrollingElement } = srcElement
+    console.log(scrollingElement, scrollingElement.scrollTop)
+    const { scrollTop, scrollHeight } = e.target.scrollingElement
     const thisScrollHeight = innerHeight + scrollTop - 1
     const prevTrigger = scrollTop <= 0
     const nextTrigger = scrollHeight - thisScrollHeight - 1 <= 0
@@ -71,8 +74,6 @@ class MobileScrollOMatic extends Component {
       console.log('transitionDirection')
       const route = dir === 'forward' ? nextRoute : prevRoute
       getNewOriginPos(route, dir, [innerWidth, innerHeight])
-      // window.removeEventListener('scroll', (e) => { that.handleScroll(e) })
-      // window.removeEventListener('touchmove', (e) => { that.handleScroll(e) })
       transitionRoute(routerData)
       that.setState({ canScroll: false })
     }
@@ -88,11 +89,9 @@ class MobileScrollOMatic extends Component {
   }
 
   handleScroll (e) {
-    // e.preventDefault()
     const { canScroll } = this.state
-    const { routeData: { bgColor1, bgColor2 } } = this.props
 
-    if (canScroll) {
+    if (canScroll && e.target.scrollingElement.scrollTop !== undefined) {
       this.navigator(e)
       this.changeColors()
     }

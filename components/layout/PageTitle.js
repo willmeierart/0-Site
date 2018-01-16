@@ -8,11 +8,9 @@ const PageTitle = ({ routeData }) => {
     background: 'transparent',
     position: 'fixed',
     margin: 0,
-    lineHeight: '1.5em',
     zIndex: 5,
     pointerEvents: 'none',
-    opacity: 0.125,
-    display: 'grid'
+    opacity: 0.125
   }
   let titleStyles = {}
 
@@ -23,13 +21,15 @@ const PageTitle = ({ routeData }) => {
         justifyContent: 'space-between'
       }
       const newWrapperStyles = {
+        display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
         gridTemplateRows: 'repeat(3, 1fr)',
-        fontSize: '10vw',
+        fontSize: '11vh',
         width: '55vw',
         height: '55vh',
         bottom: 0,
-        left: 0
+        left: 0,
+        lineHeight: '1.4em'
         // verticalAlign: 'bottom'
       }
       titleWrapperStyles = { ...titleWrapperStyles, ...newWrapperStyles }
@@ -37,22 +37,85 @@ const PageTitle = ({ routeData }) => {
       break
     }
     case 'work': {
-      const newTitleStyles = {}
-      const newWrapperStyles = {}
+      const newTitleStyles = {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-end'
+      }
+      const newWrapperStyles = {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        fontSize: '25vw',
+        lineHeight: '1.5em'
+      }
       titleWrapperStyles = { ...titleWrapperStyles, ...newWrapperStyles }
       titleStyles = { ...titleStyles, ...newTitleStyles }
       break
     }
     case 'skills': {
-      const newTitleStyles = {}
-      const newWrapperStyles = {}
+      const newTitleStyles = {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-end'
+      }
+      const newWrapperStyles = {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        fontSize: '20vw',
+        lineHeight: '1.5em'
+      }
       titleWrapperStyles = { ...titleWrapperStyles, ...newWrapperStyles }
       titleStyles = { ...titleStyles, ...newTitleStyles }
       break
     }
     case 'us': {
-      const newTitleStyles = {}
-      const newWrapperStyles = {}
+      const newTitleStyles = {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-end'
+      }
+      const newWrapperStyles = {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        fontSize: '50vw',
+        lineHeight: '1.5em'
+      }
+      titleWrapperStyles = { ...titleWrapperStyles, ...newWrapperStyles }
+      titleStyles = { ...titleStyles, ...newTitleStyles }
+      break
+    }
+    case 'converse': {
+      const newTitleStyles = {
+        display: 'flex',
+        justifyContent: 'space-between'
+      }
+      const newWrapperStyles = {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gridTemplateRows: 'repeat(2, 1fr)',
+        fontSize: '11vh',
+        width: '55vw',
+        height: '40vh',
+        top: '45vh',
+        left: 0,
+        lineHeight: '1.4em'
+        // verticalAlign: 'bottom'
+      }
       titleWrapperStyles = { ...titleWrapperStyles, ...newWrapperStyles }
       titleStyles = { ...titleStyles, ...newTitleStyles }
       break
@@ -68,7 +131,7 @@ const PageTitle = ({ routeData }) => {
       gridArea: `${i + 1}/${1}/${i + 2}/${wdLength + 1}`
     }
     return (
-      <h1 className={`section-${i}`} style={{...lineStyles, ...titleStyles}}>{ splitToSpans(section) }</h1>
+      <h1 key={i} className={`section-${i}`} style={{...lineStyles, ...titleStyles}}>{ splitToSpans(section) }</h1>
     )
   })
 
