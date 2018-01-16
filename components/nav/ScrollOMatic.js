@@ -216,17 +216,19 @@ class ScrollOMatic extends Component {
     const rawData = () => {
       if (isMobile) {
         if (e.touches[0].clientY !== touchStartY || e.touches[0].clientX !== touchStartX) {
-          if (Math.abs(e.touches[0].clientY - touchStartY) > Math.abs(e.touches[0].clientX - touchStartX)){
-            const returnVal = e.touches[0].clientY - touchStartY
+          if (Math.abs(e.touches[0].clientY - touchStartY) > Math.abs(e.touches[0].clientX - touchStartX)) {
+            const yVal = 1.01 * e.touches[0].clientY
+            const returnVal = yVal - touchStartY
             this.setState({
-              touchStartY: e.touches[0].clientY,
+              touchStartY: yVal,
               touchStartX: e.touches[0].clientX
             })
             return returnVal
           } else {
-            const returnVal = e.touches[0].clientX - touchStartX
+            const xVal = 1.01 * e.touches[0].clientX
+            const returnVal = xVal - touchStartX
             this.setState({
-              touchStartX: e.touches[0].clientX,
+              touchStartX: xVal,
               touchStartY: e.touches[0].clientY
             })
             return returnVal
