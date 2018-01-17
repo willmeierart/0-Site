@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Motion, spring, presets } from 'react-motion'
 import raf from 'raf'
-import { getNewOriginPos, transitionRoute, setPrevNextRoutes, setScrollLayoutRules, getRawScrollData, setColorScheme, isFreshLoad } from '../../lib/redux/actions'
+import { getNewOriginPos, transitionRoute, setPrevNextRoutes, setScrollLayoutRules, getRawScrollData, setColorScheme, isFreshLoad, lockScrollOMatic } from '../../lib/redux/actions'
 import { fadeColor, binder } from '../../lib/_utils'
 import router from '../../router'
 const { Router } = router
@@ -25,7 +25,6 @@ class ScrollOMatic extends Component {
       current: -1,
       increment: 0,
       bounds: -1,
-      scrollTimerDone: false,
       touchStartX: 0,
       touchStartY: 0,
       scrollTiplier: 0
@@ -49,7 +48,7 @@ class ScrollOMatic extends Component {
   componentWillUnmount () { window.removeEventListener('resize', () => this.props.setScrollLayoutRules) }
 
   componentDidMount () {
-    const { routeData: { bgColor1, bgColor2, route }, setScrollLayoutRules, setColorScheme, setPrevNextRoutes } = this.props
+    const { routeData: { bgColor1, bgColor2, route }, setScrollLayoutRules, setColorScheme, setPrevNextRoutes, lockScrollOMatic } = this.props
     const fetchEm = async () => {
       await setPrevNextRoutes(route)
       const prevNextRoutes = await this.props.prevNextRoutes
@@ -58,8 +57,6 @@ class ScrollOMatic extends Component {
       Router.prefetchRoute('main', { slug: prevRoute })
     }
     fetchEm()
-
-    setTimeout(() => { this.setState({ scrollTimerDone: true }) }, 1000)
 
     const scrollOMatic = DOM.findDOMNode(this.scrollOMatic)
     const scrollTray = DOM.findDOMNode(this.scrollTray)
@@ -94,11 +91,10 @@ class ScrollOMatic extends Component {
   componentDidUpdate () { this.calculate() }
 
   canIscroll () {
-    const { scrollTimerDone } = this.state
-    const { layout, routeData: { type } } = this.props
-    const canScrollSideways = type === 'horizontal' && scrollTimerDone && (layout.trayLeft < layout.scrollOMaticLeft || layout.trayOffsetWidth > layout.scrollOMaticWidth)
-    const canScrollVertical = type === 'vertical' && scrollTimerDone && (layout.trayTop < layout.scrollOMaticTop || layout.trayOffsetHeight > layout.scrollOMaticHeight)
-    return canScrollVertical || canScrollSideways
+    const { layout, routeData: { type }, scrollOMaticLocked } = this.props
+    const canScrollSideways = type === 'horizontal' && (layout.trayLeft < layout.scrollOMaticLeft || layout.trayOffsetWidth > layout.scrollOMaticWidth)
+    const canScrollVertical = type === 'vertical' && (layout.trayTop < layout.scrollOMaticTop || layout.trayOffsetHeight > layout.scrollOMaticHeight)
+    return (canScrollVertical || canScrollSideways) && !scrollOMaticLocked
   }
 
   calculate () {
@@ -275,7 +271,8 @@ class ScrollOMatic extends Component {
   }
 
   render () {
-    const { routeData: { navRules: { style: { height, width } } }, colors: { cur1 }, isMobile } = this.props
+    const TransitionWrapper = this.props.transitionWrapper
+    const { routeData: { titleCopy, navRules: { style: { height, width } } }, colors: { cur1 }, isMobile } = this.props
     const springConfig = isMobile ? { stiffness: 85, damping: 15 } : presets.noWobble
     const axisVals = this.animValSwitch().val
     return (
@@ -304,7 +301,9 @@ class ScrollOMatic extends Component {
                 WebkitOverflowScrolling: 'touch',
                 overflow: 'hidden'
               }}>
-              { this.props.children }
+              <TransitionWrapper key={titleCopy} animationProps={{}}>
+                { this.props.children }
+              </TransitionWrapper>
             </div>
           )}
         </Motion>
@@ -324,8 +323,10 @@ function mapStateToProps (state) {
     transitionOrigin: state.router.transitionOrigin,
     prevNextRoutes: state.router.prevNextRoutes,
     transitionDirection: state.router.transitionDirection,
+    transitionWrapper: state.router.transitionWrapper,
     layout: state.scroll.layout,
     rawScrollData: state.scroll.rawScrollData,
+    scrollOMaticLocked: state.scroll.scrollOMaticLocked,
     colors: state.ui.colors,
     freshLoad: state.functional.freshLoad
   }
@@ -348,13 +349,17 @@ export default connect(mapStateToProps, mapDispatchToProps)(ScrollOMatic)
 ScrollOMatic.PropTypes = {
   isMobile: PropTypes.bool.isRequired,
   freshLoad: PropTypes.bool.isRequired,
+  isFreshLoad: PropTypes.func.isRequired,
   getNewOriginPos: PropTypes.func.isRequired,
   prevNextRoutes: PropTypes.object.isRequired,
   transitionRoute: PropTypes.func.isRequired,
+  transitionWrapper: PropTypes.func.isRequired,
   setScrollLayoutRules: PropTypes.func.isRequired,
   setColorScheme: PropTypes.func.isRequired,
   layout: PropTypes.object.isRequired,
   rawScrollData: PropTypes.object.isRequired,
+  getRawScrollData: PropTypes.func.isRequired,
+  scrollOMaticLocked: PropTypes.bool.isRequired,
   colors: PropTypes.object.isRequired,
   transitionOrigin: PropTypes.object.isRequired,
   transitionDirection: PropTypes.string.isRequired,
