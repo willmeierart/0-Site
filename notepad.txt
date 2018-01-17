@@ -6,3 +6,22 @@ TO-DO:
   + there aren't really 'subpages' -- top level pages lock at the top and then scroll downward
 [] start laying in Head content for SEO
 [] make sure Jeremy understands - no subpages means no '/coupestudios' url, etc.
+
+
+
+Detailed scroll notes:
++ horiz/vert page types ok
++ but what happens is:
+  + for a top-lvl page:
+    + first the high-lvl transition happens
+      + the new route page either looks the exact same or is blank or something
+      + the color fade maybe only goes a percentage of the way to the new color
+      + the goal is to make it feel like the new page 'snaps' into place
+    + so once you're there, as soon as you scroll, it doesn't immediately trigger ScrollOMatic
+      + it triggers an animation (CSS / R.Motion / GSAP / ?) that slides the new page in sideways
+      + it 'snaps' into place and then ScrollOMatic is released, you start scrolling down
+  + but there ARE in fact subpages
+    + these are similar-ish, there's a smooth transition between subpages
+    + and then maybe some sort of animated 'slide-up' of a header or something
+    + still vague
++ bottom line - there is the top level page animation (still variable via redux)

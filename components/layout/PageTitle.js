@@ -18,21 +18,38 @@ const PageTitle = ({ routeData, width, height }) => {
 
   switch (routeData.route) {
     case 'home': {
+      const fontSize = wider ? `${~~(height / 8)}px` : `${~~(width / 8)}px`
       const newTitleStyles = {
-        display: 'flex',
-        justifyContent: 'space-between'
-      }
-      const newWrapperStyles = {
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
-        gridTemplateRows: 'repeat(3, 1fr)',
-        fontSize: '11vh',
+        gridTemplateRows: 'repeat(3, 1fr)'
+      }
+      const newWrapperStyles = {
+        fontSize,
         width: '55vw',
         height: '55vh',
-        bottom: 0,
+        top: '45vh',
         left: 0,
-        lineHeight: '1.4em'
-        // verticalAlign: 'bottom'
+        lineHeight: '.5em'
+      }
+      titleWrapperStyles = { ...titleWrapperStyles, ...newWrapperStyles }
+      titleStyles = { ...titleStyles, ...newTitleStyles }
+      break
+    }
+    case 'converse': {
+      const fontSize = wider ? `${~~(height / 6)}px` : `${~~(width / 6)}px`
+      const newTitleStyles = {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        gridTemplateRows: 'repeat(2, 1fr)'
+      }
+      const newWrapperStyles = {
+        fontSize,
+        width: '55vw',
+        height: '55vh',
+        top: '45vh',
+        left: 0,
+        lineHeight: '.9em'
       }
       titleWrapperStyles = { ...titleWrapperStyles, ...newWrapperStyles }
       titleStyles = { ...titleStyles, ...newTitleStyles }
@@ -107,33 +124,7 @@ const PageTitle = ({ routeData, width, height }) => {
       break
     }
 
-    // THIS IS THE ONE THAT IS FURTHER ALONG:
-    case 'converse': {
-      const fontSize = wider ? `${~~(height / 6)}px` : ~~(1.5 * width / 6)
-
-      const newTitleStyles = {
-        // display: 'flex',
-        // justifyContent: 'space-between'
-        display: 'grid',
-        gridTemplateColumns: 'repeat(5, 1fr)',
-        gridTemplateRows: 'repeat(2, 1fr)'
-      }
-      const newWrapperStyles = {
-        // display: 'grid',
-        // gridTemplateColumns: 'repeat(4, 1fr)',
-        // gridTemplateRows: 'repeat(2, 1fr)',
-        fontSize,
-        width: '55vw',
-        height: '55vh',
-        top: '45vh',
-        left: 0,
-        lineHeight: '.9em'
-        // verticalAlign: 'bottom'
-      }
-      titleWrapperStyles = { ...titleWrapperStyles, ...newWrapperStyles }
-      titleStyles = { ...titleStyles, ...newTitleStyles }
-      break
-    }
+    
     default :
       break
   }

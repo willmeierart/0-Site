@@ -74,7 +74,7 @@ class App extends Component {
       <div className='App' style={{ overflow: 'hidden' }}>
         <Head title={title} />
         <main style={{ overflow: 'hidden' }}>
-          <div className='logo-clip-path' style={{ overflow: 'hidden' }}>
+          <div style={{ overflow: 'hidden' }}>
             <PageTitle routeData={routeData} width={width} height={height} />
             {/* { isMobile
               ? <MobileScrollOMatic pathname={pathname} title={title} routeData={routeData}>
