@@ -16,11 +16,11 @@ CONTENTS:************************************
 ********************************************/
 @import '~normalize.css';
 @import '~loaders.css/src/animations/line-spin-fade-loader.scss';
-@import url(./_base/_animations.scss);
-@import url(./_base/_base.scss);
-@import url(./_base/_colors.scss);
-@import url(./_base/_easings.scss);
-@import url(./_base/_fonts.scss);
+@import 'animations';
+@import 'fonts';
+@import 'base';
+@import 'colors';
+@import 'easings';
 
 /********************************************
 **************** ~VARIABLES~ ****************
@@ -28,27 +28,20 @@ CONTENTS:************************************
 
 
 /********************************************
-****************** MIXINS *******************
+***************** ~MIXINS~ ******************
 ********************************************/
 
 /********************************************
-***************** ~LOADERS~ *****************
+***************** ~GENERAL~ *****************
 ********************************************/
 
-.loader-wrapper {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.scaletext-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  grid-column: span 1; 
 }
-
-.loader-hidden { display: none; }
-
-.loader-active { display: block; }
-
-.loader-active .loader-inner div { background-color: #970d11; }
-
 
 /********************************************
 ************* ~MEDIA QUERIES~ ***************

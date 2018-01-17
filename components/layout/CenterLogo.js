@@ -8,31 +8,34 @@ import { AzLogo01 } from '../assets/ZeroLogos'
 class CenterLogo extends Component {
   constructor (props) {
     super(props)
-    binder(this, ['handleMouseEnter', 'handleMouseLeave'])
+    binder(this, ['handleMouseEnter', 'handleMouseLeave', 'handleClick'])
   }
 
-  handleMouseEnter () {
-    this.props.toggleMenu(true)
+  handleMouseEnter () { this.props.toggleMenu(true) }
+  handleMouseLeave () { this.props.toggleMenu(false) }
+  handleClick (e) {
+    e.preventDefault()
+    console.log('click')
+    const { menuOpen, toggleMenu } = this.props
+    toggleMenu(!menuOpen)
   }
 
-  handleMouseLeave () {
-    this.props.toggleMenu(false)
-  }
   render () {
-    const { cur2 } = this.props.colors
+    const { colors: { cur2 } } = this.props
     return (
       <div className='logo-wrapper'>
         <div className='logo-inner-wrapper'>
-          <AzLogo01 handleMouseEnter={this.handleMouseEnter} handleMouseLeave={this.handleMouseLeave} color={this.props.menuOpen ? 'rgba(0, 255, 255, 1)' : cur2} />
+          <AzLogo01 handleClick={this.handleClick}
+            handleMouseEnter={this.handleMouseEnter}
+            handleMouseLeave={this.handleMouseLeave}
+            color={this.props.menuOpen ? 'rgba(0, 255, 255, 1)' : cur2} />
         </div>
         <style jsx>{`
           .logo-wrapper {
-            margin-left:35%;
-            margin-top:35%;
-            width:30%;
-            height:30%;
+            width:6%;
+            height:6%;
             z-index:5;
-            position:fixed; top:0; left:0;
+            position:fixed; top:47%; left:47%;
             display: flex; justify-content: center; align-items: center;
             {/* pointer-events: none; */}
           }

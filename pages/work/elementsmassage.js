@@ -7,11 +7,11 @@ export default ({ pathname }) => {
   const thisRouteData = { ...routeData.elementsmassage }
   thisRouteData.navRules = navRules(thisRouteData.type)
   return (
-    <App pathname={pathname} routeData={thisRouteData} title='us'>
+    <App pathname={pathname} routeData={thisRouteData} title='elements massage'>
       <div>
         {/* {faker.lorem.paragraphs(120)} */}
       </div>
-      <style jsx>{``}</style>
+      {/* <style jsx>{``}</style> */}
     </App>
   )
 }

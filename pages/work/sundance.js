@@ -4,14 +4,14 @@ import routeData from '../../router/routeData'
 import navRules from '../../router/navRules'
 
 export default ({ pathname }) => {
-  const thisRouteData = { ...routeData.us }
+  const thisRouteData = { ...routeData.sundance }
   thisRouteData.navRules = navRules(thisRouteData.type)
   return (
-    <App pathname={pathname} routeData={thisRouteData} title='us'>
+    <App pathname={pathname} routeData={thisRouteData} title='sundance'>
       <div>
         {/* {faker.lorem.paragraphs(120)} */}
       </div>
-      <style jsx>{``}</style>
+      {/* <style jsx>{``}</style> */}
     </App>
   )
 }
