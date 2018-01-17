@@ -1,13 +1,14 @@
 import { PureComponent } from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import RouteSwitcher from '../components/nav/RouteSwitcher'
 
-export default class Main extends PureComponent {
+class Main extends PureComponent {
   render () {
-    const { pathname } = this.props
+    const { pathname, bgColor } = this.props
     return (
       <div>
-        <div id='container'>
+        <div id='container' style={{ background: bgColor, overflowScrolling: 'touch', WebkitOverflowScrolling: 'touch', overflow: 'hidden' }}>
           <RouteSwitcher pathname={pathname} />
         </div>
         <style jsx>{`
@@ -44,7 +45,6 @@ export default class Main extends PureComponent {
               justify-content: center;
               width: 100%;
               height: 100%;
-              {/* background: black; */}
             }
             #container[class*="animate-"] {
               position: fixed;
@@ -65,6 +65,19 @@ export default class Main extends PureComponent {
   }
 }
 
+function mapStateToProps (state) {
+  return {
+    bgColor: state.ui.colors.actualBG
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main)
+
 Main.propTypes = {
-  pathname: PropTypes.string.isRequired
+  pathname: PropTypes.string.isRequired,
+  bgColor: PropTypes.string.isRequired
 }

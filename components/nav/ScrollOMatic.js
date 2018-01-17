@@ -13,10 +13,9 @@ class ScrollOMatic extends Component {
   constructor (props) {
     super(props)
 
-    const { routeData: { bgColor1, bgColor2 }, transitionOrigin: { x, y }, transitionDirection } = props
+    const { transitionOrigin: { x, y }, transitionDirection } = props
 
     this.state = {
-      currentColor: transitionDirection === 'forward' ? bgColor1 : bgColor2,
       canScroll: false,
       animValues: 0,
       animValsY: y,
@@ -131,7 +130,7 @@ class ScrollOMatic extends Component {
 
   navigator () {
     const { current } = this.state
-    const { prevNextRoutes: { nextRoute, prevRoute }, layout: { scrollOMaticHeight, scrollOMaticWidth, widthMargin, heightMargin }, routeData: { type }, getNewOriginPos, transitionRoute, isFreshLoad, freshLoad } = this.props
+    const { prevNextRoutes: { nextRoute, prevRoute }, layout: { scrollOMaticHeight, scrollOMaticWidth, widthMargin, heightMargin }, routeData: { type, bgColor1, bgColor2 }, getNewOriginPos, transitionRoute, isFreshLoad, freshLoad, setColorScheme } = this.props
     let prevTrigger = current >= 0
     let nextTrigger = type === 'vertical' ? heightMargin >= current : widthMargin >= current
 
@@ -139,13 +138,17 @@ class ScrollOMatic extends Component {
 
     if (nextTrigger || prevTrigger) {
       const widthHeight = [scrollOMaticWidth, scrollOMaticHeight]
-      nextTrigger
-        ? getNewOriginPos(nextRoute, 'forward', widthHeight)
-        : getNewOriginPos(prevRoute, 'back', widthHeight)
-      transitionRoute(routerData)
       if (freshLoad === true) {
         isFreshLoad(false)
       }
+      if (nextTrigger) {
+        getNewOriginPos(nextRoute, 'forward', widthHeight)
+        setColorScheme({ actualBG: bgColor2 })
+      } else {
+        getNewOriginPos(prevRoute, 'back', widthHeight)
+        setColorScheme({ actualBG: bgColor1 })
+      }
+      transitionRoute(routerData)
     }
   }
 
@@ -158,7 +161,7 @@ class ScrollOMatic extends Component {
   }
 
   setScrollStyleState () {
-    const { isMobile, layout: { scrollOMaticHeight, scrollOMaticWidth, trayOffsetHeight, trayOffsetWidth }, routeData: { type, bgColor1, bgColor2, navRules: { style: { backgroundImageBack, backgroundImageForward } } }, setColorScheme } = this.props
+    const { isMobile, layout: { scrollOMaticHeight, scrollOMaticWidth, trayOffsetHeight, trayOffsetWidth }, routeData: { type, bgColor1, bgColor2 }, setColorScheme } = this.props
     const { current, scrollTiplier } = this.state
 
     const scrollOMaticDim = type === 'horizontal' ? scrollOMaticWidth : scrollOMaticHeight
@@ -301,9 +304,7 @@ class ScrollOMatic extends Component {
                 WebkitOverflowScrolling: 'touch',
                 overflow: 'hidden'
               }}>
-              <TransitionWrapper key={titleCopy} animationProps={{}}>
-                { this.props.children }
-              </TransitionWrapper>
+              { this.props.children }
             </div>
           )}
         </Motion>

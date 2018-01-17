@@ -9,7 +9,7 @@ import ScrollOMatic from './nav/ScrollOMatic'
 import CenterLogo from './layout/CenterLogo'
 import Menu from './layout/Menu'
 import PageTitle from './layout/PageTitle'
-import MobileScrollOMatic from './nav/MobileScrollOMatic'
+import TransitionSled from './nav/TransitionSled'
 
 class App extends Component {
   constructor (props) {
@@ -23,8 +23,6 @@ class App extends Component {
   componentWillMount () { this.props.checkIfMobile() }
   componentDidMount () {
     this.setState({
-      // width: typeof window !== 'undefined' ? window.innerWidth : 0,
-      // height: typeof window !== 'undefined' ? window.innerHeight : 0
       width: window.innerWidth,
       height: window.innerHeight
     })
@@ -74,20 +72,12 @@ class App extends Component {
       <div className='App' style={{ overflow: 'hidden' }}>
         <Head title={title} />
         <main style={{ overflow: 'hidden' }}>
-          <div style={{ overflow: 'hidden' }}>
+          <TransitionSled key={title} animationProps={{}}>
             <PageTitle routeData={routeData} width={width} height={height} />
-            {/* { isMobile
-              ? <MobileScrollOMatic pathname={pathname} title={title} routeData={routeData}>
-                { children }
-              </MobileScrollOMatic>
-              : <ScrollOMatic pathname={pathname} title={title} routeData={routeData} scrollInverted>
-                { children }
-              </ScrollOMatic>
-            } */}
             <ScrollOMatic isMobile={isMobile} pathname={pathname} title={title} routeData={routeData} scrollInverted>
               { children }
             </ScrollOMatic>
-          </div>
+          </TransitionSled>
           <CenterLogo />
           { menuOpen && this.renderMenu() }
         </main>
