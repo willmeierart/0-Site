@@ -2,11 +2,11 @@
 // import Loader from 'react-loaders'
 // import withData from '../lib/withData'
 // import { checkAllQueriesLoading, checkAllQueriesError } from '../lib/_utils'
-import App from '../components/App'
-import PageTitle from '../components/layout/PageTitle'
-import routeData from '../router/routeData'
-import navRules from '../router/navRules'
-import { splitToSpans } from '../lib/_utils'
+import App from '../../components/App'
+import PageTitle from '../../components/layout/PageTitle'
+import routeData from '../../router/routeData'
+import navRules from '../../router/navRules'
+import { splitToSpans } from '../../lib/_utils'
 
 // include boilerplate for global loader dependent on graphql req's:
 export default ({ pathname }) => {

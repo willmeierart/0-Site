@@ -48,7 +48,7 @@ export default class Main extends PureComponent {
             }
             #container[class*="animate-"] {
               position: fixed;
-              animation: animateIn .5s ease-in-out forwards; 
+              animation: animateIn 1s ease-in-out forwards; 
               transform-origin: center;
               will-change: transform opacity;
             }

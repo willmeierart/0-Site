@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Motion, spring, presets } from 'react-motion'
 import raf from 'raf'
-import { getNewOriginPos, transitionRoute, setPrevNextRoutes, setScrollLayoutRules, setColorScheme } from '../../lib/redux/actions'
+import { getNewOriginPos, transitionRoute, setPrevNextRoutes, setScrollLayoutRules, getRawScrollData, setColorScheme, isFreshLoad } from '../../lib/redux/actions'
 import { fadeColor, binder } from '../../lib/_utils'
 import router from '../../router'
 const { Router } = router
@@ -17,17 +17,18 @@ class ScrollOMatic extends Component {
 
     this.state = {
       currentColor: transitionDirection === 'forward' ? bgColor1 : bgColor2,
-      isEndOfScroll: false,
       canScroll: false,
       animValues: 0,
       animValsY: y,
       animValsX: x,
       currentScrollDir: transitionDirection,
       current: -1,
+      increment: 0,
       bounds: -1,
       scrollTimerDone: false,
       touchStartX: 0,
-      touchStartY: 0
+      touchStartY: 0,
+      scrollTiplier: 0
     }
     binder(this, [
       'handleScroll',
@@ -134,7 +135,7 @@ class ScrollOMatic extends Component {
 
   navigator () {
     const { current } = this.state
-    const { prevNextRoutes: { nextRoute, prevRoute }, layout: { scrollOMaticHeight, scrollOMaticWidth, widthMargin, heightMargin }, routeData: { type }, getNewOriginPos, transitionRoute } = this.props
+    const { prevNextRoutes: { nextRoute, prevRoute }, layout: { scrollOMaticHeight, scrollOMaticWidth, widthMargin, heightMargin }, routeData: { type }, getNewOriginPos, transitionRoute, isFreshLoad, freshLoad } = this.props
     let prevTrigger = current >= 0
     let nextTrigger = type === 'vertical' ? heightMargin >= current : widthMargin >= current
 
@@ -146,6 +147,9 @@ class ScrollOMatic extends Component {
         ? getNewOriginPos(nextRoute, 'forward', widthHeight)
         : getNewOriginPos(prevRoute, 'back', widthHeight)
       transitionRoute(routerData)
+      if (freshLoad === true) {
+        isFreshLoad(false)
+      }
     }
   }
 
@@ -159,36 +163,18 @@ class ScrollOMatic extends Component {
 
   setScrollStyleState () {
     const { isMobile, layout: { scrollOMaticHeight, scrollOMaticWidth, trayOffsetHeight, trayOffsetWidth }, routeData: { type, bgColor1, bgColor2, navRules: { style: { backgroundImageBack, backgroundImageForward } } }, setColorScheme } = this.props
-    const { current } = this.state
+    const { current, scrollTiplier } = this.state
 
     const scrollOMaticDim = type === 'horizontal' ? scrollOMaticWidth : scrollOMaticHeight
     const trayScrollDim = type === 'horizontal' ? trayOffsetWidth : trayOffsetHeight
 
-     // THIS IS THE CORRECT FORMULA FOR CHANGING COLOR:
-    const scrollTiplier = ((current / (scrollOMaticDim - trayScrollDim))).toFixed(3)
+    this.setState({
+      scrollTiplier: ((current / (scrollOMaticDim - trayScrollDim))).toFixed(3)
+    })
 
-    const dirSwitcher = (b, f) => this.state.currentScrollDir === 'back' ? b : f
-
-    const styles = {
-      bgImage: dirSwitcher(backgroundImageBack, backgroundImageForward)
-    }
-    const { bgImage } = styles
-
-    // setColorScheme({
-    //   cur1: fadeColor(scrollTiplier, [bgColor1, bgColor2]),
-    //   cur2: fadeColor(scrollTiplier, [bgColor2, bgColor1])
-    // })
     setColorScheme({
       cur1: fadeColor(isMobile ? spring(scrollTiplier, { stiffness: 120, damping: 20 }).val : scrollTiplier, [bgColor1, bgColor2]),
       cur2: fadeColor(isMobile ? spring(scrollTiplier, { stiffness: 120, damping: 20 }).val : scrollTiplier, [bgColor2, bgColor1])
-    })
-    // setColorScheme({
-    //   cur1: fadeColor(isMobile ? spring(scrollTiplier, { stiffness: 120, damping: 20 }).val : spring(scrollTiplier, presets.noWobble).val, [bgColor1, bgColor2]),
-    //   cur2: fadeColor(isMobile ? spring(scrollTiplier, { stiffness: 120, damping: 20 }).val : spring(scrollTiplier, presets.noWobble).val, [bgColor2, bgColor1])
-    // })
-
-    this.setState({
-      bgImage
     })
   }
 
@@ -212,7 +198,7 @@ class ScrollOMatic extends Component {
 
   animateTheScroll (e) {
     const { scrollInverted, isMobile } = this.props
-    const { touchStartX, touchStartY } = this.state
+    const { touchStartX, touchStartY, scrollTiplier } = this.state
     const rawData = () => {
       if (isMobile) {
         if (e.touches[0].clientY !== touchStartY || e.touches[0].clientX !== touchStartX) {
@@ -254,9 +240,11 @@ class ScrollOMatic extends Component {
     const scrolling = () => {
       scrollInverted
         ? this.setState({
-          [animationVal.name]: newAnimationValNeg
+          [animationVal.name]: newAnimationValNeg,
+          increment: mousePos
         }) : this.setState({
-          [animationVal.name]: newAnimationVal
+          [animationVal.name]: newAnimationVal,
+          increment: mousePos
         })
     }
 
@@ -274,11 +262,16 @@ class ScrollOMatic extends Component {
   }
 
   handleScroll (e) {
+    const { increment, scrollTiplier } = this.state
     e.preventDefault()
     this.setScrollStyleState()
     this.animateTheScroll(e)
     this.trackCurrentPosition()
     this.navigator()
+    this.props.getRawScrollData({
+      increment,
+      percent: scrollTiplier * 100
+    })
   }
 
   render () {
@@ -332,7 +325,9 @@ function mapStateToProps (state) {
     prevNextRoutes: state.router.prevNextRoutes,
     transitionDirection: state.router.transitionDirection,
     layout: state.scroll.layout,
-    colors: state.ui.colors
+    rawScrollData: state.scroll.rawScrollData,
+    colors: state.ui.colors,
+    freshLoad: state.functional.freshLoad
   }
 }
 
@@ -342,7 +337,9 @@ function mapDispatchToProps (dispatch) {
     transitionRoute: routerData => dispatch(transitionRoute(routerData)),
     setPrevNextRoutes: routerData => dispatch(setPrevNextRoutes(routerData)),
     setScrollLayoutRules: layoutData => dispatch(setScrollLayoutRules(layoutData)),
-    setColorScheme: colorObj => dispatch(setColorScheme(colorObj))
+    getRawScrollData: scrollData => dispatch(getRawScrollData(scrollData)),
+    setColorScheme: colorObj => dispatch(setColorScheme(colorObj)),
+    isFreshLoad: bool => dispatch(isFreshLoad(bool))
   }
 }
 
@@ -350,12 +347,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(ScrollOMatic)
 
 ScrollOMatic.PropTypes = {
   isMobile: PropTypes.bool.isRequired,
+  freshLoad: PropTypes.bool.isRequired,
   getNewOriginPos: PropTypes.func.isRequired,
   prevNextRoutes: PropTypes.object.isRequired,
   transitionRoute: PropTypes.func.isRequired,
   setScrollLayoutRules: PropTypes.func.isRequired,
   setColorScheme: PropTypes.func.isRequired,
   layout: PropTypes.object.isRequired,
+  rawScrollData: PropTypes.object.isRequired,
   colors: PropTypes.object.isRequired,
   transitionOrigin: PropTypes.object.isRequired,
   transitionDirection: PropTypes.string.isRequired,
