@@ -1,6 +1,9 @@
 {
   "name": "agency-zero-starter-v4",
   "version": "1.0.0",
+  "engines" : {
+    "node": "v8.9.x"
+  },
   "description": "using next.js and apollo",
   "scripts": {
     "test": "jest",
