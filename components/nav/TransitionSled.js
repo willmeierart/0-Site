@@ -23,14 +23,15 @@ export default class TransitionSled extends Component {
   componentDidMount () {
     const { lockScrollOMatic, completePageTransition } = this.props
     console.log('didmount')
-    setTimeout(() => { completePageTransition(true) })
+    setTimeout(() => { completePageTransition(true) }, 500)
     setTimeout(() => { lockScrollOMatic(false) }, 1000)
   }
 
   willAppear () {
     console.log('willappear')
     return {
-      translate: this.props.width
+      translate: this.props.width,
+      opacity: 0
     }
   }
 
@@ -38,14 +39,16 @@ export default class TransitionSled extends Component {
     console.log('willenter')
     console.log(spring(0))
     return {
-      translate: this.props.width
+      translate: this.props.width,
+      opacity: 0
     }
   }
 
   willLeave () {
     console.log('willleave')
     return {
-      translate: this.props.width
+      translate: this.props.width,
+      opacity: 0
     }
   }
 
@@ -59,12 +62,15 @@ export default class TransitionSled extends Component {
         willAppear={this.willAppear}
         willEnter={this.willEnter}
         willLeave={this.willLeave}
-        styles={width ? [{ key: k, style: { translate: spring(0) } }] : []}>
+        styles={width ? [{ key: k, style: { translate: spring(0), opacity: spring(1) } }] : []}>
         { interpolated =>
           <div>
             { interpolated.map(config =>
-              <div key={config.key} config={config} style={{ transform: `translate3d(${config.style.translate}px,0,0)`, willChange: 'transform' }} className='transition-sled'>
-                <div>{`${config.style.translate}`}</div>
+              <div key={config.key} config={config} style={{
+                transform: `translate3d(${config.style.translate}px,0,0)`,
+                opacity: config.style.opacity,
+                willChange: 'transform'
+              }} className='transition-sled'>
                 { transitionComplete && children }
               </div>
             ) }
