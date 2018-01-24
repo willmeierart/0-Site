@@ -1,7 +1,7 @@
 // import faker from 'faker'
-import App from '../../components/App'
-import routeData from '../../router/routeData'
-import navRules from '../../router/navRules'
+import App from '../../../components/App'
+import routeData from '../../../router/routeData'
+import navRules from '../../../router/navRules'
 
 export default ({ pathname }) => {
   const thisRouteData = { ...routeData.branding }
