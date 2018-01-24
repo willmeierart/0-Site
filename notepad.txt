@@ -1,6 +1,7 @@
 TO-DO: 
 [] start laying in Head content for SEO
-[] get complex transitions working with either react-motion or react-move
+[x] get complex transitions working with either react-motion or react-move
+[] hone these ^, get them closer to intended UI spec
 [] REALLY start thinking about performance -- if you're rerendering the entire app on EVERY scroll increment (??????) fix that somehow...
 
 
