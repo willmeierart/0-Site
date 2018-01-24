@@ -1,9 +1,9 @@
 // import faker from 'faker'
-import App from '../components/App'
-import routeData from '../router/routeData'
-import navRules from '../router/navRules'
+import App from '../../components/App'
+import routeData from '../../router/routeData'
+import navRules from '../../router/navRules'
 
-export default ({ pathname }) => {
+const Skills = ({ pathname }) => {
   const thisRouteData = { ...routeData.skills }
   thisRouteData.navRules = navRules(thisRouteData.type)
   return (
@@ -44,3 +44,5 @@ export default ({ pathname }) => {
     </App>
   )
 }
+
+export default Skills

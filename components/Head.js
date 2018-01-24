@@ -7,7 +7,7 @@ const initialProps = {
   initialScale: '1.0'
 }
 
-export default (props = initialProps) => {
+const CustomHead = (props = initialProps) => {
   const { title, initialScale } = props
   return <Head>
     <title key='title'>{title}</title>
@@ -21,3 +21,5 @@ export default (props = initialProps) => {
     <style dangerouslySetInnerHTML={{ __html: globalStyles }} />
   </Head>
 }
+
+export default CustomHead

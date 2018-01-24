@@ -1,11 +1,7 @@
 TO-DO: 
-[] fix scroll on mobile, like really fix it...
-[] start laying in boilerplate content
-[] refactor scrolling to work differently:
-  + it's the last subpage (or if there's no subpages) that scrolls right
-  + there aren't really 'subpages' -- top level pages lock at the top and then scroll downward
 [] start laying in Head content for SEO
-[] make sure Jeremy understands - no subpages means no '/coupestudios' url, etc.
+[] get complex transitions working with either react-motion or react-move
+[] REALLY start thinking about performance -- if you're rerendering the entire app on EVERY scroll increment (??????) fix that somehow...
 
 
 
