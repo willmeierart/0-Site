@@ -274,7 +274,6 @@ class ScrollOMatic extends Component {
   }
 
   render () {
-    const TransitionWrapper = this.props.transitionWrapper
     const { routeData: { titleCopy, navRules: { style: { height, width } } }, colors: { cur1 }, isMobile } = this.props
     const springConfig = isMobile ? { stiffness: 85, damping: 15 } : presets.noWobble
     const axisVals = this.animValSwitch().val
@@ -324,7 +323,6 @@ function mapStateToProps (state) {
     transitionOrigin: state.router.transitionOrigin,
     prevNextRoutes: state.router.prevNextRoutes,
     transitionDirection: state.router.transitionDirection,
-    transitionWrapper: state.router.transitionWrapper,
     layout: state.scroll.layout,
     rawScrollData: state.scroll.rawScrollData,
     scrollOMaticLocked: state.scroll.scrollOMaticLocked,
@@ -354,7 +352,6 @@ ScrollOMatic.PropTypes = {
   getNewOriginPos: PropTypes.func.isRequired,
   prevNextRoutes: PropTypes.object.isRequired,
   transitionRoute: PropTypes.func.isRequired,
-  transitionWrapper: PropTypes.func.isRequired,
   setScrollLayoutRules: PropTypes.func.isRequired,
   setColorScheme: PropTypes.func.isRequired,
   layout: PropTypes.object.isRequired,

@@ -1,46 +1,79 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import ReactTransitionGroup from 'react-addons-transition-group'
-import { Motion, spring, presets } from 'react-motion'
+// import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import { TransitionMotion, spring, presets } from 'react-motion'
 import raf from 'raf'
 import { binder } from '../../lib/_utils'
-import { completePageTransition, lockScrollOMatic } from '../../lib/redux/actions/'
 
-class TransitionSled extends Component {
+export default class TransitionSled extends Component {
   constructor (props) {
     super(props)
-    binder(this, [])
+    binder(this, ['willAppear', 'willLeave', 'willEnter'])
   }
 
-  componentWillUnmount () { this.props.lockScrollOMatic(true) }
+  componentWillUnmount () {
+    console.log('willunmount')
+    this.props.lockScrollOMatic(true)
+  }
+  componentWillMount () {
+    console.log('willmount')
+  }
 
   componentDidMount () {
-    const { lockScrollOMatic } = this.props
+    const { lockScrollOMatic, completePageTransition } = this.props
+    console.log('didmount')
+    setTimeout(() => { completePageTransition(true) })
     setTimeout(() => { lockScrollOMatic(false) }, 1000)
   }
 
+  willAppear () {
+    console.log('willappear')
+    return {
+      translate: this.props.width
+    }
+  }
+
+  willEnter () {
+    console.log('willenter')
+    console.log(spring(0))
+    return {
+      translate: this.props.width
+    }
+  }
+
+  willLeave () {
+    console.log('willleave')
+    return {
+      translate: this.props.width
+    }
+  }
+
   render () {
+    // const { appear, transitionProps: { name, enterTimeout, leaveTimeout, appearTimeout }, width, height } = this.props
+    const { k, width, height, children, transitionComplete } = this.props
+    // console.log(k)
+    // console.log(width)
     return (
-      <div className='sub-lvl-transition'>{ this.props.children }</div>
+      <TransitionMotion
+        willAppear={this.willAppear}
+        willEnter={this.willEnter}
+        willLeave={this.willLeave}
+        styles={width ? [{ key: k, style: { translate: spring(0) } }] : []}>
+        { interpolated =>
+          <div>
+            { interpolated.map(config =>
+              <div key={config.key} config={config} style={{ transform: `translate3d(${config.style.translate}px,0,0)`, willChange: 'transform' }} className='transition-sled'>
+                <div>{`${config.style.translate}`}</div>
+                { transitionComplete && children }
+              </div>
+            ) }
+          </div>
+        }
+      </TransitionMotion>
     )
   }
 }
-
-function mapStateToProps (state) {
-  return {
-    transitionComplete: state.router.transitionComplete
-  }
-}
-
-function mapDispatchToProps (dispatch) {
-  return {
-    completePageTransition: bool => dispatch(completePageTransition(bool)),
-    lockScrollOMatic: bool => dispatch(lockScrollOMatic(bool))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TransitionSled)
 
 TransitionSled.PropTypes = {
   transitionComplete: PropTypes.bool.isRequired,

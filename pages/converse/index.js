@@ -3,7 +3,7 @@ import App from '../../components/App'
 import routeData from '../../router/routeData'
 import navRules from '../../router/navRules'
 
-export default ({ pathname }) => {
+const Converse = ({ pathname }) => {
   const thisRouteData = { ...routeData.converse }
   thisRouteData.navRules = navRules(thisRouteData.type)
 
@@ -45,3 +45,5 @@ export default ({ pathname }) => {
     </App>
   )
 }
+
+export default Converse

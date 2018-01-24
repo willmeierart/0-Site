@@ -3,7 +3,7 @@ import App from '../../components/App'
 import routeData from '../../router/routeData'
 import navRules from '../../router/navRules'
 
-export default ({ pathname }) => {
+const Work = ({ pathname }) => {
   const thisRouteData = { ...routeData.work }
   thisRouteData.navRules = navRules(thisRouteData.type)
   return (
@@ -15,3 +15,5 @@ export default ({ pathname }) => {
     </App>
   )
 }
+
+export default Work

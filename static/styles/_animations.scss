@@ -1,3 +1,24 @@
 /********************************************
 **************** ~FIRST ONE~ ****************
 ********************************************/
+.test-appear {
+  transform: translateX(1000px);
+  &.test-appear-active {
+    transform: translateX(0);
+    transition: transform 1000ms ease-in-out;
+  }
+}
+.test-enter {
+  transform: translateX(1000px);
+  &.test-enter-active {
+    transform: translateX(0);
+    transition: transform 1000ms ease-in-out;
+  }
+}
+.test-leave {
+  transform: translateX(0);
+  &.test-leave-active {
+    transform: translateX(1000px);
+    transition: transform 1000ms ease-in-out;
+  }
+}

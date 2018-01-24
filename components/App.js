@@ -2,9 +2,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import { Transition } from 'react-transition-group'
 import { binder } from '../lib/_utils'
-import { toggleMenu, setColorScheme, checkIfMobile } from '../lib/redux/actions'
+import { toggleMenu, setColorScheme, checkIfMobile, lockScrollOMatic, completePageTransition } from '../lib/redux/actions'
 import Head from './Head'
+import FirstChild from './hoc/FirstChild'
+import ConnectWrapper from './hoc/ConnectWrapper'
 import ScrollOMatic from './nav/ScrollOMatic'
 import CenterLogo from './layout/CenterLogo'
 import Menu from './layout/Menu'
@@ -16,15 +19,17 @@ class App extends Component {
     super(props)
     this.state = {
       width: 0,
-      height: 0
+      height: 0,
+      ready: false
     }
-    binder(this, ['handleMouseEnter', 'handleMouseLeave', 'renderMenu'])
+    binder(this, ['handleMouseEnter', 'handleMouseLeave', 'renderMenu', 'renderTransition'])
   }
   componentWillMount () { this.props.checkIfMobile() }
   componentDidMount () {
     this.setState({
       width: window.innerWidth,
-      height: window.innerHeight
+      height: window.innerHeight,
+      ready: true
     })
     window.addEventListener('resize', () => {
       this.setState({
@@ -33,8 +38,10 @@ class App extends Component {
       })
     })
   }
+
   handleMouseEnter () { this.props.toggleMenu(true) }
   handleMouseLeave () { this.props.toggleMenu(false) }
+
   renderMenu () {
     const { title } = this.props
     return (
@@ -59,25 +66,45 @@ class App extends Component {
             top: 35%;
             z-index:10;
             padding-right: 20vw;
-            {/* transition: opacity 1s ease-in-out; */}
           }
         `}</style>
       </div>
     )
   }
+
+  renderTransition () {
+    const { lockScrollOMatic, transitionComplete, completePageTransition, freshLoad, children, title, routeData, pathname, isMobile, colors: { actualBG } } = this.props
+    const { width, height, ready } = this.state
+    if (freshLoad) {
+      lockScrollOMatic(false)
+      return (
+        <div>
+          <PageTitle routeData={routeData} width={width} height={height} />
+          <ScrollOMatic isMobile={isMobile} pathname={pathname} title={title} routeData={routeData} scrollInverted>
+            { children }
+          </ScrollOMatic>
+        </div>
+      )
+    }
+    return (
+      // <Transition appear mountOnEnter unmountOnExit in={ready} timeout={50} component={FirstChild}>
+      <TransitionSled k={title} width={width} height={height} transitionComplete={transitionComplete} completePageTransition={completePageTransition} lockScrollOMatic={lockScrollOMatic} appear>
+        <PageTitle routeData={routeData} width={width} height={height} />
+        <ScrollOMatic isMobile={isMobile} pathname={pathname} title={title} routeData={routeData} scrollInverted>
+          { children }
+        </ScrollOMatic>
+      </TransitionSled>
+      // </Transition>
+    )
+  }
+
   render () {
-    const { children, title, routeData, pathname, menuOpen, isMobile } = this.props
-    const { width, height } = this.state
+    const { title, menuOpen } = this.props
     return (
       <div className='App' style={{ overflow: 'hidden' }}>
         <Head title={title} />
         <main style={{ overflow: 'hidden' }}>
-          <TransitionSled key={title} animationProps={{}}>
-            <PageTitle routeData={routeData} width={width} height={height} />
-            <ScrollOMatic isMobile={isMobile} pathname={pathname} title={title} routeData={routeData} scrollInverted>
-              { children }
-            </ScrollOMatic>
-          </TransitionSled>
+          { this.renderTransition() }
           <CenterLogo />
           { menuOpen && this.renderMenu() }
         </main>
@@ -88,9 +115,11 @@ class App extends Component {
 
 function mapStateToProps (state) {
   return {
+    freshLoad: state.functional.freshLoad,
     isMobile: state.functional.isMobile,
     menuOpen: state.ui.menuOpen,
-    colors: state.ui.colors
+    colors: state.ui.colors,
+    transitionComplete: state.router.transitionComplete
   }
 }
 
@@ -98,15 +127,19 @@ function mapDispatchToProps (dispatch) {
   return {
     checkIfMobile: () => dispatch(checkIfMobile()),
     toggleMenu: bool => dispatch(toggleMenu(bool)),
-    setColorScheme: colorObj => dispatch(setColorScheme(colorObj))
+    setColorScheme: colorObj => dispatch(setColorScheme(colorObj)),
+    lockScrollOMatic: bool => dispatch(lockScrollOMatic(bool)),
+    completePageTransition: bool => dispatch(completePageTransition(bool))
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
 
 App.PropTypes = {
+  lockScrollOMatic: PropTypes.func.isRequired,
   checkIfMobile: PropTypes.func.isRequired,
   isMobile: PropTypes.bool.isRequired,
+  freshLoad: PropTypes.bool.isRequired,
   toggleMenu: PropTypes.func.isRequired,
   setColorScheme: PropTypes.func.isRequired,
   menuOpen: PropTypes.bool.isRequired,

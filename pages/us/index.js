@@ -3,7 +3,7 @@ import App from '../../components/App'
 import routeData from '../../router/routeData'
 import navRules from '../../router/navRules'
 
-export default ({ pathname }) => {
+const Us = ({ pathname }) => {
   const thisRouteData = { ...routeData.us }
   thisRouteData.navRules = navRules(thisRouteData.type)
   const titleStyle = {
@@ -32,3 +32,5 @@ export default ({ pathname }) => {
     </App>
   )
 }
+
+export default Us
