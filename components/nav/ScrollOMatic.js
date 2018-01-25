@@ -6,6 +6,7 @@ import { Motion, spring, presets } from 'react-motion'
 import raf from 'raf'
 import { getNewOriginPos, transitionRoute, setPrevNextRoutes, setScrollLayoutRules, getRawScrollData, setColorScheme, isFreshLoad, lockScrollOMatic } from '../../lib/redux/actions'
 import { fadeColor, binder } from '../../lib/_utils'
+import PerformanceGate from '../hoc/PerformanceGate'
 import router from '../../router'
 const { Router } = router
 
@@ -40,7 +41,8 @@ class ScrollOMatic extends Component {
       'animateTheScroll',
       'animValSwitch',
       'trackCurrentPosition',
-      'handleTouchStart'
+      'handleTouchStart',
+      'getStyles'
     ])
   }
 
@@ -272,6 +274,13 @@ class ScrollOMatic extends Component {
       percent: scrollTiplier * 100
     })
   }
+  
+  getStyles () {
+    return {
+      ScrollOMatic: {},
+      ScrollTray: {}
+    }
+  }
 
   render () {
     const { routeData: { titleCopy, navRules: { style: { height, width } } }, colors: { cur1 }, isMobile } = this.props
@@ -292,7 +301,7 @@ class ScrollOMatic extends Component {
             <div className='scroll-tray' ref={(scrollTray) => { this.scrollTray = scrollTray }}
               style={{
                 boxSizing: 'border-box',
-                filter: 'invert(50%)',
+                // filter: 'invert(50%)',
                 height: `${Math.floor(height * 100)}vh`,
                 width: `${Math.floor(width * 100)}vw`,
                 transform: this.scrollDirTransformer(amt),
@@ -303,7 +312,10 @@ class ScrollOMatic extends Component {
                 WebkitOverflowScrolling: 'touch',
                 overflow: 'hidden'
               }}>
-              { this.props.children }
+              <PerformanceGate checkedProps={this.props.children}>
+                { this.props.children }
+              </PerformanceGate>
+              {/* <MagicalBackgroundComponentSittingBehindRestOfApp bgColor={cur1} /> */}
             </div>
           )}
         </Motion>

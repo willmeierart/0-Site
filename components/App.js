@@ -2,12 +2,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Transition } from 'react-transition-group'
 import { binder } from '../lib/_utils'
 import { toggleMenu, setColorScheme, checkIfMobile, lockScrollOMatic, completePageTransition } from '../lib/redux/actions'
 import Head from './Head'
-import FirstChild from './hoc/FirstChild'
-import ConnectWrapper from './hoc/ConnectWrapper'
 import ScrollOMatic from './nav/ScrollOMatic'
 import CenterLogo from './layout/CenterLogo'
 import Menu from './layout/Menu'
@@ -37,6 +34,17 @@ class App extends Component {
         height: window.innerHeight
       })
     })
+  }
+  shouldComponentUpdate (nextProps, nextState) {
+    const { menuOpen, transitionComplete, freshLoad } = this.props
+    if (menuOpen !== nextProps.menuOpen ||
+      transitionComplete !== nextProps.transitionComplete ||
+      freshLoad !== nextProps.freshLoad ||
+      this.state.ready !== nextState.ready
+    ) {
+      return true
+    }
+    return false
   }
 
   handleMouseEnter () { this.props.toggleMenu(true) }
@@ -73,14 +81,14 @@ class App extends Component {
   }
 
   renderTransition () {
-    const { lockScrollOMatic, transitionComplete, completePageTransition, freshLoad, children, title, routeData, pathname, isMobile, colors: { actualBG } } = this.props
+    const { lockScrollOMatic, transitionComplete, completePageTransition, freshLoad, children, title, routeData, pathname, isMobile} = this.props
     const { width, height, ready } = this.state
     if (freshLoad) {
       lockScrollOMatic(false)
       return (
         <div>
           <PageTitle routeData={routeData} width={width} height={height} />
-          <ScrollOMatic isMobile={isMobile} pathname={pathname} title={title} routeData={routeData} scrollInverted>
+          <ScrollOMatic ready={ready} isMobile={isMobile} pathname={pathname} title={title} routeData={routeData} scrollInverted>
             { children }
           </ScrollOMatic>
         </div>
@@ -99,6 +107,7 @@ class App extends Component {
   }
 
   render () {
+    console.log('update app')
     const { title, menuOpen } = this.props
     return (
       <div className='App' style={{ overflow: 'hidden' }}>
