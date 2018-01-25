@@ -2,6 +2,7 @@
 import App from '../../components/App'
 import routeData from '../../router/routeData'
 import navRules from '../../router/navRules'
+import UsSplash from './splash'
 
 const Us = ({ pathname }) => {
   const thisRouteData = { ...routeData.us }
@@ -27,6 +28,7 @@ const Us = ({ pathname }) => {
     <App splitSpans titleStyle={titleStyle} pathname={pathname} routeData={thisRouteData} title='us'>
       <div>
         {/* {faker.lorem.paragraphs(120)} */}
+        <UsSplash />
       </div>
       {/* <style jsx>{``}</style> */}
     </App>

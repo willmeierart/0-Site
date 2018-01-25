@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Motion, spring, presets } from 'react-motion'
 import raf from 'raf'
-import { getNewOriginPos, transitionRoute, setPrevNextRoutes, setScrollLayoutRules, getRawScrollData, setColorScheme, isFreshLoad, lockScrollOMatic } from '../../lib/redux/actions'
+import { getNewOriginPos, transitionRoute, setPrevNextRoutes, setScrollLayoutRules, getRawScrollData, setColorScheme, isFreshLoad } from '../../lib/redux/actions'
 import { fadeColor, binder } from '../../lib/_utils'
 import PerformanceGate from '../hoc/PerformanceGate'
 import router from '../../router'
@@ -49,7 +49,7 @@ class ScrollOMatic extends Component {
   componentWillUnmount () { window.removeEventListener('resize', () => this.props.setScrollLayoutRules) }
 
   componentDidMount () {
-    const { routeData: { bgColor1, bgColor2, route }, setScrollLayoutRules, setColorScheme, setPrevNextRoutes, lockScrollOMatic } = this.props
+    const { routeData: { bgColor1, bgColor2, route }, setScrollLayoutRules, setColorScheme, setPrevNextRoutes } = this.props
     const fetchEm = async () => {
       await setPrevNextRoutes(route)
       const prevNextRoutes = await this.props.prevNextRoutes
@@ -199,7 +199,7 @@ class ScrollOMatic extends Component {
 
   animateTheScroll (e) {
     const { scrollInverted, isMobile } = this.props
-    const { touchStartX, touchStartY, scrollTiplier } = this.state
+    const { touchStartX, touchStartY } = this.state
     const rawData = () => {
       if (isMobile) {
         if (e.touches[0].clientY !== touchStartY || e.touches[0].clientX !== touchStartX) {
@@ -223,9 +223,9 @@ class ScrollOMatic extends Component {
         }
       } else {
         if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-          return e.deltaY * 0.99
+          return e.deltaY * 0.9
         } else {
-          return e.deltaX * 0.99
+          return e.deltaX * 0.9
         }
       }
     }
@@ -274,44 +274,41 @@ class ScrollOMatic extends Component {
       percent: scrollTiplier * 100
     })
   }
-  
+
   getStyles () {
+    const { colors: { cur1 }, routeData: { navRules: { style: { height, width } } } } = this.props
     return {
-      ScrollOMatic: {},
-      ScrollTray: {}
+      ScrollOMaticStyles: {
+        backgroundColor: cur1,
+        position: 'relative',
+        width: '100vw',
+        height: '100vh',
+        boxSizing: 'border-box',
+        overflow: 'hidden'
+      },
+      ScrollTrayStyles: {
+        boxSizing: 'border-box',
+        // filter: 'invert(50%)',
+        height: `${Math.floor(height * 100)}vh`,
+        width: `${Math.floor(width * 100)}vw`,
+        willChange: 'transform',
+        display: 'inline-flex',
+        position: 'absolute',
+        overflowScrolling: 'touch',
+        WebkitOverflowScrolling: 'touch',
+        overflow: 'hidden'
+      }
     }
   }
 
   render () {
-    const { routeData: { titleCopy, navRules: { style: { height, width } } }, colors: { cur1 }, isMobile } = this.props
-    const springConfig = isMobile ? { stiffness: 85, damping: 15 } : presets.noWobble
-    const axisVals = this.animValSwitch().val
     return (
       <div className='scroll-o-matic' ref={(ref) => { this.scrollOMatic = ref }}
-        style={{
-          backgroundColor: cur1,
-          position: 'relative',
-          width: '100vw',
-          height: '100vh',
-          boxSizing: 'border-box',
-          overflow: 'hidden'
-        }} onWheel={this.handleScroll} onTouchMove={this.handleScroll} onTouchStart={this.handleTouchStart}>
-        <Motion style={{ amt: spring(axisVals, springConfig) }}>
+        style={this.getStyles().ScrollOMaticStyles} onWheel={this.handleScroll} onTouchMove={this.handleScroll} onTouchStart={this.handleTouchStart}>
+        <Motion style={{ amt: spring(this.animValSwitch().val, this.props.isMobile ? { stiffness: 85, damping: 15 } : presets.noWobble) }}>
           { ({ amt }) => (
             <div className='scroll-tray' ref={(scrollTray) => { this.scrollTray = scrollTray }}
-              style={{
-                boxSizing: 'border-box',
-                // filter: 'invert(50%)',
-                height: `${Math.floor(height * 100)}vh`,
-                width: `${Math.floor(width * 100)}vw`,
-                transform: this.scrollDirTransformer(amt),
-                willChange: 'transform',
-                display: 'inline-flex',
-                position: 'absolute',
-                overflowScrolling: 'touch',
-                WebkitOverflowScrolling: 'touch',
-                overflow: 'hidden'
-              }}>
+              style={{ ...this.getStyles().ScrollTrayStyles, transform: this.scrollDirTransformer(amt) }}>
               <PerformanceGate checkedProps={this.props.children}>
                 { this.props.children }
               </PerformanceGate>
