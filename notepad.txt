@@ -1,8 +1,9 @@
 TO-DO: 
 [] start laying in Head content for SEO
 [x] get complex transitions working with either react-motion or react-move
-[] hone these ^, get them closer to intended UI spec
+  [] hone these, get them closer to intended UI spec
 [] REALLY start thinking about performance -- if you're rerendering the entire app on EVERY scroll increment (??????) fix that somehow...
+  [] is it even possible to not render entire app if you're changing bg color of top-lvl component?
 
 
 
