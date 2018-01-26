@@ -7,6 +7,7 @@ import raf from 'raf'
 import { getNewOriginPos, transitionRoute, setPrevNextRoutes, setScrollLayoutRules, getRawScrollData, setColorScheme, isFreshLoad } from '../../lib/redux/actions'
 import { fadeColor, binder } from '../../lib/_utils'
 import PerformanceGate from '../hoc/PerformanceGate'
+import TesterAnimatedThing from '../TesterAnimatedThing'
 import router from '../../router'
 const { Router } = router
 
@@ -308,10 +309,12 @@ class ScrollOMatic extends Component {
         <Motion style={{ amt: spring(this.animValSwitch().val, this.props.isMobile ? { stiffness: 85, damping: 15 } : presets.noWobble) }}>
           { ({ amt }) => (
             <div className='scroll-tray' ref={(scrollTray) => { this.scrollTray = scrollTray }}
-              style={{ ...this.getStyles().ScrollTrayStyles, transform: this.scrollDirTransformer(amt) }}>
+              style={{ ...this.getStyles().ScrollTrayStyles, transform: this.scrollDirTransformer(+amt.toFixed(3)) }}>
               <PerformanceGate checkedProps={this.props.children}>
                 { this.props.children }
               </PerformanceGate>
+
+              {/* <TesterAnimatedThing colors={this.props.colors} layout={this.props.layout} rawScrollData={this.props.rawScrollData} amt={+amt.toFixed(3)} /> */}
               {/* <MagicalBackgroundComponentSittingBehindRestOfApp bgColor={cur1} /> */}
             </div>
           )}
