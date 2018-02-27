@@ -1,3 +1,5 @@
+// custom webpack config -- mainly allowing for SASS
+
 const path = require('path')
 const glob = require('glob')
 

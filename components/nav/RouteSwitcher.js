@@ -1,3 +1,5 @@
+// uses pathname synthetically applied via custom express server to change the core component of a given route
+
 import routeData from '../../router/routeData'
 import PropTypes from 'prop-types'
 

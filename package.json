@@ -1,6 +1,9 @@
 {
   "name": "agency-zero-starter-v4",
   "version": "1.0.0",
+  "engines": {
+    "node": "v8.9.x"
+  },
   "description": "using next.js and apollo",
   "scripts": {
     "test": "jest",
@@ -32,7 +35,6 @@
     "compression": "^1.7.1",
     "express": "^4.16.2",
     "faker": "^4.1.0",
-    "fitty": "^2.2.5",
     "glob": "^7.1.2",
     "graphql": "^0.11.7",
     "graphql-anywhere": "^4.0.1",
@@ -50,16 +52,12 @@
     "raf": "^3.4.0",
     "raw-loader": "^0.5.1",
     "react": "^16.1.1",
-    "react-addons-css-transition-group": "^15.6.2",
-    "react-addons-transition-group": "^15.6.2",
     "react-apollo": "^2.0.1",
     "react-dom": "^16.1.1",
-    "react-fittext": "^1.0.0",
     "react-loaders": "^3.0.1",
     "react-motion": "^0.5.2",
     "react-redux": "^5.0.6",
     "react-scroll-lock-component": "^1.1.2",
-    "react-transition-group": "^2.2.1",
     "redux": "^3.7.2",
     "redux-devtools": "^3.4.1",
     "redux-logger": "^3.0.6",
