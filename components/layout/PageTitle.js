@@ -1,3 +1,5 @@
+// takes each page and assigns styles for its background title
+
 import { splitToSpans } from '../../lib/_utils'
 
 const PageTitle = ({ routeData, width, height }) => {

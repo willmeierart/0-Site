@@ -1,4 +1,6 @@
 // main wrapper component - layout, universal styles, etc.
+// serves to bind transitionSled, scrollOMatic, titles, and menu together, passes core component as children
+
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -19,7 +21,7 @@ class App extends Component {
       height: 0,
       ready: false
     }
-    binder(this, ['handleMouseEnter', 'handleMouseLeave', 'renderMenu', 'renderTransition'])
+    binder(this, ['handleMouseEnter', 'handleMouseLeave', 'renderMenu', 'renderTransition', 'preventScrollNav'])
   }
   componentWillMount () { this.props.checkIfMobile() }
   componentDidMount () {
@@ -45,6 +47,11 @@ class App extends Component {
       return true
     }
     return false
+  }
+
+  preventScrollNav (e) {
+    e.preventDefault()
+    e.stopPropagation()
   }
 
   handleMouseEnter () { this.props.toggleMenu(true) }
@@ -95,14 +102,12 @@ class App extends Component {
       )
     }
     return (
-      // <Transition appear mountOnEnter unmountOnExit in={ready} timeout={50} component={FirstChild}>
       <TransitionSled k={title} width={width} height={height} transitionComplete={transitionComplete} completePageTransition={completePageTransition} lockScrollOMatic={lockScrollOMatic} appear>
         <PageTitle routeData={routeData} width={width} height={height} />
         <ScrollOMatic isMobile={isMobile} pathname={pathname} title={title} routeData={routeData} scrollInverted>
           { children }
         </ScrollOMatic>
       </TransitionSled>
-      // </Transition>
     )
   }
 
@@ -110,9 +115,9 @@ class App extends Component {
     console.log('update app')
     const { title, menuOpen } = this.props
     return (
-      <div className='App' style={{ overflow: 'hidden' }}>
+      <div onWheel={this.preventScrollNav} onTouchMove={this.preventScrollNav} className='App' style={{ overflow: 'hidden' }}>
         <Head title={title} />
-        <main style={{ overflow: 'hidden' }}>
+        <main onWheel={this.preventScrollNav} onTouchMove={this.preventScrollNav} style={{ overflow: 'hidden' }}>
           { this.renderTransition() }
           <CenterLogo />
           { menuOpen && this.renderMenu() }

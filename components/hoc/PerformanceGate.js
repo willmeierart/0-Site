@@ -1,3 +1,5 @@
+// take entire app and say, unless children change, don't update anything inside ScrollOMatic
+
 import React, { Component } from 'react'
 
 export default class PerformanceGate extends Component {

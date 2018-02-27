@@ -1,3 +1,8 @@
+// this is the most important component of the entire site!
+// it's based on an NPM package called 'react-scroll-horizontal'
+// and controls all interpolation of wheel/touchmove events
+// wiring it to redux for routing, animations, etc:
+
 import React, { Component } from 'react'
 import DOM from 'react-dom'
 import PropTypes from 'prop-types'
@@ -11,6 +16,7 @@ import TesterAnimatedThing from '../TesterAnimatedThing'
 import router from '../../router'
 const { Router } = router
 
+// parent component: TransitionSled (via App)
 class ScrollOMatic extends Component {
   constructor (props) {
     super(props)
@@ -55,6 +61,7 @@ class ScrollOMatic extends Component {
       await setPrevNextRoutes(route)
       const prevNextRoutes = await this.props.prevNextRoutes
       const { prevRoute, nextRoute } = prevNextRoutes
+      // use Next.js's router's prefetching to load in possible next routes more performantly
       Router.prefetchRoute('main', { slug: nextRoute })
       Router.prefetchRoute('main', { slug: prevRoute })
     }
@@ -68,12 +75,14 @@ class ScrollOMatic extends Component {
     setScrollLayoutRules({ scrollOMatic, scrollTray })
     setColorScheme({ base1: bgColor1, base2: bgColor2 })
 
+    // need to reset math relationships on window resize
     window.addEventListener('resize', () => setScrollLayoutRules({ scrollOMatic, scrollTray }))
   }
 
   componentWillReceiveProps (nextProps) { (this.props.children !== nextProps.children) && this.resetMin() }
 
   shouldComponentUpdate (nextProps, nextState) {
+    // a sort of performance gate to prevent rerendering unless relevant to scroll mechanics
     if (true &&
       this.calculate.timer !== void 0 &&
       this.props.children === nextProps.children &&
@@ -93,6 +102,7 @@ class ScrollOMatic extends Component {
   componentDidUpdate () { this.calculate() }
 
   canIscroll () {
+    // lock scrolling when bottomed out and when route-start timeout hasn't finished
     const { layout, routeData: { type }, scrollOMaticLocked } = this.props
     const canScrollSideways = type === 'horizontal' && (layout.trayLeft < layout.scrollOMaticLeft || layout.trayOffsetWidth > layout.scrollOMaticWidth)
     const canScrollVertical = type === 'vertical' && (layout.trayTop < layout.scrollOMaticTop || layout.trayOffsetHeight > layout.scrollOMaticHeight)
@@ -100,6 +110,7 @@ class ScrollOMatic extends Component {
   }
 
   calculate () {
+    // tricky little function that keeps track of whether bottomed/topped out
     clearTimeout(this.calculate.timer)
     this.calculate.timer = setTimeout(() => {
       const { bounds, current } = this.state
@@ -116,6 +127,7 @@ class ScrollOMatic extends Component {
   resetMax (x) { this.setState({ [this.animValSwitch().name]: x }) }
 
   animValSwitch () {
+    // controls whether scrolling on X or Y axis depending on routeData
     const { animValsX, animValsY } = this.state
     const { routeData: { type } } = this.props
     const valSwitch = type === 'horizontal'
@@ -125,13 +137,18 @@ class ScrollOMatic extends Component {
   }
 
   trackCurrentPosition () {
+    // self-explanatory
     const { layout: { widthMargin, heightMargin }, routeData: { type } } = this.props
     const bounds = type === 'vertical' ? heightMargin : widthMargin
     const current = this.animValSwitch().val
-    this.setState({ bounds: bounds, current: current })
+    this.setState({ bounds, current })
   }
 
   navigator () {
+    // controls all routing for the app
+    // basically, see scrollReducer, but depending on direction view routed to
+    // ScrollTray rendered 1px offset from min/max possible.
+    // when it hits 0/max it routes back/forward. kept track of via routeData.
     const { current } = this.state
     const { prevNextRoutes: { nextRoute, prevRoute }, layout: { scrollOMaticHeight, scrollOMaticWidth, widthMargin, heightMargin }, routeData: { type, bgColor1, bgColor2 }, getNewOriginPos, transitionRoute, isFreshLoad, freshLoad, setColorScheme } = this.props
     let prevTrigger = current >= 0
@@ -146,6 +163,7 @@ class ScrollOMatic extends Component {
       }
       if (nextTrigger) {
         getNewOriginPos(nextRoute, 'forward', widthHeight)
+        // also controls whether fading from second color to first bound to route or vice versa
         setColorScheme({ actualBG: bgColor2 })
       } else {
         getNewOriginPos(prevRoute, 'back', widthHeight)
@@ -156,6 +174,7 @@ class ScrollOMatic extends Component {
   }
 
   setCurrentScrollDir (mousePos) {
+    // allows 'inverted' prop to control relation of scroll direction to animation
     const { scrollInverted } = this.props
     this.setState({ currentScrollDir: scrollInverted
        ? mousePos < 0 ? 'back' : 'forward'
@@ -164,6 +183,7 @@ class ScrollOMatic extends Component {
   }
 
   setScrollStyleState () {
+    // controls color changes, etc.
     const { isMobile, layout: { scrollOMaticHeight, scrollOMaticWidth, trayOffsetHeight, trayOffsetWidth }, routeData: { type, bgColor1, bgColor2 }, setColorScheme } = this.props
     const { current, scrollTiplier } = this.state
 
@@ -181,6 +201,7 @@ class ScrollOMatic extends Component {
   }
 
   scrollDirTransformer (amt) {
+    // really important function -- takes amount scrolled and translates it to the pixel val animation property applied to Motion component
     let amt3 = amt ? amt.toFixed(0) : -1
     const { type } = this.props.routeData
     const { animValsX, animValsY } = this.state
@@ -199,6 +220,9 @@ class ScrollOMatic extends Component {
   }
 
   animateTheScroll (e) {
+    // this is where the mouse/touch values come from
+    // also where the functionality of 'use whichever scroll[X,Y] is greatest'
+    // also where multiplier applied against raw val to slow/speed-up scroll
     const { scrollInverted, isMobile } = this.props
     const { touchStartX, touchStartY } = this.state
     const rawData = () => {
@@ -250,10 +274,12 @@ class ScrollOMatic extends Component {
         })
     }
 
+    // use raf library for requestAnimationFrame polyfill
     raf(scrolling)
   }
 
   handleTouchStart (e) {
+    // if mobile assign touch origin point
     const { isMobile } = this.props
     if (isMobile) {
       this.setState({
@@ -264,6 +290,7 @@ class ScrollOMatic extends Component {
   }
 
   handleScroll (e) {
+    // handler that distributes event to all redux functionality
     const { increment, scrollTiplier } = this.state
     e.preventDefault()
     this.setScrollStyleState()
@@ -313,9 +340,7 @@ class ScrollOMatic extends Component {
               <PerformanceGate checkedProps={this.props.children}>
                 { this.props.children }
               </PerformanceGate>
-
               {/* <TesterAnimatedThing colors={this.props.colors} layout={this.props.layout} rawScrollData={this.props.rawScrollData} amt={+amt.toFixed(3)} /> */}
-              {/* <MagicalBackgroundComponentSittingBehindRestOfApp bgColor={cur1} /> */}
             </div>
           )}
         </Motion>

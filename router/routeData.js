@@ -1,3 +1,6 @@
+// SUPER important file -- where all routeData bound to pathnames
+// including the Component!, but also where nextRoute / prevRoute defined
+
 import home from '../pages/home/'
 import converse from '../pages/converse/'
 import skills from '../pages/skills/'

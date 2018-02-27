@@ -1,3 +1,5 @@
+// pretty simple, but this is what controls the synthetic routing
+
 const nextRoutes = require('next-routes')
 const router = nextRoutes()
 

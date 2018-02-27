@@ -1,3 +1,4 @@
+// assigns styles, scrollTray size, other UI props according to routeType
 const navRules = type => {
   let rules = {}
   switch (type) {

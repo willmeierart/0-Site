@@ -15,9 +15,8 @@ export default class TesterAnimatedThing extends Component {
   makeRandomCircle () {
     const randomNum = () => Math.floor(Math.random() * 100)
     const circle = DOM.findDOMNode(this.circle)
-      if (timer) clearTimeout(timer)
-    
-    
+    if (timer) clearTimeout(timer)
+
     if (circle) {
       timer = setTimeout(() => {
         console.log(circle.style.transform)
